@@ -67,6 +67,11 @@ export default {
 			fontFamily: {
 				'inter': ['Inter', 'sans-serif'],
 			},
+			backgroundImage: {
+				'gradient-white-teal': 'linear-gradient(to bottom, #FFFFFF, #A5C1C8)',
+				'gradient-teal-coral': 'linear-gradient(to right, #A5C1C8, #F57B4E)',
+				'gradient-coral-teal': 'linear-gradient(to right, #F57B4E, #A5C1C8)',
+			},
 			keyframes: {
 				'accordion-down': {
 					from: {
@@ -90,7 +95,7 @@ export default {
 						opacity: '1'
 					},
 					'50%': {
-						transform: 'scale(1.05)',
+						transform: 'scale(1.2)',
 						opacity: '0.7'
 					},
 					'100%': {

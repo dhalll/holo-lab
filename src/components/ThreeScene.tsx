@@ -16,18 +16,38 @@ const RotatingStructure = () => {
   return (
     <group ref={meshRef}>
       {/* Mock pipe structure */}
-      <Box position={[0, 0, 0]} args={[0.1, 2, 0.1]} material-color="#C8C8C8" />
-      <Box position={[1, 0, 0]} args={[0.1, 2, 0.1]} material-color="#C8C8C8" />
-      <Box position={[-1, 0, 0]} args={[0.1, 2, 0.1]} material-color="#C8C8C8" />
-      <Box position={[0, 0, 1]} args={[0.1, 2, 0.1]} material-color="#C8C8C8" />
-      <Box position={[0, 0, -1]} args={[0.1, 2, 0.1]} material-color="#C8C8C8" />
+      <Box position={[0, 0, 0]} args={[0.1, 2, 0.1]}>
+        <meshStandardMaterial color="#C8C8C8" />
+      </Box>
+      <Box position={[1, 0, 0]} args={[0.1, 2, 0.1]}>
+        <meshStandardMaterial color="#C8C8C8" />
+      </Box>
+      <Box position={[-1, 0, 0]} args={[0.1, 2, 0.1]}>
+        <meshStandardMaterial color="#C8C8C8" />
+      </Box>
+      <Box position={[0, 0, 1]} args={[0.1, 2, 0.1]}>
+        <meshStandardMaterial color="#C8C8C8" />
+      </Box>
+      <Box position={[0, 0, -1]} args={[0.1, 2, 0.1]}>
+        <meshStandardMaterial color="#C8C8C8" />
+      </Box>
       
       {/* Joints */}
-      <Box position={[0, 1, 0]} args={[0.2, 0.2, 0.2]} material-color="#F57B4E" />
-      <Box position={[1, 1, 0]} args={[0.2, 0.2, 0.2]} material-color="#F57B4E" />
-      <Box position={[-1, 1, 0]} args={[0.2, 0.2, 0.2]} material-color="#F57B4E" />
-      <Box position={[0, 1, 1]} args={[0.2, 0.2, 0.2]} material-color="#F57B4E" />
-      <Box position={[0, 1, -1]} args={[0.2, 0.2, 0.2]} material-color="#F57B4E" />
+      <Box position={[0, 1, 0]} args={[0.2, 0.2, 0.2]}>
+        <meshStandardMaterial color="#F57B4E" />
+      </Box>
+      <Box position={[1, 1, 0]} args={[0.2, 0.2, 0.2]}>
+        <meshStandardMaterial color="#F57B4E" />
+      </Box>
+      <Box position={[-1, 1, 0]} args={[0.2, 0.2, 0.2]}>
+        <meshStandardMaterial color="#F57B4E" />
+      </Box>
+      <Box position={[0, 1, 1]} args={[0.2, 0.2, 0.2]}>
+        <meshStandardMaterial color="#F57B4E" />
+      </Box>
+      <Box position={[0, 1, -1]} args={[0.2, 0.2, 0.2]}>
+        <meshStandardMaterial color="#F57B4E" />
+      </Box>
     </group>
   );
 };

@@ -13,20 +13,25 @@ const RoleSelection = () => {
     if (role === 'designer') {
       navigate('/designer/location');
     } else {
-      navigate('/supplier/dashboard');
+      navigate('/supplier/start');
     }
   };
 
   return (
     <div className="min-h-screen bg-holo-white font-inter relative">
-      <ProgressBar currentStep={1} stepLabels={['Select Experience', 'Location', 'Customize', 'Generate', 'Export', 'Complete']} />
+      <ProgressBar currentStep={1} />
       
       {/* Header */}
-      <div className="absolute top-8 left-20">
+      <div className="absolute top-6 left-32 md:left-32">
         <BackButton to="/" />
       </div>
 
-      <div className="flex flex-col items-center justify-center min-h-screen px-4">
+      {/* Logo */}
+      <div className="absolute top-6 left-6">
+        <HoloLogo size="small" variant="full" />
+      </div>
+
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
         {/* Title */}
         <h1 className="text-2xl font-inter font-bold text-holo-black mb-16 tracking-wide">
           SELECT YOUR EXPERIENCE
@@ -87,6 +92,13 @@ const RoleSelection = () => {
               <p className="text-sm font-inter text-gray-600">Upload Materials</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Footer Logo - Six-dot version */}
+      <div className="fixed bottom-4 right-4">
+        <div className="w-12 h-12 flex items-center justify-center">
+          <HoloLogo size="small" variant="dots" />
         </div>
       </div>
     </div>

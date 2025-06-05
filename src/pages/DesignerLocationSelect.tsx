@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
+import HoloLogo from '@/components/HoloLogo';
 import { Building, Sliders, Search } from 'lucide-react';
 
 const DesignerLocationSelect = () => {
@@ -19,37 +20,47 @@ const DesignerLocationSelect = () => {
 
   return (
     <div className="min-h-screen bg-holo-white font-inter relative">
-      <ProgressBar currentStep={2} stepLabels={['Select Experience', 'Location', 'Customize', 'Generate', 'Export', 'Complete']} />
+      <ProgressBar currentStep={2} />
       
       {/* Header */}
-      <div className="absolute top-8 left-20">
+      <div className="absolute top-6 left-6">
+        <HoloLogo size="small" variant="full" />
+      </div>
+      
+      <div className="absolute top-6 left-32">
         <BackButton to="/role-selection" />
       </div>
 
-      <div className="pl-20 pr-8 pt-16 pb-8">
+      <div className="pl-32 pr-8 pt-16 pb-8">
         <h1 className="text-2xl font-inter font-bold text-holo-black mb-8">
           SELECT YOUR BUILDING
         </h1>
 
         <div className="flex gap-8 h-[calc(100vh-200px)]">
           {/* Map Area */}
-          <div className="flex-1 bg-gray-100 rounded-lg border-2 border-dashed border-holo-teal relative overflow-hidden">
-            {/* Placeholder Map */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200">
+          <div className="flex-1 bg-gradient-to-br from-gray-50 to-gray-200 rounded-lg border-2 border-dashed border-holo-teal relative overflow-hidden">
+            {/* Placeholder Map centered on London */}
+            <div className="absolute inset-0">
               <div className="p-8 text-center">
                 <div className="text-gray-400 mb-4">
                   <Building size={48} className="mx-auto" />
                 </div>
-                <p className="text-gray-500 font-inter">Interactive map will appear here</p>
+                <p className="text-gray-500 font-inter">London Building Map</p>
                 <p className="text-sm text-gray-400 mt-2">Click on building footprints to select</p>
               </div>
 
-              {/* Mock building footprints */}
+              {/* Mock London building footprints */}
               <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                   onClick={() => setSelectedBuilding('building1')}>
+                   onClick={() => setSelectedBuilding('london-building1')}>
+                <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
               </div>
               <div className="absolute top-1/2 right-1/3 w-20 h-16 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                   onClick={() => setSelectedBuilding('building2')}>
+                   onClick={() => setSelectedBuilding('london-building2')}>
+                <div className="text-xs text-center pt-4 text-gray-600">Camden</div>
+              </div>
+              <div className="absolute bottom-1/3 left-1/2 w-14 h-18 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                   onClick={() => setSelectedBuilding('london-building3')}>
+                <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
               </div>
             </div>
 
@@ -59,10 +70,10 @@ const DesignerLocationSelect = () => {
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-holo-coral" size={20} />
                 <input
                   type="text"
-                  placeholder="Type Location Search..."
+                  placeholder="Search London area..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-holo-white border border-holo-teal rounded-[32px] focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-coral"
+                  className="w-full pl-12 pr-4 py-3 bg-holo-white border-2 border-holo-teal rounded-[32px] focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-coral"
                 />
               </div>
             </div>
@@ -76,17 +87,22 @@ const DesignerLocationSelect = () => {
                 {selectedBuilding ? (
                   <div className="w-12 h-8 bg-holo-teal rounded"></div>
                 ) : (
-                  <span className="text-gray-400 text-sm font-inter">No Building Selected</span>
+                  <span className="text-gray-400 text-xs font-inter text-center px-2">No Building Selected</span>
                 )}
               </div>
+              {selectedBuilding && (
+                <p className="text-sm font-inter text-gray-600 capitalize">
+                  {selectedBuilding.replace('london-building', 'Building ')}
+                </p>
+              )}
             </div>
 
             {/* Control Buttons */}
-            <div className="space-y-4">
+            <div className="flex justify-center space-x-4">
               <button
                 onClick={() => setShowAnalysis(true)}
                 disabled={!selectedBuilding}
-                className={`w-20 h-20 mx-auto flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                   selectedBuilding 
                     ? 'bg-holo-black border-holo-coral text-holo-teal hover:scale-105' 
                     : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
@@ -99,7 +115,7 @@ const DesignerLocationSelect = () => {
               <button
                 onClick={() => setShowAdvanced(true)}
                 disabled={!selectedBuilding}
-                className={`w-20 h-20 mx-auto flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                   selectedBuilding 
                     ? 'bg-holo-black border-holo-coral text-holo-teal hover:scale-105' 
                     : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
@@ -109,20 +125,22 @@ const DesignerLocationSelect = () => {
                 <span className="text-xs font-inter mt-1">Controls</span>
               </button>
             </div>
-
-            {/* Proceed Button */}
-            <button
-              onClick={handleProceed}
-              disabled={!selectedBuilding}
-              className={`w-full py-4 rounded-[32px] font-inter font-semibold transition-all duration-300 ${
-                selectedBuilding
-                  ? 'bg-holo-coral text-holo-white hover:shadow-lg hover:shadow-holo-coral/30'
-                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              Proceed with Selection
-            </button>
           </div>
+        </div>
+
+        {/* Proceed Button - Separate container */}
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={handleProceed}
+            disabled={!selectedBuilding}
+            className={`px-8 py-4 rounded-[32px] font-inter font-semibold transition-all duration-300 ${
+              selectedBuilding
+                ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105 shadow-lg'
+                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+            }`}
+          >
+            Proceed with Selection
+          </button>
         </div>
       </div>
 
@@ -157,9 +175,9 @@ const DesignerLocationSelect = () => {
               {/* Tab Content */}
               <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
                 <p className="text-gray-500 font-inter">
-                  {activeTab === 'wind' && 'Wind vector visualization will appear here'}
-                  {activeTab === 'sun' && 'Sun path diagram will appear here'}
-                  {activeTab === 'visibility' && 'Line-of-sight analysis will appear here'}
+                  {activeTab === 'wind' && 'Wind patterns for London location will appear here'}
+                  {activeTab === 'sun' && 'Solar analysis for selected building will appear here'}
+                  {activeTab === 'visibility' && 'Visibility analysis from street level will appear here'}
                 </p>
               </div>
 
@@ -204,7 +222,8 @@ const DesignerLocationSelect = () => {
                       type="number"
                       step="any"
                       className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
-                      placeholder="37.7749"
+                      placeholder="51.5074"
+                      defaultValue="51.5074"
                     />
                   </div>
                   <div>
@@ -215,7 +234,8 @@ const DesignerLocationSelect = () => {
                       type="number"
                       step="any"
                       className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
-                      placeholder="-122.4194"
+                      placeholder="-0.1278"
+                      defaultValue="-0.1278"
                     />
                   </div>
                 </div>
@@ -241,7 +261,7 @@ const DesignerLocationSelect = () => {
                 </button>
                 <button
                   onClick={() => setShowAdvanced(false)}
-                  className="px-6 py-2 bg-holo-coral text-holo-white rounded-lg font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300"
+                  className="px-6 py-2 bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white rounded-lg font-inter font-semibold transition-all duration-300"
                 >
                   Apply Changes
                 </button>
@@ -250,6 +270,13 @@ const DesignerLocationSelect = () => {
           </div>
         </div>
       )}
+
+      {/* Footer Logo - Six-dot version */}
+      <div className="fixed bottom-4 right-4">
+        <div className="w-12 h-12 flex items-center justify-center">
+          <HoloLogo size="small" variant="dots" />
+        </div>
+      </div>
     </div>
   );
 };

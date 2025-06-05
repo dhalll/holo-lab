@@ -6,7 +6,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import RoleSelection from "./pages/RoleSelection";
+import SupplierStart from "./pages/SupplierStart";
 import SupplierDashboard from "./pages/SupplierDashboard";
+import SupplierScan from "./pages/SupplierScan";
+import SupplierScanResults from "./pages/SupplierScanResults";
 import DesignerLocationSelect from "./pages/DesignerLocationSelect";
 import DesignerCustomization from "./pages/DesignerCustomization";
 import DesignerOutput from "./pages/DesignerOutput";
@@ -23,7 +26,10 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/role-selection" element={<RoleSelection />} />
+          <Route path="/supplier/start" element={<SupplierStart />} />
           <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
+          <Route path="/supplier/scan" element={<SupplierScan />} />
+          <Route path="/supplier/scan-results" element={<SupplierScanResults />} />
           <Route path="/designer/location" element={<DesignerLocationSelect />} />
           <Route path="/designer/customization" element={<DesignerCustomization />} />
           <Route path="/designer/output" element={<DesignerOutput />} />
