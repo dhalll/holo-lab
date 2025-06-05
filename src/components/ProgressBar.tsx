@@ -15,7 +15,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <>
       {/* Desktop Progress Bar */}
-      <div className="fixed left-4 top-20 bottom-20 z-10 hidden md:flex flex-col justify-between w-24">
+      <div className="fixed left-6 top-20 bottom-20 z-10 hidden md:flex flex-col justify-between w-[100px]">
         <div className="flex flex-col space-y-12">
           {Array.from({ length: totalSteps }, (_, index) => {
             const stepNumber = index + 1;
@@ -23,8 +23,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
             const isCurrent = stepNumber === currentStep;
             
             return (
-              <div key={stepNumber} className="flex flex-col items-start">
-                <div className="relative mb-2">
+              <div key={stepNumber} className="flex items-center">
+                <div className="relative">
                   <div
                     className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${
                       isActive
@@ -50,7 +50,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
                 </div>
                 
                 {stepLabels[index] && (
-                  <span className={`text-base font-inter font-semibold transition-colors duration-300 ${
+                  <span className={`ml-3 text-[16px] font-semibold transition-colors duration-300 ${
                     isCurrent ? 'text-holo-coral' : isActive ? 'text-holo-black' : 'text-gray-600'
                   }`}>
                     {stepLabels[index]}

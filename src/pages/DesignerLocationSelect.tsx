@@ -23,22 +23,18 @@ const DesignerLocationSelect = () => {
       <ProgressBar currentStep={2} />
       
       {/* Header */}
-      <div className="absolute top-6 left-6">
-        <HoloLogo size="small" variant="full" />
-      </div>
-      
-      <div className="absolute top-6 left-32">
-        <BackButton to="/role-selection" />
-      </div>
+      <HoloLogo size="small" variant="full" />
+      <BackButton to="/role-selection" />
 
-      <div className="pl-32 pr-8 pt-16 pb-8">
-        <h1 className="text-2xl font-inter font-bold text-holo-black mb-8">
-          SELECT YOUR BUILDING
-        </h1>
+      {/* Title - aligned with header */}
+      <h1 className="absolute top-6 left-[148px] text-[20px] font-semibold text-holo-black">
+        SELECT YOUR BUILDING
+      </h1>
 
-        <div className="flex gap-8 h-[calc(100vh-200px)]">
-          {/* Map Area */}
-          <div className="flex-1 bg-gradient-to-br from-gray-50 to-gray-200 rounded-lg border-2 border-dashed border-holo-teal relative overflow-hidden">
+      <div className="flex flex-col items-center px-8 pt-16 pb-8 min-h-screen">
+        <div className="flex gap-8 w-full max-w-7xl" style={{ height: '60vh' }}>
+          {/* Map Area - 60% width */}
+          <div className="w-[60%] bg-gradient-to-br from-gray-50 to-gray-200 rounded-lg border-2 border-dashed border-holo-teal relative overflow-hidden">
             {/* Placeholder Map centered on London */}
             <div className="absolute inset-0">
               <div className="p-8 text-center">
@@ -79,8 +75,8 @@ const DesignerLocationSelect = () => {
             </div>
           </div>
 
-          {/* Selection Panel */}
-          <div className="w-80 flex flex-col space-y-6">
+          {/* Selection Panel - 40% width */}
+          <div className="w-[40%] flex flex-col items-center justify-center space-y-8 px-8">
             {/* Selected Building Preview */}
             <div className="text-center">
               <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-holo-teal/20' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
@@ -97,8 +93,8 @@ const DesignerLocationSelect = () => {
               )}
             </div>
 
-            {/* Control Buttons */}
-            <div className="flex justify-center space-x-4">
+            {/* Control Buttons - stacked vertically */}
+            <div className="flex flex-col items-center space-y-8">
               <button
                 onClick={() => setShowAnalysis(true)}
                 disabled={!selectedBuilding}
@@ -108,7 +104,7 @@ const DesignerLocationSelect = () => {
                     : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
                 }`}
               >
-                <Building size={24} />
+                <Building size={36} />
                 <span className="text-xs font-inter mt-1">Analysis</span>
               </button>
 
@@ -121,7 +117,7 @@ const DesignerLocationSelect = () => {
                     : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
                 }`}
               >
-                <Sliders size={24} />
+                <Sliders size={36} />
                 <span className="text-xs font-inter mt-1">Controls</span>
               </button>
             </div>
@@ -129,13 +125,13 @@ const DesignerLocationSelect = () => {
         </div>
 
         {/* Proceed Button - Separate container */}
-        <div className="mt-6 flex justify-center">
+        <div className="flex-shrink-0 mt-6">
           <button
             onClick={handleProceed}
             disabled={!selectedBuilding}
-            className={`px-8 py-4 rounded-[32px] font-inter font-semibold transition-all duration-300 ${
+            className={`w-[240px] h-[48px] rounded-xl font-inter font-semibold text-[16px] transition-all duration-300 shadow-md ${
               selectedBuilding
-                ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105 shadow-lg'
+                ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105'
                 : 'bg-gray-200 text-gray-500 cursor-not-allowed'
             }`}
           >

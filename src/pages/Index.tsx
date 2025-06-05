@@ -22,13 +22,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-holo-white font-inter flex flex-col items-center justify-center px-4">
-      {/* Logo */}
-      <div className="mb-20" style={{ marginTop: '80px' }}>
-        <HoloLogo size="large" variant="full" />
-      </div>
+      {/* Logo - centered, no progress bar or six-dot emblem on landing */}
+      <HoloLogo variant="full" isLanding={true} />
 
       {/* Login Form */}
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md mt-12">
         <div 
           className="p-8 rounded-[32px] bg-gradient-white-teal backdrop-blur-sm"
           style={{ boxShadow: '0 8px 32px rgba(165, 193, 200, 0.1)' }}
@@ -40,7 +38,7 @@ const Index = () => {
                 placeholder="Enter your Email or Username *"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-12 px-6 rounded-[32px] border-0 bg-holo-white text-holo-black placeholder:text-gray-500 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200"
+                className="w-full h-12 px-6 rounded-[32px] border-2 border-holo-teal bg-holo-white text-holo-black placeholder:text-gray-500 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200"
                 required
               />
             </div>
@@ -51,7 +49,7 @@ const Index = () => {
                 placeholder="Enter your Password *"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 px-6 rounded-[32px] border-0 bg-holo-white text-holo-black placeholder:text-gray-500 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200"
+                className="w-full h-12 px-6 rounded-[32px] border-2 border-holo-teal bg-holo-white text-holo-black placeholder:text-gray-500 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200"
                 required
               />
             </div>
@@ -84,13 +82,6 @@ const Index = () => {
               </button>
             </div>
           </form>
-        </div>
-      </div>
-
-      {/* Footer Logo - Six-dot version */}
-      <div className="fixed bottom-4 right-4">
-        <div className="w-12 h-12 flex items-center justify-center">
-          <HoloLogo size="small" variant="dots" />
         </div>
       </div>
     </div>

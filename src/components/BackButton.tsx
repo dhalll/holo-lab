@@ -25,7 +25,7 @@ const BackButton: React.FC<BackButtonProps> = ({ to, onClick, className = '' }) 
   return (
     <button
       onClick={handleClick}
-      className={`w-10 h-10 rounded-full bg-holo-black text-holo-white flex items-center justify-center hover:ring-2 hover:ring-holo-coral transition-all duration-200 ${className}`}
+      className={`absolute top-6 left-[140px] w-10 h-10 rounded-full bg-holo-black text-holo-white flex items-center justify-center hover:border-2 hover:border-holo-coral hover:w-11 hover:h-11 transition-all duration-100 ${className}`}
     >
       <ArrowLeft size={20} />
     </button>

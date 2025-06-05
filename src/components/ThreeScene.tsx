@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Box } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 const RotatingStructure = () => {
@@ -16,38 +16,48 @@ const RotatingStructure = () => {
   return (
     <group ref={meshRef}>
       {/* Mock pipe structure */}
-      <Box position={[0, 0, 0]} args={[0.1, 2, 0.1]}>
+      <mesh position={[0, 0, 0]}>
+        <boxGeometry args={[0.1, 2, 0.1]} />
         <meshStandardMaterial color="#C8C8C8" />
-      </Box>
-      <Box position={[1, 0, 0]} args={[0.1, 2, 0.1]}>
+      </mesh>
+      <mesh position={[1, 0, 0]}>
+        <boxGeometry args={[0.1, 2, 0.1]} />
         <meshStandardMaterial color="#C8C8C8" />
-      </Box>
-      <Box position={[-1, 0, 0]} args={[0.1, 2, 0.1]}>
+      </mesh>
+      <mesh position={[-1, 0, 0]}>
+        <boxGeometry args={[0.1, 2, 0.1]} />
         <meshStandardMaterial color="#C8C8C8" />
-      </Box>
-      <Box position={[0, 0, 1]} args={[0.1, 2, 0.1]}>
+      </mesh>
+      <mesh position={[0, 0, 1]}>
+        <boxGeometry args={[0.1, 2, 0.1]} />
         <meshStandardMaterial color="#C8C8C8" />
-      </Box>
-      <Box position={[0, 0, -1]} args={[0.1, 2, 0.1]}>
+      </mesh>
+      <mesh position={[0, 0, -1]}>
+        <boxGeometry args={[0.1, 2, 0.1]} />
         <meshStandardMaterial color="#C8C8C8" />
-      </Box>
+      </mesh>
       
       {/* Joints */}
-      <Box position={[0, 1, 0]} args={[0.2, 0.2, 0.2]}>
+      <mesh position={[0, 1, 0]}>
+        <boxGeometry args={[0.2, 0.2, 0.2]} />
         <meshStandardMaterial color="#F57B4E" />
-      </Box>
-      <Box position={[1, 1, 0]} args={[0.2, 0.2, 0.2]}>
+      </mesh>
+      <mesh position={[1, 1, 0]}>
+        <boxGeometry args={[0.2, 0.2, 0.2]} />
         <meshStandardMaterial color="#F57B4E" />
-      </Box>
-      <Box position={[-1, 1, 0]} args={[0.2, 0.2, 0.2]}>
+      </mesh>
+      <mesh position={[-1, 1, 0]}>
+        <boxGeometry args={[0.2, 0.2, 0.2]} />
         <meshStandardMaterial color="#F57B4E" />
-      </Box>
-      <Box position={[0, 1, 1]} args={[0.2, 0.2, 0.2]}>
+      </mesh>
+      <mesh position={[0, 1, 1]}>
+        <boxGeometry args={[0.2, 0.2, 0.2]} />
         <meshStandardMaterial color="#F57B4E" />
-      </Box>
-      <Box position={[0, 1, -1]} args={[0.2, 0.2, 0.2]}>
+      </mesh>
+      <mesh position={[0, 1, -1]}>
+        <boxGeometry args={[0.2, 0.2, 0.2]} />
         <meshStandardMaterial color="#F57B4E" />
-      </Box>
+      </mesh>
     </group>
   );
 };

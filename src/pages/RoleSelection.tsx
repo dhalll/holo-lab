@@ -21,22 +21,18 @@ const RoleSelection = () => {
     <div className="min-h-screen bg-holo-white font-inter relative">
       <ProgressBar currentStep={1} />
       
-      {/* Header */}
-      <div className="absolute top-6 left-32 md:left-32">
-        <BackButton to="/" />
-      </div>
-
       {/* Logo */}
-      <div className="absolute top-6 left-6">
-        <HoloLogo size="small" variant="full" />
-      </div>
+      <HoloLogo size="small" variant="full" />
+      
+      {/* Header */}
+      <BackButton to="/" />
+
+      {/* Title - aligned with header */}
+      <h1 className="absolute top-6 left-[148px] text-[20px] font-semibold text-holo-black tracking-wide">
+        SELECT YOUR EXPERIENCE
+      </h1>
 
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
-        {/* Title */}
-        <h1 className="text-2xl font-inter font-bold text-holo-black mb-16 tracking-wide">
-          SELECT YOUR EXPERIENCE
-        </h1>
-
         {/* Role Options */}
         <div className="flex flex-col md:flex-row items-center gap-16 mb-16">
           {/* Designer Option */}

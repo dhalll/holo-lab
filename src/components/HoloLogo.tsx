@@ -5,17 +5,19 @@ interface HoloLogoProps {
   size?: 'small' | 'medium' | 'large';
   className?: string;
   variant?: 'full' | 'dots';
+  isLanding?: boolean;
 }
 
 const HoloLogo: React.FC<HoloLogoProps> = ({ 
   size = 'medium', 
   className = '', 
-  variant = 'full' 
+  variant = 'full',
+  isLanding = false
 }) => {
   if (variant === 'dots') {
     // Six-dot logo for bottom-right corner
     const sizeClasses = {
-      small: 'w-8 h-12',
+      small: 'w-12 h-12',
       medium: 'w-12 h-16',
       large: 'w-20 h-24'
     };
@@ -49,18 +51,22 @@ const HoloLogo: React.FC<HoloLogoProps> = ({
     );
   }
 
-  // Full HoloLab logo
-  const sizeClasses = {
-    small: 'w-20',
-    medium: 'w-40',
-    large: 'w-40'
-  };
+  // Full HoloLab logo using the uploaded image
+  if (isLanding) {
+    return (
+      <img 
+        src="/lovable-uploads/cbd5629b-35d4-4351-8070-3528ec5cec35.png" 
+        alt="HoloLab Logo" 
+        className="w-40 mx-auto mt-20 h-auto"
+      />
+    );
+  }
 
   return (
     <img 
-      src="/lovable-uploads/0e268fdf-0bc5-4d6a-9fd8-e2d25676be8c.png" 
+      src="/lovable-uploads/cbd5629b-35d4-4351-8070-3528ec5cec35.png" 
       alt="HoloLab Logo" 
-      className={`${sizeClasses[size]} h-auto ${className}`}
+      className="w-[100px] absolute top-6 left-6 h-auto"
     />
   );
 };

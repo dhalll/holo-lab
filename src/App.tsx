@@ -13,6 +13,7 @@ import SupplierScanResults from "./pages/SupplierScanResults";
 import DesignerLocationSelect from "./pages/DesignerLocationSelect";
 import DesignerCustomization from "./pages/DesignerCustomization";
 import DesignerOutput from "./pages/DesignerOutput";
+import DesignerFinalOutput from "./pages/DesignerFinalOutput";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/designer/location" element={<DesignerLocationSelect />} />
           <Route path="/designer/customization" element={<DesignerCustomization />} />
           <Route path="/designer/output" element={<DesignerOutput />} />
+          <Route path="/designer/final-output" element={<DesignerFinalOutput />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
