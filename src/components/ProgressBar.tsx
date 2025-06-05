@@ -15,16 +15,16 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <>
       {/* Desktop Progress Bar */}
-      <div className="fixed left-6 top-20 bottom-20 z-10 hidden md:flex flex-col justify-between w-[100px]">
-        <div className="flex flex-col space-y-12">
+      <div className="fixed left-6 top-20 bottom-20 z-10 hidden md:flex flex-col justify-start w-[100px]">
+        <div className="flex flex-col">
           {Array.from({ length: totalSteps }, (_, index) => {
             const stepNumber = index + 1;
             const isActive = stepNumber <= currentStep;
             const isCurrent = stepNumber === currentStep;
             
             return (
-              <div key={stepNumber} className="flex items-center">
-                <div className="relative">
+              <div key={stepNumber} className="flex items-center mb-12">
+                <div className="relative flex flex-col items-center">
                   <div
                     className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${
                       isActive
@@ -37,20 +37,25 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
                     )}
                   </div>
                   
-                  {/* Connecting line */}
+                  {/* Connecting dotted line */}
                   {index < totalSteps - 1 && (
-                    <div
-                      className={`absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-12 transition-all duration-300 ${
-                        stepNumber < currentStep
-                          ? 'bg-holo-black'
-                          : 'bg-holo-teal'
-                      }`}
-                    ></div>
+                    <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-0.5 h-12 flex flex-col justify-between items-center">
+                      {Array.from({ length: 6 }, (_, dotIndex) => (
+                        <div
+                          key={dotIndex}
+                          className={`w-1 h-1 rounded-full transition-all duration-300 ${
+                            stepNumber < currentStep
+                              ? 'bg-holo-black'
+                              : 'bg-holo-teal'
+                          }`}
+                        />
+                      ))}
+                    </div>
                   )}
                 </div>
                 
                 {stepLabels[index] && (
-                  <span className={`ml-3 text-[16px] font-semibold transition-colors duration-300 ${
+                  <span className={`ml-4 text-[16px] font-semibold transition-colors duration-300 ${
                     isCurrent ? 'text-holo-coral' : isActive ? 'text-holo-black' : 'text-gray-600'
                   }`}>
                     {stepLabels[index]}
