@@ -1,0 +1,219 @@
+
+import React, { useState, useEffect } from 'react';
+import ProgressBar from '@/components/ProgressBar';
+import BackButton from '@/components/BackButton';
+import { Download } from 'lucide-react';
+
+const DesignerOutput = () => {
+  const [activeTab, setActiveTab] = useState('materials');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading 3D model
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const materials = [
+    { type: 'PVC', qty: 85, length: 120, diameter: 50, condition: 'Excellent', source: 'SF Reclaim Co.', reuse: 95 },
+    { type: 'Steel', qty: 20, length: 50, diameter: 75, condition: 'Good', source: 'Oakland Steel', reuse: 88 },
+    { type: 'Copper', qty: 12, length: 30, diameter: 25, condition: 'Fair', source: 'Bay Metals', reuse: 82 },
+  ];
+
+  const joints = [
+    { id: 1, name: 'Joint #001', type: 'T-Junction' },
+    { id: 2, name: 'Joint #002', type: 'Elbow' },
+    { id: 3, name: 'Joint #003', type: 'Cross' },
+    { id: 4, name: 'Joint #004', type: 'Reducer' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-holo-white font-inter relative">
+      <ProgressBar currentStep={5} stepLabels={['Select Experience', 'Location', 'Customize', 'Generate', 'Export', 'Complete']} />
+      
+      {/* Header */}
+      <div className="absolute top-8 left-20">
+        <BackButton to="/designer/customization" />
+      </div>
+
+      <div className="pl-20 pr-8 pt-16 pb-8">
+        <h1 className="text-2xl font-inter font-bold text-holo-black mb-8">
+          YOUR DESIGN OUTPUT
+        </h1>
+
+        <div className="flex gap-8 h-[calc(100vh-200px)]">
+          {/* 3D Viewport */}
+          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden">
+            {isLoading ? (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <div className="w-16 h-16 border-4 border-holo-coral border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="font-inter text-lg">Loading 3D Model...</p>
+                </div>
+              </div>
+            ) : (
+              <div className="absolute inset-0">
+                {/* Mock 3D Scene */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <div className="w-48 h-32 bg-gradient-to-r from-holo-coral/30 to-holo-teal/30 rounded-lg mx-auto mb-4 flex items-center justify-center border border-holo-coral/50">
+                      <div className="grid grid-cols-4 gap-2">
+                        {Array.from({ length: 12 }, (_, i) => (
+                          <div key={i} className="w-2 h-8 bg-holo-coral/60 rounded-full"></div>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="font-inter text-lg">Parametric Structure Model</p>
+                    <p className="font-inter text-sm text-gray-300 mt-1">Gym + Bar Configuration</p>
+                  </div>
+                </div>
+
+                {/* Controls */}
+                <div className="absolute top-4 right-4 space-y-2">
+                  <button className="p-2 bg-holo-white/20 text-white rounded-lg hover:bg-holo-white/30 transition-colors duration-200">
+                    <span className="text-xs font-inter">Orbit</span>
+                  </button>
+                  <button className="px-3 py-2 bg-holo-teal text-holo-white rounded-lg hover:bg-holo-teal/80 transition-colors duration-200 flex items-center gap-2">
+                    <Download size={16} />
+                    <span className="text-xs font-inter">GLTF</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Info Panel */}
+          <div className="w-96 flex flex-col space-y-6">
+            {/* Design Summary */}
+            <div className="bg-holo-white border border-holo-teal/20 rounded-2xl p-6 shadow-sm">
+              <h3 className="font-inter font-semibold text-holo-black mb-4">Design Summary</h3>
+              <div className="space-y-3 text-sm">
+                <div><span className="font-medium">Program:</span> Gym + Bar</div>
+                <div><span className="font-medium">Total Height Zones:</span> &lt;2m: 60 m²; &lt;3m: 80 m²</div>
+                <div><span className="font-medium">Material Usage:</span> PVC: 85 pipes (120 ft); Steel: 20 pipes (50 ft); Copper: 12 pipes (30 ft)</div>
+                <div><span className="font-medium">Joints:</span> 45 custom 3D-printed blobs</div>
+                <div><span className="font-medium">Build Time:</span> ~120 hrs</div>
+                <div><span className="font-medium text-holo-coral">CO₂ Saved:</span> <span className="font-semibold text-holo-coral">1.35 t</span></div>
+              </div>
+            </div>
+
+            {/* Tabs */}
+            <div className="bg-holo-white border border-holo-teal/20 rounded-2xl shadow-sm overflow-hidden flex-1">
+              <div className="flex border-b border-holo-teal/10">
+                {[
+                  { id: 'materials', label: 'Materials List' },
+                  { id: 'joints', label: 'Joints & Connectors' },
+                  { id: 'manual', label: 'Assembly Manual' },
+                  { id: 'export', label: 'Export Data' }
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex-1 px-3 py-3 text-xs font-inter font-medium transition-colors duration-200 ${
+                      activeTab === tab.id
+                        ? 'text-holo-coral border-b-2 border-holo-coral bg-holo-coral/5'
+                        : 'text-gray-600 hover:text-holo-black hover:bg-gray-50'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="p-4 overflow-y-auto flex-1">
+                {activeTab === 'materials' && (
+                  <div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs">
+                        <thead>
+                          <tr className="border-b border-holo-teal/10">
+                            <th className="text-left py-2 font-inter font-semibold">Type</th>
+                            <th className="text-left py-2 font-inter font-semibold">Qty</th>
+                            <th className="text-left py-2 font-inter font-semibold">Ø (mm)</th>
+                            <th className="text-left py-2 font-inter font-semibold">Reuse %</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {materials.map((material, index) => (
+                            <tr key={index} className={`${index % 2 === 0 ? 'bg-holo-white' : 'bg-holo-coral/5'} hover:bg-holo-coral/10 transition-colors duration-200`}>
+                              <td className="py-3 font-inter">{material.type}</td>
+                              <td className="py-3 font-inter">{material.qty}</td>
+                              <td className="py-3 font-inter">{material.diameter}</td>
+                              <td className="py-3 font-inter font-semibold text-holo-coral">{material.reuse}%</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <button className="w-full mt-4 py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium hover:bg-holo-teal/30 transition-colors duration-200">
+                      Download CSV
+                    </button>
+                  </div>
+                )}
+
+                {activeTab === 'joints' && (
+                  <div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {joints.map((joint) => (
+                        <div key={joint.id} className="border border-holo-teal/20 rounded-lg p-3 hover:shadow-md transition-shadow duration-200">
+                          <div className="w-full h-16 bg-gray-100 rounded mb-2 flex items-center justify-center">
+                            <div className="w-8 h-8 bg-holo-coral rounded-lg"></div>
+                          </div>
+                          <p className="text-xs font-inter font-medium text-holo-black">{joint.name}</p>
+                          <p className="text-xs font-inter text-gray-600 mb-2">{joint.type}</p>
+                          <button className="w-full py-1 bg-holo-coral text-holo-white rounded text-xs font-inter font-medium hover:shadow-md hover:shadow-holo-coral/30 transition-all duration-200">
+                            Download STL
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'manual' && (
+                  <div className="text-center">
+                    <div className="w-32 h-40 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                      <div className="text-gray-400 text-xs">PDF Preview</div>
+                    </div>
+                    <button className="w-full py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium hover:bg-holo-teal/30 transition-colors duration-200">
+                      Download PDF
+                    </button>
+                  </div>
+                )}
+
+                {activeTab === 'export' && (
+                  <div className="text-center">
+                    <button className="w-full py-3 bg-holo-coral text-holo-white rounded-lg font-inter font-medium hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 mb-4">
+                      Download JSON
+                    </button>
+                    <p className="text-xs font-inter text-gray-600">
+                      Use this file to train custom ML models for future designs.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => window.history.back()}
+                className="flex-1 py-3 bg-holo-white border border-holo-teal text-holo-black rounded-[32px] font-inter font-medium hover:bg-holo-teal/10 transition-colors duration-200"
+              >
+                Go Back to Edit
+              </button>
+              <button className="flex-1 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300">
+                Finalize & Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DesignerOutput;
