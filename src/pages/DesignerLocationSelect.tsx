@@ -8,7 +8,7 @@ import { Building, Sliders, Search } from 'lucide-react';
 
 const DesignerLocationSelect = () => {
   const navigate = useNavigate();
-  const [selectedBuilding, setSelectedBuilding] = useState(null);
+  const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -31,113 +31,109 @@ const DesignerLocationSelect = () => {
         SELECT YOUR BUILDING
       </h1>
 
-      <div className="flex flex-col items-center px-8 pt-16 pb-8 min-h-screen">
-        <div className="flex gap-8 w-full max-w-7xl" style={{ height: '60vh' }}>
-          {/* Map Area - 60% width */}
-          <div className="w-[60%] bg-gradient-to-br from-gray-50 to-gray-200 rounded-lg border-2 border-dashed border-holo-teal relative overflow-hidden">
-            {/* Placeholder Map centered on London */}
-            <div className="absolute inset-0">
-              <div className="p-8 text-center">
-                <div className="text-gray-400 mb-4">
-                  <Building size={48} className="mx-auto" />
-                </div>
-                <p className="text-gray-500 font-inter">London Building Map</p>
-                <p className="text-sm text-gray-400 mt-2">Click on building footprints to select</p>
-              </div>
-
-              {/* Mock London building footprints */}
-              <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                   onClick={() => setSelectedBuilding('london-building1')}>
-                <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
-              </div>
-              <div className="absolute top-1/2 right-1/3 w-20 h-16 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                   onClick={() => setSelectedBuilding('london-building2')}>
-                <div className="text-xs text-center pt-4 text-gray-600">Camden</div>
-              </div>
-              <div className="absolute bottom-1/3 left-1/2 w-14 h-18 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                   onClick={() => setSelectedBuilding('london-building3')}>
-                <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
-              </div>
+      <div className="flex flex-col lg:flex-row px-8 pt-16 pb-8 min-h-screen">
+        {/* Map Column - Centered */}
+        <div className="flex-1 flex flex-col items-center px-6 py-8">
+          <div className="w-full max-w-[800px] h-[500px] rounded-xl overflow-hidden border-2 border-holo-teal bg-gradient-to-br from-gray-50 to-gray-200 relative">
+            {/* Map Image */}
+            <img
+              src="/lovable-uploads/74d4b984-a513-478e-bc0e-3490532fd4ce.png"
+              alt="London Building Map"
+              className="w-full h-full object-cover"
+            />
+            
+            {/* Overlay building footprints as clickable elements */}
+            <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                 onClick={() => setSelectedBuilding('london-building1')}>
+              <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
             </div>
-
-            {/* Search Bar */}
-            <div className="absolute bottom-4 left-4 right-4">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-holo-coral" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search London area..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-holo-white border-2 border-holo-teal rounded-[32px] focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-coral"
-                />
-              </div>
+            <div className="absolute top-1/2 right-1/3 w-20 h-16 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                 onClick={() => setSelectedBuilding('london-building2')}>
+              <div className="text-xs text-center pt-4 text-gray-600">Camden</div>
+            </div>
+            <div className="absolute bottom-1/3 left-1/2 w-14 h-18 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                 onClick={() => setSelectedBuilding('london-building3')}>
+              <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
             </div>
           </div>
+          
+          {/* Search Bar */}
+          <div className="w-full max-w-[800px] mt-4">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-holo-coral" size={20} />
+              <input
+                type="text"
+                placeholder="Search London area..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-holo-white border-2 border-holo-teal rounded-[32px] focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-coral"
+              />
+            </div>
+          </div>
+        </div>
 
-          {/* Selection Panel - 40% width */}
-          <div className="w-[40%] flex flex-col items-center justify-center space-y-8 px-8">
-            {/* Selected Building Preview */}
-            <div className="text-center">
-              <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-holo-teal/20' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
-                {selectedBuilding ? (
-                  <div className="w-12 h-8 bg-holo-teal rounded"></div>
-                ) : (
-                  <span className="text-gray-400 text-xs font-inter text-center px-2">No Building Selected</span>
-                )}
-              </div>
-              {selectedBuilding && (
-                <p className="text-sm font-inter text-gray-600 capitalize">
-                  {selectedBuilding.replace('london-building', 'Building ')}
-                </p>
+        {/* Right Column: Preview & Controls */}
+        <div className="w-[200px] flex flex-col items-center px-4 py-8 space-y-6">
+          {/* Selected Building Preview */}
+          <div className="text-center">
+            <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-holo-teal/20' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
+              {selectedBuilding ? (
+                <div className="w-12 h-8 bg-holo-teal rounded"></div>
+              ) : (
+                <span className="text-gray-400 text-xs font-inter text-center px-2">No Building Selected</span>
               )}
             </div>
+            {selectedBuilding && (
+              <p className="text-sm font-inter text-gray-600 capitalize">
+                {selectedBuilding.replace('london-building', 'Building ')}
+              </p>
+            )}
+          </div>
 
-            {/* Control Buttons - stacked vertically */}
-            <div className="flex flex-col items-center space-y-8">
-              <button
-                onClick={() => setShowAnalysis(true)}
-                disabled={!selectedBuilding}
-                className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
-                  selectedBuilding 
-                    ? 'bg-holo-black border-holo-coral text-holo-teal hover:scale-105' 
-                    : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                <Building size={36} />
-                <span className="text-xs font-inter mt-1">Analysis</span>
-              </button>
+          {/* Control Buttons - stacked vertically */}
+          <div className="flex flex-col items-center space-y-8">
+            <button
+              onClick={() => setShowAnalysis(true)}
+              disabled={!selectedBuilding}
+              className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                selectedBuilding 
+                  ? 'bg-holo-black border-holo-coral text-holo-teal hover:scale-105' 
+                  : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              <Building size={36} />
+              <span className="text-xs font-inter mt-1">Analysis</span>
+            </button>
 
-              <button
-                onClick={() => setShowAdvanced(true)}
-                disabled={!selectedBuilding}
-                className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
-                  selectedBuilding 
-                    ? 'bg-holo-black border-holo-coral text-holo-teal hover:scale-105' 
-                    : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                <Sliders size={36} />
-                <span className="text-xs font-inter mt-1">Controls</span>
-              </button>
-            </div>
+            <button
+              onClick={() => setShowAdvanced(true)}
+              disabled={!selectedBuilding}
+              className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                selectedBuilding 
+                  ? 'bg-holo-black border-holo-coral text-holo-teal hover:scale-105' 
+                  : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              <Sliders size={36} />
+              <span className="text-xs font-inter mt-1">Controls</span>
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Proceed Button - Separate container */}
-        <div className="flex-shrink-0 mt-6">
-          <button
-            onClick={handleProceed}
-            disabled={!selectedBuilding}
-            className={`w-[240px] h-[48px] rounded-xl font-inter font-semibold text-[16px] transition-all duration-300 shadow-md ${
-              selectedBuilding
-                ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105'
-                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            Proceed with Selection
-          </button>
-        </div>
+      {/* Proceed Button - Below all columns */}
+      <div className="flex justify-center py-8">
+        <button
+          onClick={handleProceed}
+          disabled={!selectedBuilding}
+          className={`w-[240px] h-[48px] rounded-xl font-inter font-semibold text-[16px] transition-all duration-300 shadow-md ${
+            selectedBuilding
+              ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105'
+              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          Proceed with Selection
+        </button>
       </div>
 
       {/* Building Analysis Modal */}

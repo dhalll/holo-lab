@@ -15,7 +15,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <>
       {/* Desktop Progress Bar */}
-      <div className="fixed left-6 top-20 bottom-20 z-10 hidden md:flex flex-col justify-start w-[100px]">
+      <div className="fixed left-6 top-24 bottom-20 z-10 hidden md:flex flex-col justify-start w-[100px]">
         <div className="flex flex-col">
           {Array.from({ length: totalSteps }, (_, index) => {
             const stepNumber = index + 1;
