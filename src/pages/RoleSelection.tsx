@@ -21,10 +21,7 @@ const RoleSelection = () => {
     <div className="min-h-screen bg-holo-white font-inter relative">
       <ProgressBar currentStep={1} />
       
-      {/* Logo */}
-      <HoloLogo size="small" variant="full" />
-      
-      {/* Header */}
+      {/* Back Button only (no top logo) */}
       <BackButton to="/" />
 
       {/* Title - aligned with header */}
@@ -56,14 +53,36 @@ const RoleSelection = () => {
             </div>
           </div>
 
-          {/* Connecting Curve */}
+          {/* Thickened Teal Curve with Arrows */}
           <div className="hidden md:block">
-            <svg width="120" height="60" className="text-holo-teal">
+            <svg width="160" height="60" className="mx-8">
+              <marker
+                id="arrowLeft"
+                markerWidth="6"
+                markerHeight="6"
+                refX="6"
+                refY="3"
+                orient="180"
+              >
+                <path d="M0,0 L6,3 L0,6 Z" fill="#A5C1C8" />
+              </marker>
+              <marker
+                id="arrowRight"
+                markerWidth="6"
+                markerHeight="6"
+                refX="0"
+                refY="3"
+                orient="0"
+              >
+                <path d="M6,0 L0,3 L6,6 Z" fill="#A5C1C8" />
+              </marker>
               <path
-                d="M 10 30 Q 60 10 110 30"
-                stroke="currentColor"
-                strokeWidth="2"
+                d="M8,40 Q80,-10 152,40"
+                stroke="#A5C1C8"
+                strokeWidth="4"
                 fill="none"
+                markerStart="url(#arrowLeft)"
+                markerEnd="url(#arrowRight)"
               />
             </svg>
           </div>

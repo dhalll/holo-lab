@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
+import WorkflowWindow from '@/components/WorkflowWindow';
 import { Building, Sliders, Search } from 'lucide-react';
 
 const DesignerLocationSelect = () => {
@@ -22,8 +22,7 @@ const DesignerLocationSelect = () => {
     <div className="min-h-screen bg-holo-white font-inter relative">
       <ProgressBar currentStep={2} />
       
-      {/* Header */}
-      <HoloLogo size="small" variant="full" />
+      {/* Back Button only (no top logo) */}
       <BackButton to="/role-selection" />
 
       {/* Title - aligned with header */}
@@ -32,10 +31,9 @@ const DesignerLocationSelect = () => {
       </h1>
 
       <div className="flex flex-col lg:flex-row px-8 pt-16 pb-8 min-h-screen">
-        {/* Map Column - Centered */}
+        {/* Center Column: Map Window */}
         <div className="flex-1 flex flex-col items-center px-6 py-8">
-          <div className="w-full max-w-[800px] h-[500px] rounded-xl overflow-hidden border-2 border-holo-teal bg-gradient-to-br from-gray-50 to-gray-200 relative">
-            {/* Map Image */}
+          <WorkflowWindow>
             <img
               src="/lovable-uploads/74d4b984-a513-478e-bc0e-3490532fd4ce.png"
               alt="London Building Map"
@@ -55,7 +53,7 @@ const DesignerLocationSelect = () => {
                  onClick={() => setSelectedBuilding('london-building3')}>
               <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
             </div>
-          </div>
+          </WorkflowWindow>
           
           {/* Search Bar */}
           <div className="w-full max-w-[800px] mt-4">
@@ -97,11 +95,11 @@ const DesignerLocationSelect = () => {
               disabled={!selectedBuilding}
               className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                 selectedBuilding 
-                  ? 'bg-holo-black border-holo-coral text-holo-teal hover:scale-105' 
+                  ? 'bg-holo-black border-holo-coral text-holo-white hover:scale-105' 
                   : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
               }`}
             >
-              <Building size={36} />
+              <Building size={36} className="text-white" />
               <span className="text-xs font-inter mt-1">Analysis</span>
             </button>
 
@@ -110,11 +108,11 @@ const DesignerLocationSelect = () => {
               disabled={!selectedBuilding}
               className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                 selectedBuilding 
-                  ? 'bg-holo-black border-holo-coral text-holo-teal hover:scale-105' 
+                  ? 'bg-holo-black border-holo-coral text-holo-white hover:scale-105' 
                   : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
               }`}
             >
-              <Sliders size={36} />
+              <Sliders size={36} className="text-white" />
               <span className="text-xs font-inter mt-1">Controls</span>
             </button>
           </div>
@@ -136,7 +134,7 @@ const DesignerLocationSelect = () => {
         </button>
       </div>
 
-      {/* Building Analysis Modal */}
+      {/* Building Analysis Modal - keep existing code for modals */}
       {showAnalysis && (
         <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-holo-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
@@ -186,7 +184,7 @@ const DesignerLocationSelect = () => {
         </div>
       )}
 
-      {/* Advanced Controls Panel */}
+      {/* Advanced Controls Panel - keep existing code for modals */}
       {showAdvanced && (
         <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-holo-white rounded-3xl shadow-2xl max-w-md w-full">

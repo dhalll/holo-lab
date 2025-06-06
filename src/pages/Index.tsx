@@ -57,12 +57,14 @@ const Index = () => {
             <div className="flex justify-between text-sm pt-2">
               <button
                 type="button"
+                onClick={() => navigate('/signup')}
                 className="text-gray-600 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
               >
                 Create an Account
               </button>
               <button
                 type="button"
+                onClick={() => navigate('/forgot-password')}
                 className="text-gray-600 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
               >
                 Forgot Password

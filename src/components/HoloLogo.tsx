@@ -62,13 +62,8 @@ const HoloLogo: React.FC<HoloLogoProps> = ({
     );
   }
 
-  return (
-    <img 
-      src="/lovable-uploads/cbd5629b-35d4-4351-8070-3528ec5cec35.png" 
-      alt="HoloLab Logo" 
-      className="w-[100px] absolute top-6 left-6 h-auto"
-    />
-  );
+  // For non-landing pages, return null since we don't want the top logo
+  return null;
 };
 
 export default HoloLogo;
