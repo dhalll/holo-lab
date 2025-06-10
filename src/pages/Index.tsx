@@ -21,45 +21,15 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter flex flex-col items-center justify-center px-4 relative overflow-hidden">
-      {/* Animated Pixel Gradient Background */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0 bg-gradient-to-br from-holo-teal/20 via-transparent to-holo-coral/20 animate-pulse"></div>
-        <div 
-          className="absolute inset-0 opacity-60"
-          style={{
-            backgroundImage: `
-              radial-gradient(circle at 20% 30%, rgba(165, 193, 200, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 70%, rgba(245, 123, 78, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 40% 80%, rgba(165, 193, 200, 0.15) 0%, transparent 60%),
-              radial-gradient(circle at 90% 20%, rgba(245, 123, 78, 0.08) 0%, transparent 40%),
-              radial-gradient(circle at 10% 90%, rgba(0, 0, 0, 0.03) 0%, transparent 30%)
-            `,
-            backgroundSize: '400px 400px, 300px 300px, 500px 500px, 200px 200px, 350px 350px',
-            animation: 'float 20s ease-in-out infinite, drift 30s linear infinite'
-          }}
-        ></div>
-        <div 
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage: `
-              radial-gradient(circle at 60% 40%, rgba(245, 123, 78, 0.05) 0%, transparent 40%),
-              radial-gradient(circle at 30% 60%, rgba(165, 193, 200, 0.08) 0%, transparent 45%),
-              radial-gradient(circle at 70% 90%, rgba(0, 0, 0, 0.02) 0%, transparent 35%)
-            `,
-            backgroundSize: '250px 250px, 180px 180px, 400px 400px',
-            animation: 'float 25s ease-in-out infinite reverse, drift 40s linear infinite reverse'
-          }}
-        ></div>
-      </div>
-
+    <div className="min-h-screen bg-holo-white font-inter flex flex-col items-center justify-center px-4">
       {/* Logo - centered, no progress bar or six-dot emblem on landing */}
       <HoloLogo variant="full" isLanding={true} />
 
-      {/* Login Form with Animated Gradient Background */}
-      <div className="w-full max-w-md mt-12 relative z-10">
+      {/* Login Form */}
+      <div className="w-full max-w-md mt-12">
         <div 
-          className="relative p-8 rounded-[32px] bg-holo-gradient bg-[length:200%_200%] animate-gradient-slide shadow-lg"
+          className="p-8 rounded-[32px] bg-gradient-white-teal backdrop-blur-sm"
+          style={{ boxShadow: '0 8px 32px rgba(165, 193, 200, 0.1)' }}
         >
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
@@ -68,7 +38,7 @@ const Index = () => {
                 placeholder="Enter your Email or Username *"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-12 px-6 rounded-[32px] border-2 border-white bg-white/90 text-holo-black placeholder:text-gray-600 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral focus:bg-white transition-all duration-200 backdrop-blur-sm"
+                className="w-full h-12 px-6 rounded-[32px] border-2 border-holo-teal bg-holo-white text-holo-black placeholder:text-gray-500 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200"
                 required
               />
             </div>
@@ -79,7 +49,7 @@ const Index = () => {
                 placeholder="Enter your Password *"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 px-6 rounded-[32px] border-2 border-white bg-white/90 text-holo-black placeholder:text-gray-600 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral focus:bg-white transition-all duration-200 backdrop-blur-sm"
+                className="w-full h-12 px-6 rounded-[32px] border-2 border-holo-teal bg-holo-white text-holo-black placeholder:text-gray-500 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200"
                 required
               />
             </div>
@@ -88,14 +58,14 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => navigate('/signup')}
-                className="text-gray-800 hover:text-holo-black hover:underline font-inter font-medium transition-colors duration-200"
+                className="text-gray-600 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
               >
                 Create an Account
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/forgot-password')}
-                className="text-gray-800 hover:text-holo-black hover:underline font-inter font-medium transition-colors duration-200"
+                className="text-gray-600 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
               >
                 Forgot Password
               </button>
@@ -105,7 +75,10 @@ const Index = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-12 rounded-[32px] bg-white/90 text-holo-coral font-inter font-semibold text-base border-2 border-holo-coral hover:bg-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:scale-105"
+                className="w-full h-12 rounded-[32px] bg-gradient-teal-coral hover:bg-gradient-coral-teal border-4 border-holo-coral text-holo-white font-inter font-semibold text-base transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:scale-105"
+                style={{ 
+                  boxShadow: 'inset 0 2px 4px rgba(245, 123, 78, 0.3)' 
+                }}
               >
                 {isLoading ? 'Logging in...' : 'Log in'}
               </button>
