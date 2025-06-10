@@ -71,6 +71,10 @@ export default {
 				'gradient-white-teal': 'linear-gradient(to bottom, #FFFFFF, #A5C1C8)',
 				'gradient-teal-coral': 'linear-gradient(to right, #A5C1C8, #F57B4E)',
 				'gradient-coral-teal': 'linear-gradient(to right, #F57B4E, #A5C1C8)',
+				'holo-gradient': 'linear-gradient(90deg, #A5C1C8 0%, #F57B4E 100%)',
+			},
+			backgroundSize: {
+				'200': '200% 200%',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -102,12 +106,17 @@ export default {
 						transform: 'scale(1)',
 						opacity: '1'
 					}
-				}
+				},
+				'gradient-slide': {
+					'0%, 100%': { 'background-position': '0% 50%' },
+					'50%': { 'background-position': '100% 50%' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'pulse-ring': 'pulse-ring 2s ease-in-out infinite'
+				'pulse-ring': 'pulse-ring 2s ease-in-out infinite',
+				'gradient-slide': 'gradient-slide 12s ease-in-out infinite',
 			}
 		}
 	},
