@@ -56,11 +56,10 @@ const Index = () => {
       {/* Logo - centered, no progress bar or six-dot emblem on landing */}
       <HoloLogo variant="full" isLanding={true} />
 
-      {/* Login Form */}
+      {/* Login Form with Animated Gradient Background */}
       <div className="w-full max-w-md mt-12 relative z-10">
         <div 
-          className="p-8 rounded-[32px] bg-gradient-white-teal backdrop-blur-sm"
-          style={{ boxShadow: '0 8px 32px rgba(165, 193, 200, 0.1)' }}
+          className="relative p-8 rounded-[32px] bg-holo-gradient bg-[length:200%_200%] animate-gradient-slide shadow-lg"
         >
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
@@ -69,7 +68,7 @@ const Index = () => {
                 placeholder="Enter your Email or Username *"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-12 px-6 rounded-[32px] border-2 border-holo-teal bg-holo-white text-holo-black placeholder:text-gray-500 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200"
+                className="w-full h-12 px-6 rounded-[32px] border-2 border-white bg-white/90 text-holo-black placeholder:text-gray-600 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral focus:bg-white transition-all duration-200 backdrop-blur-sm"
                 required
               />
             </div>
@@ -80,7 +79,7 @@ const Index = () => {
                 placeholder="Enter your Password *"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-12 px-6 rounded-[32px] border-2 border-holo-teal bg-holo-white text-holo-black placeholder:text-gray-500 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200"
+                className="w-full h-12 px-6 rounded-[32px] border-2 border-white bg-white/90 text-holo-black placeholder:text-gray-600 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral focus:bg-white transition-all duration-200 backdrop-blur-sm"
                 required
               />
             </div>
@@ -89,14 +88,14 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => navigate('/signup')}
-                className="text-gray-600 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
+                className="text-gray-800 hover:text-holo-black hover:underline font-inter font-medium transition-colors duration-200"
               >
                 Create an Account
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/forgot-password')}
-                className="text-gray-600 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
+                className="text-gray-800 hover:text-holo-black hover:underline font-inter font-medium transition-colors duration-200"
               >
                 Forgot Password
               </button>
@@ -106,10 +105,7 @@ const Index = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-12 rounded-[32px] bg-gradient-teal-coral hover:bg-gradient-coral-teal border-4 border-holo-coral text-holo-white font-inter font-semibold text-base transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:scale-105"
-                style={{ 
-                  boxShadow: 'inset 0 2px 4px rgba(245, 123, 78, 0.3)' 
-                }}
+                className="w-full h-12 rounded-[32px] bg-white/90 text-holo-coral font-inter font-semibold text-base border-2 border-holo-coral hover:bg-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:scale-105"
               >
                 {isLoading ? 'Logging in...' : 'Log in'}
               </button>
@@ -117,20 +113,6 @@ const Index = () => {
           </form>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-20px) scale(1.05); }
-        }
-        @keyframes drift {
-          0% { transform: translateX(0px) rotate(0deg); }
-          25% { transform: translateX(100px) rotate(90deg); }
-          50% { transform: translateX(0px) rotate(180deg); }
-          75% { transform: translateX(-100px) rotate(270deg); }
-          100% { transform: translateX(0px) rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 };
