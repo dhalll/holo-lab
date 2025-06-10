@@ -58,72 +58,59 @@ const Index = () => {
 
       {/* Login Form */}
       <div className="w-full max-w-md mt-12 relative z-10">
-        {/* Outer wrapper for faint image + gradient */}
-        <div className="relative rounded-[32px] overflow-hidden">
-          {/* 1. Faint Pipes Background */}
-          <img
-            src="/lovable-uploads/13200af4-8cd6-4bb6-94e8-72e38dbf1f56.png"
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ opacity: 0.15 }}
-          />
+        <div 
+          className="relative p-8 rounded-[32px] bg-holo-gradient bg-[length:200%_200%] animate-gradient-slide backdrop-blur-sm shadow-lg"
+        >
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <input
+                type="email"
+                placeholder="Enter your Email or Username *"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full h-12 px-6 rounded-[32px] border-2 border-white bg-white/80 text-holo-black placeholder:text-gray-600 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200 backdrop-blur-sm"
+                required
+              />
+            </div>
+            
+            <div>
+              <input
+                type="password"
+                placeholder="Enter your Password *"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full h-12 px-6 rounded-[32px] border-2 border-white bg-white/80 text-holo-black placeholder:text-gray-600 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200 backdrop-blur-sm"
+                required
+              />
+            </div>
 
-          {/* 2. Animated Gradient Overlay */}
-          <div 
-            className="relative p-8 bg-holo-gradient bg-[length:200%_200%] animate-gradient-slide backdrop-blur-sm shadow-lg"
-          >
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <input
-                  type="email"
-                  placeholder="Enter your Email or Username *"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-12 px-6 rounded-[32px] border-2 border-white bg-white/80 text-holo-black placeholder:text-gray-600 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200 backdrop-blur-sm"
-                  required
-                />
-              </div>
-              
-              <div>
-                <input
-                  type="password"
-                  placeholder="Enter your Password *"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-12 px-6 rounded-[32px] border-2 border-white bg-white/80 text-holo-black placeholder:text-gray-600 font-inter text-base focus:outline-none focus:ring-2 focus:ring-holo-coral transition-all duration-200 backdrop-blur-sm"
-                  required
-                />
-              </div>
+            <div className="flex justify-between text-sm pt-2">
+              <button
+                type="button"
+                onClick={() => navigate('/signup')}
+                className="text-gray-800 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
+              >
+                Create an Account
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/forgot-password')}
+                className="text-gray-800 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
+              >
+                Forgot Password
+              </button>
+            </div>
 
-              <div className="flex justify-between text-sm pt-2">
-                <button
-                  type="button"
-                  onClick={() => navigate('/signup')}
-                  className="text-gray-800 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
-                >
-                  Create an Account
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate('/forgot-password')}
-                  className="text-gray-800 hover:text-holo-coral hover:underline font-inter font-medium transition-colors duration-200"
-                >
-                  Forgot Password
-                </button>
-              </div>
-
-              <div className="pt-4">
-                {/* 3. Restored Gradient "Log in" Button */}
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full h-12 bg-gradient-to-r from-holo-teal to-holo-coral text-white font-inter font-semibold text-base rounded-[32px] shadow-inner hover:scale-105 transition-transform duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isLoading ? 'Logging in...' : 'Log in'}
-                </button>
-              </div>
-            </form>
-          </div>
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-12 rounded-[32px] bg-white/90 text-holo-coral font-inter font-semibold text-base border-2 border-holo-coral hover:bg-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? 'Logging in...' : 'Log in'}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

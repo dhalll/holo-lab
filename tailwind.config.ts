@@ -71,7 +71,7 @@ export default {
 				'gradient-white-teal': 'linear-gradient(to bottom, #FFFFFF, #A5C1C8)',
 				'gradient-teal-coral': 'linear-gradient(to right, #A5C1C8, #F57B4E)',
 				'gradient-coral-teal': 'linear-gradient(to right, #F57B4E, #A5C1C8)',
-				'holo-gradient': 'linear-gradient(90deg, #A5C1C8 0%, #F57B4E 100%)',
+				'holo-gradient': 'linear-gradient(90deg, #A5C1C8 0%, #FFFFFF 100%)',
 			},
 			backgroundSize: {
 				'200': '200% 200%',
