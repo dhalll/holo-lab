@@ -117,20 +117,6 @@ const Index = () => {
           </form>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-20px) scale(1.05); }
-        }
-        @keyframes drift {
-          0% { transform: translateX(0px) rotate(0deg); }
-          25% { transform: translateX(100px) rotate(90deg); }
-          50% { transform: translateX(0px) rotate(180deg); }
-          75% { transform: translateX(-100px) rotate(270deg); }
-          100% { transform: translateX(0px) rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 };
