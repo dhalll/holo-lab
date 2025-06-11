@@ -21,11 +21,11 @@ const RoleSelection = () => {
     <div className="min-h-screen bg-holo-white font-inter relative">
       <ProgressBar currentStep={1} />
       
-      {/* Back Button only (no top logo) */}
+      {/* Back Button aligned with progress bar */}
       <BackButton to="/" />
 
-      {/* Title - aligned with header */}
-      <h1 className="absolute top-6 left-[148px] text-[20px] font-semibold text-holo-black tracking-wide">
+      {/* Title positioned after back button */}
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black tracking-wide">
         SELECT YOUR EXPERIENCE
       </h1>
 

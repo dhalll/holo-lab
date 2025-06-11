@@ -72,7 +72,7 @@ const SupplierScan = () => {
         <HoloLogo size="small" variant="full" />
       </div>
       
-      <div className="absolute top-6 left-32 z-20">
+      <div className="absolute top-6 left-20 z-20">
         <BackButton to="/supplier/start" />
       </div>
 

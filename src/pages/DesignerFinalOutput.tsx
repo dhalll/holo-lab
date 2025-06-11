@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -35,11 +36,11 @@ const DesignerFinalOutput = () => {
     <div className="min-h-screen bg-holo-white font-inter relative overflow-hidden">
       <ProgressBar currentStep={4} />
       
-      {/* Back Button only (no top logo) */}
+      {/* Back Button aligned with progress bar */}
       <BackButton onClick={() => navigate('/designer/customization')} />
       
-      {/* Title - aligned with header */}
-      <h1 className="absolute top-6 left-[148px] text-[20px] font-semibold text-holo-black z-10">
+      {/* Title positioned after back button */}
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black z-10">
         YOUR DESIGN OUTPUT
       </h1>
 

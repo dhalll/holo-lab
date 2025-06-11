@@ -23,7 +23,7 @@ const SupplierStart = () => {
         <HoloLogo size="small" variant="full" />
       </div>
       
-      <div className="absolute top-6 left-32">
+      <div className="absolute top-6 left-20">
         <BackButton to="/role-selection" />
       </div>
 
