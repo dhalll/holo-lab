@@ -53,38 +53,13 @@ const RoleSelection = () => {
             </div>
           </div>
 
-          {/* Thickened Teal Curve with Arrows */}
+          {/* Arrow Image */}
           <div className="hidden md:block">
-            <svg width="160" height="60" className="mx-8">
-              <marker
-                id="arrowLeft"
-                markerWidth="6"
-                markerHeight="6"
-                refX="6"
-                refY="3"
-                orient="180"
-              >
-                <path d="M0,0 L6,3 L0,6 Z" fill="#A5C1C8" />
-              </marker>
-              <marker
-                id="arrowRight"
-                markerWidth="6"
-                markerHeight="6"
-                refX="0"
-                refY="3"
-                orient="0"
-              >
-                <path d="M6,0 L0,3 L6,6 Z" fill="#A5C1C8" />
-              </marker>
-              <path
-                d="M8,40 Q80,-10 152,40"
-                stroke="#A5C1C8"
-                strokeWidth="4"
-                fill="none"
-                markerStart="url(#arrowLeft)"
-                markerEnd="url(#arrowRight)"
-              />
-            </svg>
+            <img 
+              src="/lovable-uploads/812f4522-3587-4914-8f42-e1f6190abb47.png" 
+              alt="Arrow" 
+              className="w-40 h-16 mx-8"
+            />
           </div>
 
           {/* Supplier Option */}
