@@ -1,13 +1,10 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Map, { Source, Layer } from 'react-map-gl';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import WorkflowWindow from '@/components/WorkflowWindow';
 import { Building, Sliders, Search } from 'lucide-react';
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 const DesignerLocationSelect = () => {
   const navigate = useNavigate();
@@ -16,67 +13,20 @@ const DesignerLocationSelect = () => {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [activeTab, setActiveTab] = useState('wind');
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(true);
-
-  const [viewState, setViewState] = useState({
-    longitude: -0.1278,
-    latitude: 51.5074,
-    zoom: 14.5,
-    pitch: 45,
-    bearing: -17
-  });
 
   const handleProceed = () => {
     navigate('/designer/customization');
   };
 
-  const handleBuildingClick = (buildingId: string, event: any) => {
-    event.stopPropagation();
-    setSelectedBuilding(buildingId);
-  };
-
-  if (showTokenInput && !mapboxToken) {
-    return (
-      <div className="min-h-screen bg-holo-white font-inter relative flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl border-2 border-holo-teal shadow-lg max-w-md w-full mx-4">
-          <h2 className="text-xl font-semibold text-holo-black mb-4">Mapbox Configuration</h2>
-          <p className="text-gray-600 mb-4">
-            To display the interactive map, please enter your Mapbox public token. 
-            You can get one for free at <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="text-holo-coral hover:underline">mapbox.com</a>
-          </p>
-          <input
-            type="text"
-            placeholder="pk.your_mapbox_token_here"
-            value={mapboxToken}
-            onChange={(e) => setMapboxToken(e.target.value)}
-            className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral mb-4"
-          />
-          <button
-            onClick={() => setShowTokenInput(false)}
-            disabled={!mapboxToken}
-            className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
-              mapboxToken
-                ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-white'
-                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            Continue to Map
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-holo-white font-inter relative">
       <ProgressBar currentStep={2} />
       
-      {/* Back Button aligned with progress bar */}
+      {/* Back Button only (no top logo) */}
       <BackButton to="/role-selection" />
 
-      {/* Title positioned after back button */}
-      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
+      {/* Title - aligned with header */}
+      <h1 className="absolute top-6 left-[148px] text-[20px] font-semibold text-holo-black">
         SELECT YOUR BUILDING
       </h1>
 
@@ -85,116 +35,25 @@ const DesignerLocationSelect = () => {
           {/* Center Column: Map Window */}
           <div className="flex-1 flex flex-col items-center px-6 py-8">
             <WorkflowWindow>
-              <Map
-                {...viewState}
-                onMove={evt => setViewState(evt.viewState)}
-                style={{width: '100%', height: '100%'}}
-                mapStyle="mapbox://styles/mapbox/light-v10"
-                mapboxAccessToken={mapboxToken}
-              >
-                {/* 3D Buildings Layer */}
-                <Source id="composite" type="vector" url="mapbox://mapbox.mapbox-streets-v8">
-                  <Layer
-                    id="3d-buildings"
-                    source="composite"
-                    source-layer="building"
-                    filter={['==', 'extrude', 'true']}
-                    type="fill-extrusion"
-                    paint={{
-                      'fill-extrusion-color': '#A5C1C8',
-                      'fill-extrusion-height': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        15,
-                        0,
-                        15.05,
-                        ['get', 'height']
-                      ],
-                      'fill-extrusion-base': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        15,
-                        0,
-                        15.05,
-                        ['get', 'min_height']
-                      ],
-                      'fill-extrusion-opacity': 0.6
-                    }}
-                  />
-                </Source>
-
-                {/* Interactive Building Markers */}
-                <div 
-                  style={{
-                    position: 'absolute',
-                    top: '33%',
-                    left: '25%',
-                    width: '64px',
-                    height: '48px',
-                    backgroundColor: selectedBuilding === 'london-building1' ? 'rgba(255, 107, 107, 0.3)' : 'rgba(165, 193, 200, 0.3)',
-                    border: `2px solid ${selectedBuilding === 'london-building1' ? '#FF6B6B' : '#A5C1C8'}`,
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '12px',
-                    color: '#666',
-                    transition: 'all 0.2s'
-                  }}
-                  onClick={(e) => handleBuildingClick('london-building1', e)}
-                >
-                  Shoreditch
-                </div>
-                
-                <div 
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: '33%',
-                    width: '80px',
-                    height: '64px',
-                    backgroundColor: selectedBuilding === 'london-building2' ? 'rgba(255, 107, 107, 0.3)' : 'rgba(165, 193, 200, 0.3)',
-                    border: `2px solid ${selectedBuilding === 'london-building2' ? '#FF6B6B' : '#A5C1C8'}`,
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '12px',
-                    color: '#666',
-                    transition: 'all 0.2s'
-                  }}
-                  onClick={(e) => handleBuildingClick('london-building2', e)}
-                >
-                  Camden
-                </div>
-                
-                <div 
-                  style={{
-                    position: 'absolute',
-                    bottom: '33%',
-                    left: '50%',
-                    width: '56px',
-                    height: '72px',
-                    backgroundColor: selectedBuilding === 'london-building3' ? 'rgba(255, 107, 107, 0.3)' : 'rgba(165, 193, 200, 0.3)',
-                    border: `2px solid ${selectedBuilding === 'london-building3' ? '#FF6B6B' : '#A5C1C8'}`,
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '12px',
-                    color: '#666',
-                    transition: 'all 0.2s'
-                  }}
-                  onClick={(e) => handleBuildingClick('london-building3', e)}
-                >
-                  Westminster
-                </div>
-              </Map>
+              <img
+                src="/lovable-uploads/74d4b984-a513-478e-bc0e-3490532fd4ce.png"
+                alt="London Building Map"
+                className="w-full h-full object-cover"
+              />
+              
+              {/* Overlay building footprints as clickable elements */}
+              <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                   onClick={() => setSelectedBuilding('london-building1')}>
+                <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
+              </div>
+              <div className="absolute top-1/2 right-1/3 w-20 h-16 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                   onClick={() => setSelectedBuilding('london-building2')}>
+                <div className="text-xs text-center pt-4 text-gray-600">Camden</div>
+              </div>
+              <div className="absolute bottom-1/3 left-1/2 w-14 h-18 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                   onClick={() => setSelectedBuilding('london-building3')}>
+                <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
+              </div>
             </WorkflowWindow>
             
             {/* Search Bar */}
@@ -230,6 +89,7 @@ const DesignerLocationSelect = () => {
               )}
             </div>
 
+            {/* Control Buttons - stacked vertically */}
             <div className="flex flex-col items-center space-y-8">
               <button
                 onClick={() => setShowAnalysis(true)}
@@ -283,6 +143,7 @@ const DesignerLocationSelect = () => {
             <div className="p-6">
               <h2 className="text-lg font-inter font-bold text-holo-black mb-6">Building Analysis</h2>
               
+              {/* Tabs */}
               <div className="flex border-b border-holo-teal/20 mb-6">
                 {[
                   { id: 'wind', label: 'Wind Analysis' },
@@ -303,6 +164,7 @@ const DesignerLocationSelect = () => {
                 ))}
               </div>
 
+              {/* Tab Content */}
               <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
                 <p className="text-gray-500 font-inter">
                   {activeTab === 'wind' && 'Wind patterns for London location will appear here'}
@@ -324,6 +186,7 @@ const DesignerLocationSelect = () => {
         </div>
       )}
 
+      {/* Advanced Controls Panel - keep existing code for modals */}
       {showAdvanced && (
         <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-holo-white rounded-3xl shadow-2xl max-w-md w-full">
