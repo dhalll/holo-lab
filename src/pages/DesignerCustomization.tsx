@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -26,6 +27,9 @@ const DesignerCustomization = () => {
   ]);
   const [userInput, setUserInput] = useState('');
   const [selectedPrograms, setSelectedPrograms] = useState<string[]>([]);
+  const [selectedVolumeHeight, setSelectedVolumeHeight] = useState<string>('');
+  const [selectedSpacePreference, setSelectedSpacePreference] = useState<string>('');
+  const [selectedShading, setSelectedShading] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [canProceed, setCanProceed] = useState(false);
 
@@ -64,6 +68,30 @@ const DesignerCustomization = () => {
     }
   };
 
+  const handleVolumeHeightSelect = (option: string) => {
+    setSelectedVolumeHeight(option);
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Volume & Height: ${option}`, showOptions: false }
+    ]);
+  };
+
+  const handleSpacePreferenceSelect = (option: string) => {
+    setSelectedSpacePreference(option);
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Space Preference: ${option}`, showOptions: false }
+    ]);
+  };
+
+  const handleShadingSelect = (option: string) => {
+    setSelectedShading(option);
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Shading: ${option}`, showOptions: false }
+    ]);
+  };
+
   const handleConstraintsComplete = () => {
     setIsGenerating(true);
     setTimeout(() => {
@@ -79,6 +107,15 @@ const DesignerCustomization = () => {
       setIsGenerating(false);
       setCanProceed(true);
     }, 3000);
+  };
+
+  const handleVariantSelect = (variant: number) => {
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Selected Option ${variant}`, showOptions: false },
+      { type: 'bot', content: `Perfect! Option ${variant} has been selected. You can now proceed with your customized design.`, showOptions: false }
+    ]);
+    setCanProceed(true);
   };
 
   const handleSendMessage = () => {
@@ -177,7 +214,12 @@ const DesignerCustomization = () => {
                             {['<2m & <3m areas', 'All <2m', 'All ≥2m'].map((option) => (
                               <button
                                 key={option}
-                                className="px-3 py-2 rounded-full text-xs font-medium bg-white border border-holo-teal text-holo-black hover:bg-holo-teal hover:text-white transition-colors duration-200"
+                                onClick={() => handleVolumeHeightSelect(option)}
+                                className={`px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
+                                  selectedVolumeHeight === option
+                                    ? 'bg-holo-teal text-white'
+                                    : 'bg-white border border-holo-teal text-holo-black hover:bg-holo-teal hover:text-white'
+                                }`}
                               >
                                 {option}
                               </button>
@@ -189,10 +231,17 @@ const DesignerCustomization = () => {
                           <p className="text-sm font-medium text-gray-600 mb-2">Space Preferences:</p>
                           <div className="flex gap-4">
                             {['Separate', 'Connected'].map((option) => (
-                              <label key={option} className="flex items-center space-x-2">
-                                <input type="radio" name="space" className="text-holo-coral" />
-                                <span className="text-xs">{option}</span>
-                              </label>
+                              <button
+                                key={option}
+                                onClick={() => handleSpacePreferenceSelect(option)}
+                                className={`px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
+                                  selectedSpacePreference === option
+                                    ? 'bg-holo-coral text-white'
+                                    : 'bg-white border border-holo-coral text-holo-coral hover:bg-holo-coral hover:text-white'
+                                }`}
+                              >
+                                {option}
+                              </button>
                             ))}
                           </div>
                         </div>
@@ -203,7 +252,12 @@ const DesignerCustomization = () => {
                             {['Full Coverage', 'No Coverage', '½ Coverage'].map((option) => (
                               <button
                                 key={option}
-                                className="px-3 py-2 rounded-full text-xs font-medium bg-white border border-holo-coral text-holo-coral hover:bg-holo-coral hover:text-white transition-colors duration-200"
+                                onClick={() => handleShadingSelect(option)}
+                                className={`px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
+                                  selectedShading === option
+                                    ? 'bg-holo-coral text-white'
+                                    : 'bg-white border border-holo-coral text-holo-coral hover:bg-holo-coral hover:text-white'
+                                }`}
                               >
                                 {option}
                               </button>
@@ -225,20 +279,15 @@ const DesignerCustomization = () => {
                       <div className="mt-4">
                         <div className="grid grid-cols-3 gap-2 mb-4">
                           {[1, 2, 3].map((variant) => (
-                            <div
+                            <button
                               key={variant}
+                              onClick={() => handleVariantSelect(variant)}
                               className="aspect-square bg-gray-100 rounded-lg border-2 border-holo-teal cursor-pointer hover:border-holo-coral transition-colors duration-200 flex items-center justify-center"
                             >
                               <span className="text-xs text-gray-600">Option {variant}</span>
-                            </div>
+                            </button>
                           ))}
                         </div>
-                        <button
-                          onClick={() => setCanProceed(true)}
-                          className="w-full py-2 bg-holo-coral text-white rounded-lg font-medium hover:shadow-lg transition-all duration-200"
-                        >
-                          Select Option 1
-                        </button>
                       </div>
                     )}
                   </div>
