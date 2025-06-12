@@ -30,10 +30,10 @@ const DesignerLocationSelect = () => {
         SELECT YOUR BUILDING
       </h1>
 
-      <div className="px-8 pt-16 pb-8">
-        {/* Centered Map Content */}
-        <div className="flex flex-col items-center justify-center min-h-[600px]">
-          {/* 3D Map Window - More Square */}
+      <div className="px-8 pt-16 pb-8 flex">
+        {/* Left Panel - Map Content */}
+        <div className="flex-1 flex flex-col items-center justify-center pr-8">
+          {/* 3D Map Window */}
           <div className="mb-6">
             <WorkflowWindow className="w-[600px] h-[600px]">
               <ThreeScene className="w-full h-full" />
@@ -55,7 +55,7 @@ const DesignerLocationSelect = () => {
           </div>
           
           {/* Search Bar */}
-          <div className="w-full max-w-[600px] mb-8">
+          <div className="w-full max-w-[600px]">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-holo-coral" size={20} />
               <input
@@ -67,67 +67,69 @@ const DesignerLocationSelect = () => {
               />
             </div>
           </div>
+        </div>
 
-          {/* Controls Row */}
-          <div className="flex items-center gap-8 mb-8">
-            {/* Selected Building Preview */}
-            <div className="text-center">
-              <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-holo-teal/20' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
-                {selectedBuilding ? (
-                  <div className="w-12 h-8 bg-holo-teal rounded"></div>
-                ) : (
-                  <span className="text-gray-400 text-xs font-inter text-center px-2">No Building Selected</span>
-                )}
-              </div>
-              {selectedBuilding && (
-                <p className="text-sm font-inter text-gray-600 capitalize">
-                  {selectedBuilding.replace('london-building', 'Building ')}
-                </p>
+        {/* Right Panel - Controls and Selection */}
+        <div className="w-[300px] flex flex-col space-y-8 pt-8">
+          {/* Selected Building Preview */}
+          <div className="text-center">
+            <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-holo-teal/20' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
+              {selectedBuilding ? (
+                <div className="w-12 h-8 bg-holo-teal rounded"></div>
+              ) : (
+                <span className="text-gray-400 text-xs font-inter text-center px-2">No Building Selected</span>
               )}
             </div>
+            {selectedBuilding && (
+              <p className="text-sm font-inter text-gray-600 capitalize">
+                {selectedBuilding.replace('london-building', 'Building ')}
+              </p>
+            )}
+          </div>
 
-            {/* Control Buttons */}
-            <div className="flex items-center gap-6">
-              <button
-                onClick={() => setShowAnalysis(true)}
-                disabled={!selectedBuilding}
-                className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
-                  selectedBuilding 
-                    ? 'bg-holo-black border-holo-coral text-holo-white hover:scale-105' 
-                    : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                <Building size={36} className="text-white" />
-                <span className="text-xs font-inter mt-1">Analysis</span>
-              </button>
+          {/* Control Buttons */}
+          <div className="flex justify-center gap-6">
+            <button
+              onClick={() => setShowAnalysis(true)}
+              disabled={!selectedBuilding}
+              className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                selectedBuilding 
+                  ? 'bg-holo-black border-holo-coral text-holo-white hover:scale-105' 
+                  : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              <Building size={36} className="text-white" />
+              <span className="text-xs font-inter mt-1">Analysis</span>
+            </button>
 
-              <button
-                onClick={() => setShowAdvanced(true)}
-                disabled={!selectedBuilding}
-                className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
-                  selectedBuilding 
-                    ? 'bg-holo-black border-holo-coral text-holo-white hover:scale-105' 
-                    : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                }`}
-              >
-                <Sliders size={36} className="text-white" />
-                <span className="text-xs font-inter mt-1">Controls</span>
-              </button>
-            </div>
+            <button
+              onClick={() => setShowAdvanced(true)}
+              disabled={!selectedBuilding}
+              className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                selectedBuilding 
+                  ? 'bg-holo-black border-holo-coral text-holo-white hover:scale-105' 
+                  : 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              <Sliders size={36} className="text-white" />
+              <span className="text-xs font-inter mt-1">Controls</span>
+            </button>
           </div>
 
           {/* Proceed Button */}
-          <button
-            onClick={handleProceed}
-            disabled={!selectedBuilding}
-            className={`w-[240px] h-[48px] rounded-xl font-inter font-semibold text-[16px] transition-all duration-300 shadow-md ${
-              selectedBuilding
-                ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105'
-                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            Proceed with Selection
-          </button>
+          <div className="flex justify-center">
+            <button
+              onClick={handleProceed}
+              disabled={!selectedBuilding}
+              className={`w-[240px] h-[48px] rounded-xl font-inter font-semibold text-[16px] transition-all duration-300 shadow-md ${
+                selectedBuilding
+                  ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105'
+                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              Proceed with Selection
+            </button>
+          </div>
         </div>
       </div>
 
