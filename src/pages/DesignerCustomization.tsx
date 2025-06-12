@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -143,19 +142,22 @@ const DesignerCustomization = () => {
         CUSTOMIZE
       </h1>
 
-      <div className="px-8 pt-16 pb-8 flex">
-        {/* Left Panel - 3D Preview with matching positioning */}
-        <div className="flex-1 flex flex-col items-center justify-center pr-8">
-          <div className="mb-6">
-            <WorkflowWindow className="w-[600px] h-[600px]">
-              <ThreeScene className="w-full h-full" />
-            </WorkflowWindow>
+      <div className="px-8 pt-16 pb-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
+        {/* Centered Map */}
+        <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            {/* 3D Map Window */}
+            <div className="mb-6">
+              <WorkflowWindow className="w-[600px] h-[600px]">
+                <ThreeScene className="w-full h-full" />
+              </WorkflowWindow>
+            </div>
           </div>
         </div>
 
-        {/* Right Panel - AI Chat Panel with Fixed Height */}
-        <div className="w-[300px] flex flex-col space-y-8 pt-8">
-          <div className="w-full h-[500px] bg-gradient-to-b from-white to-holo-teal rounded-xl flex flex-col p-4">
+        {/* Right Panel - AI Chat Panel aligned with map height */}
+        <div className="ml-12 w-[300px] flex flex-col h-[600px]">
+          <div className="h-full bg-gradient-to-b from-white to-holo-teal rounded-xl flex flex-col p-4">
             {/* Top-right icon buttons */}
             <div className="flex justify-end space-x-3 mb-4">
               <button
@@ -265,12 +267,14 @@ const DesignerCustomization = () => {
                           </div>
                         </div>
 
-                        <button
-                          onClick={handleConstraintsComplete}
-                          className="w-full mt-4 py-2 bg-gradient-teal-coral text-white rounded-lg font-medium hover:bg-gradient-coral-teal transition-all duration-200"
-                        >
-                          Generate Design Options
-                        </button>
+                        {selectedVolumeHeight && selectedSpacePreference && selectedShading && (
+                          <button
+                            onClick={handleConstraintsComplete}
+                            className="w-full mt-4 py-2 bg-gradient-teal-coral text-white rounded-lg font-medium hover:bg-gradient-coral-teal transition-all duration-200"
+                          >
+                            Generate Design Options
+                          </button>
+                        )}
                       </div>
                     )}
 
@@ -330,7 +334,7 @@ const DesignerCustomization = () => {
           </div>
 
           {/* Proceed Button - Right below the chat panel */}
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-6">
             <button
               onClick={handleProceed}
               disabled={!canProceed}
