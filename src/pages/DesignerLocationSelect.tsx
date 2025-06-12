@@ -1,9 +1,11 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import WorkflowWindow from '@/components/WorkflowWindow';
+import ThreeScene from '@/components/ThreeScene';
 import { Building, Sliders, Search } from 'lucide-react';
 
 const DesignerLocationSelect = () => {
@@ -22,26 +24,21 @@ const DesignerLocationSelect = () => {
     <div className="min-h-screen bg-holo-white font-inter relative">
       <ProgressBar currentStep={2} />
       
-      {/* Back Button only (no top logo) */}
       <BackButton to="/role-selection" />
 
-      {/* Title - aligned with header */}
       <h1 className="absolute top-6 left-[148px] text-[20px] font-semibold text-holo-black">
         SELECT YOUR BUILDING
       </h1>
 
       <div className="px-8 pt-16 pb-8">
-        <div className="flex flex-col lg:flex-row min-h-[500px]">
-          {/* Center Column: Map Window */}
-          <div className="flex-1 flex flex-col items-center px-6 py-8">
-            <WorkflowWindow>
-              <img
-                src="/lovable-uploads/74d4b984-a513-478e-bc0e-3490532fd4ce.png"
-                alt="London Building Map"
-                className="w-full h-full object-cover"
-              />
+        {/* Centered Map Content */}
+        <div className="flex flex-col items-center justify-center min-h-[600px]">
+          {/* 3D Map Window - More Square */}
+          <div className="mb-6">
+            <WorkflowWindow className="w-[600px] h-[600px]">
+              <ThreeScene className="w-full h-full" />
               
-              {/* Overlay building footprints as clickable elements */}
+              {/* Overlay building selection areas */}
               <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
                    onClick={() => setSelectedBuilding('london-building1')}>
                 <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
@@ -55,24 +52,24 @@ const DesignerLocationSelect = () => {
                 <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
               </div>
             </WorkflowWindow>
-            
-            {/* Search Bar */}
-            <div className="w-full max-w-[800px] mt-4">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-holo-coral" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search London area..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-holo-white border-2 border-holo-teal rounded-[32px] focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-coral"
-                />
-              </div>
+          </div>
+          
+          {/* Search Bar */}
+          <div className="w-full max-w-[600px] mb-8">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-holo-coral" size={20} />
+              <input
+                type="text"
+                placeholder="Search London area..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-holo-white border-2 border-holo-teal rounded-[32px] focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-coral"
+              />
             </div>
           </div>
 
-          {/* Right Column: Preview & Controls */}
-          <div className="w-[200px] flex flex-col items-center px-4 py-8 space-y-6">
+          {/* Controls Row */}
+          <div className="flex items-center gap-8 mb-8">
             {/* Selected Building Preview */}
             <div className="text-center">
               <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-holo-teal/20' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
@@ -89,8 +86,8 @@ const DesignerLocationSelect = () => {
               )}
             </div>
 
-            {/* Control Buttons - stacked vertically */}
-            <div className="flex flex-col items-center space-y-8">
+            {/* Control Buttons */}
+            <div className="flex items-center gap-6">
               <button
                 onClick={() => setShowAnalysis(true)}
                 disabled={!selectedBuilding}
@@ -118,10 +115,8 @@ const DesignerLocationSelect = () => {
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Proceed Button - Right below the main panels */}
-        <div className="flex justify-center mt-8">
+          {/* Proceed Button */}
           <button
             onClick={handleProceed}
             disabled={!selectedBuilding}
@@ -136,7 +131,7 @@ const DesignerLocationSelect = () => {
         </div>
       </div>
 
-      {/* Building Analysis Modal - keep existing code for modals */}
+      {/* Building Analysis Modal */}
       {showAnalysis && (
         <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-holo-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
@@ -186,7 +181,7 @@ const DesignerLocationSelect = () => {
         </div>
       )}
 
-      {/* Advanced Controls Panel - keep existing code for modals */}
+      {/* Advanced Controls Panel */}
       {showAdvanced && (
         <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-holo-white rounded-3xl shadow-2xl max-w-md w-full">
@@ -263,7 +258,7 @@ const DesignerLocationSelect = () => {
         </div>
       )}
 
-      {/* Footer Logo - Six-dot version */}
+      {/* Footer Logo */}
       <div className="fixed bottom-4 right-4">
         <div className="w-12 h-12 flex items-center justify-center">
           <HoloLogo size="small" variant="dots" />
