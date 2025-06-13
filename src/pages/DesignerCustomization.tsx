@@ -5,7 +5,7 @@ import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import WorkflowWindow from '@/components/WorkflowWindow';
 import ThreeScene from '@/components/ThreeScene';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, Database, Building } from 'lucide-react';
 
 interface ChatMessage {
   type: string;
