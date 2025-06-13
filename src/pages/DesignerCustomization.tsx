@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import WorkflowWindow from '@/components/WorkflowWindow';
 import ThreeScene from '@/components/ThreeScene';
-import { Database, Building, Send } from 'lucide-react';
+import { Send, Bot, User } from 'lucide-react';
 
 interface ChatMessage {
   type: string;
@@ -133,12 +133,12 @@ const DesignerCustomization = () => {
   };
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter relative">
+    <div className="min-h-screen bg-holo-white font-inter relative overflow-hidden">
       <ProgressBar currentStep={3} />
       
-      <BackButton to="/designer/location" />
-
-      <h1 className="absolute top-6 left-[148px] text-[20px] font-semibold text-holo-black">
+      <BackButton onClick={() => navigate('/designer/location')} />
+      
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black z-10">
         CUSTOMIZE
       </h1>
 

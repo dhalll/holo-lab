@@ -38,7 +38,7 @@ const DesignerLocationSelect = () => {
       
       <BackButton to="/role-selection" />
 
-      <h1 className="absolute top-6 left-[148px] text-[20px] font-semibold text-holo-black">
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
         SELECT YOUR BUILDING
       </h1>
 

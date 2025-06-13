@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
@@ -34,16 +33,13 @@ const DesignerOutput = () => {
     <div className="min-h-screen bg-holo-white font-inter relative">
       <ProgressBar currentStep={5} stepLabels={['Select Experience', 'Location', 'Customize', 'Generate', 'Export', 'Complete']} />
       
-      {/* Header */}
-      <div className="absolute top-8 left-20">
-        <BackButton to="/designer/customization" />
-      </div>
+      <BackButton to="/designer/customization" />
+
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
+        YOUR DESIGN OUTPUT
+      </h1>
 
       <div className="pl-20 pr-8 pt-16 pb-8">
-        <h1 className="text-2xl font-inter font-bold text-holo-black mb-8">
-          YOUR DESIGN OUTPUT
-        </h1>
-
         <div className="flex gap-8 h-[calc(100vh-200px)]">
           {/* 3D Viewport */}
           <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden">
