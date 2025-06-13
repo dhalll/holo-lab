@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import HoloLogo from '@/components/HoloLogo';
+import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import { FolderOpen, Camera } from 'lucide-react';
 
@@ -18,6 +19,8 @@ const SupplierStart = () => {
 
   return (
     <div className="min-h-screen bg-holo-white font-inter relative">
+      <ProgressBar currentStep={1} variant="supplier" />
+      
       {/* Header */}
       <div className="absolute top-6 left-6">
         <HoloLogo size="small" variant="full" />
@@ -27,12 +30,12 @@ const SupplierStart = () => {
         <BackButton to="/role-selection" />
       </div>
 
-      <div className="flex flex-col items-center justify-center min-h-screen px-4">
-        {/* Title */}
-        <h1 className="text-2xl font-inter font-bold text-holo-black mb-16 tracking-wide">
-          HOW WOULD YOU LIKE TO PROCEED?
-        </h1>
+      {/* Title positioned after back button */}
+      <h1 className="absolute top-6 left-32 text-[20px] font-semibold text-holo-black tracking-wide">
+        HOW WOULD YOU LIKE TO PROCEED?
+      </h1>
 
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
         {/* Option Cards */}
         <div className="flex flex-col md:flex-row items-center gap-8 mb-16">
           {/* Browse Materials Option */}
