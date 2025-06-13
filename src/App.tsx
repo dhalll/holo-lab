@@ -16,6 +16,7 @@ import DesignerLocationSelect from "./pages/DesignerLocationSelect";
 import DesignerCustomization from "./pages/DesignerCustomization";
 import DesignerOutput from "./pages/DesignerOutput";
 import DesignerFinalOutput from "./pages/DesignerFinalOutput";
+import FinalRendering from "./pages/FinalRendering";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/designer/customization" element={<DesignerCustomization />} />
           <Route path="/designer/output" element={<DesignerOutput />} />
           <Route path="/designer/final-output" element={<DesignerFinalOutput />} />
+          <Route path="/designer/final-rendering" element={<FinalRendering />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

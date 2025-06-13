@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -23,9 +22,8 @@ const DesignerFinalOutput = () => {
   }, []);
 
   const handleFinalize = () => {
-    // Simulate API call
-    fetch('/api/projects/123/finalize', { method: 'POST' });
-    alert('Project saved! You can access it under Dashboard → My Projects.');
+    // Navigate to full-page rendering view
+    navigate('/designer/final-rendering');
   };
 
   const handleBackToEdit = () => {
