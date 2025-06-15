@@ -34,36 +34,57 @@ const SupplierStart = () => {
       </h1>
 
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
-        {/* Option Cards - Circular style like designer/supplier selection */}
-        <div className="flex flex-col md:flex-row items-center gap-12 mb-16">
+        {/* Option Cards - Same animation style as role selection */}
+        <div className="flex flex-col md:flex-row items-center gap-16 mb-16">
           {/* Upload Materials Option */}
-          <div 
-            className="w-64 h-64 bg-holo-white border-2 border-holo-teal rounded-full shadow-lg hover:border-holo-coral hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center"
-            onClick={() => handleOptionSelect('browse')}
-          >
-            <div className="w-16 h-16 bg-holo-black rounded-full flex items-center justify-center mb-4 group-hover:bg-holo-coral transition-colors duration-300">
-              <FolderOpen size={32} className="text-holo-white" />
+          <div className="flex flex-col items-center group cursor-pointer" onClick={() => handleOptionSelect('browse')}>
+            <div className="relative">
+              {/* Outer ring */}
+              <div className="w-48 h-48 rounded-full border-8 border-holo-teal absolute inset-0 group-hover:animate-pulse-ring"></div>
+              
+              {/* Middle ring */}
+              <div className="w-48 h-48 rounded-full border-8 border-holo-coral absolute inset-2 group-hover:scale-105 transition-transform duration-300"></div>
+              
+              {/* Inner circle - White background */}
+              <div className="w-48 h-48 rounded-full bg-holo-white flex items-center justify-center relative z-10 group-hover:bg-holo-coral transition-colors duration-300 shadow-lg">
+                <FolderOpen size={48} className="text-holo-black group-hover:text-holo-white transition-colors duration-300" />
+              </div>
             </div>
             
-            <h2 className="text-xl font-inter font-bold text-holo-black mb-2 text-center">Upload Materials</h2>
-            <p className="text-sm font-inter text-gray-600 text-center px-4">
-              View & Manage Existing Inventory
-            </p>
+            <div className="text-center mt-6">
+              <h2 className="text-lg font-inter font-semibold text-holo-black mb-2">UPLOAD MATERIALS</h2>
+              <p className="text-sm font-inter text-gray-600">View & Manage Existing Inventory</p>
+            </div>
+          </div>
+
+          {/* Arrow Image */}
+          <div className="hidden md:block">
+            <img 
+              src="/lovable-uploads/812f4522-3587-4914-8f42-e1f6190abb47.png" 
+              alt="Arrow" 
+              className="w-40 h-16 mx-8"
+            />
           </div>
 
           {/* Scan Materials Option */}
-          <div 
-            className="w-64 h-64 bg-holo-white border-2 border-holo-teal rounded-full shadow-lg hover:border-holo-coral hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center"
-            onClick={() => handleOptionSelect('scan')}
-          >
-            <div className="w-16 h-16 bg-holo-black rounded-full flex items-center justify-center mb-4 group-hover:bg-holo-coral transition-colors duration-300">
-              <Camera size={32} className="text-holo-white" />
+          <div className="flex flex-col items-center group cursor-pointer" onClick={() => handleOptionSelect('scan')}>
+            <div className="relative">
+              {/* Outer ring */}
+              <div className="w-48 h-48 rounded-full border-8 border-holo-teal absolute inset-0 group-hover:animate-pulse-ring"></div>
+              
+              {/* Middle ring */}
+              <div className="w-48 h-48 rounded-full border-8 border-holo-coral absolute inset-2 group-hover:scale-105 transition-transform duration-300"></div>
+              
+              {/* Inner circle - White background */}
+              <div className="w-48 h-48 rounded-full bg-holo-white flex items-center justify-center relative z-10 group-hover:bg-holo-coral transition-colors duration-300 shadow-lg">
+                <Camera size={48} className="text-holo-black group-hover:text-holo-white transition-colors duration-300" />
+              </div>
             </div>
             
-            <h2 className="text-xl font-inter font-bold text-holo-black mb-2 text-center">Scan Materials</h2>
-            <p className="text-sm font-inter text-gray-600 text-center px-4">
-              Use Your Camera to Upload Pipe Images
-            </p>
+            <div className="text-center mt-6">
+              <h2 className="text-lg font-inter font-semibold text-holo-black mb-2">SCAN MATERIALS</h2>
+              <p className="text-sm font-inter text-gray-600">Use Your Camera to Upload Pipe Images</p>
+            </div>
           </div>
         </div>
       </div>
