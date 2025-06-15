@@ -18,7 +18,17 @@ const RoleSelection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter relative">
+    <div className="min-h-screen bg-gradient-to-br from-holo-white via-holo-white to-holo-coral/5 font-inter relative">
+      {/* Subtle decorative background elements */}
+      <div className="absolute inset-0 opacity-[0.04]">
+        <div className="absolute top-24 left-16 w-36 h-36 border-2 border-holo-teal rounded-full"></div>
+        <div className="absolute top-32 right-20 w-28 h-28 border-2 border-holo-coral rounded-full"></div>
+        <div className="absolute bottom-24 left-1/4 w-20 h-20 border-2 border-holo-teal rotate-45"></div>
+        <div className="absolute bottom-32 right-1/4 w-24 h-24 border-2 border-holo-coral rotate-12"></div>
+        <div className="absolute top-1/3 left-12 w-12 h-12 border-2 border-holo-teal"></div>
+        <div className="absolute top-2/3 right-16 w-16 h-16 border-2 border-holo-coral"></div>
+      </div>
+
       <ProgressBar currentStep={1} />
       
       {/* Back Button aligned with progress bar */}
@@ -41,8 +51,8 @@ const RoleSelection = () => {
               {/* Middle ring */}
               <div className="w-48 h-48 rounded-full border-8 border-holo-coral absolute inset-2 group-hover:scale-105 transition-transform duration-300"></div>
               
-              {/* Inner circle */}
-              <div className="w-48 h-48 rounded-full bg-holo-black flex items-center justify-center relative z-10 group-hover:bg-holo-coral transition-colors duration-300">
+              {/* Inner circle with gradient */}
+              <div className="w-48 h-48 rounded-full bg-gradient-to-br from-holo-black to-holo-black/80 flex items-center justify-center relative z-10 group-hover:from-holo-coral group-hover:to-holo-coral/80 transition-all duration-300 backdrop-blur-sm">
                 <Building size={48} className="text-holo-white" />
               </div>
             </div>
@@ -58,7 +68,7 @@ const RoleSelection = () => {
             <img 
               src="/lovable-uploads/812f4522-3587-4914-8f42-e1f6190abb47.png" 
               alt="Arrow" 
-              className="w-40 h-16 mx-8"
+              className="w-40 h-16 mx-8 opacity-80"
             />
           </div>
 
@@ -71,8 +81,8 @@ const RoleSelection = () => {
               {/* Middle ring */}
               <div className="w-48 h-48 rounded-full border-8 border-holo-coral absolute inset-2 group-hover:scale-105 transition-transform duration-300"></div>
               
-              {/* Inner circle */}
-              <div className="w-48 h-48 rounded-full bg-holo-black flex items-center justify-center relative z-10 group-hover:bg-holo-coral transition-colors duration-300">
+              {/* Inner circle with gradient */}
+              <div className="w-48 h-48 rounded-full bg-gradient-to-br from-holo-black to-holo-black/80 flex items-center justify-center relative z-10 group-hover:from-holo-coral group-hover:to-holo-coral/80 transition-all duration-300 backdrop-blur-sm">
                 <Database size={48} className="text-holo-white" />
               </div>
             </div>

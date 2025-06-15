@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -33,7 +32,16 @@ const DesignerLocationSelect = () => {
   };
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter relative">
+    <div className="min-h-screen bg-gradient-to-br from-holo-white via-holo-white to-holo-teal/5 font-inter relative">
+      {/* Subtle background elements */}
+      <div className="absolute inset-0 opacity-[0.03]">
+        <div className="absolute top-32 left-10 w-40 h-40 border border-holo-teal rounded-full"></div>
+        <div className="absolute top-20 right-16 w-28 h-28 border border-holo-coral rounded-full"></div>
+        <div className="absolute bottom-20 left-1/4 w-24 h-24 border border-holo-teal rotate-45"></div>
+        <div className="absolute bottom-32 right-32 w-32 h-32 border border-holo-coral rotate-12"></div>
+        <div className="absolute top-1/2 left-8 w-16 h-16 border border-holo-teal"></div>
+      </div>
+
       <ProgressBar currentStep={2} />
       
       <BackButton to="/role-selection" />
@@ -48,7 +56,7 @@ const DesignerLocationSelect = () => {
           <div className="flex flex-col items-center">
             {/* 3D Map Window */}
             <div className="mb-6">
-              <WorkflowWindow className="w-[600px] h-[600px]">
+              <WorkflowWindow className="w-[600px] h-[600px] bg-gradient-to-br from-holo-white to-holo-teal/10">
                 <ThreeScene className="w-full h-full" />
                 
                 {/* Overlay building selection areas */}
@@ -76,7 +84,7 @@ const DesignerLocationSelect = () => {
                   placeholder="Search London area..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-holo-white border-2 border-holo-teal rounded-[32px] focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-coral"
+                  className="w-full pl-12 pr-4 py-3 bg-gradient-to-r from-holo-white to-holo-teal/5 border-2 border-holo-teal rounded-[32px] focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-coral backdrop-blur-sm"
                 />
               </div>
               
@@ -100,7 +108,7 @@ const DesignerLocationSelect = () => {
         <div className="ml-12 flex flex-col items-center space-y-8">
           {/* Selected Building Preview */}
           <div className="text-center">
-            <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-holo-teal/20' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
+            <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-gradient-to-br from-holo-teal/20 to-holo-teal/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
               {selectedBuilding ? (
                 <div className="w-12 h-8 bg-holo-teal rounded"></div>
               ) : (
@@ -151,8 +159,8 @@ const DesignerLocationSelect = () => {
 
       {/* Building Analysis Modal */}
       {showAnalysis && (
-        <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-holo-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-holo-white to-holo-teal/5 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto backdrop-blur-sm border border-holo-teal/20">
             <div className="p-6">
               <h2 className="text-lg font-inter font-bold text-holo-black mb-6">Building Analysis</h2>
               
@@ -201,8 +209,8 @@ const DesignerLocationSelect = () => {
 
       {/* Advanced Controls Panel */}
       {showAdvanced && (
-        <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-holo-white rounded-3xl shadow-2xl max-w-md w-full">
+        <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-holo-white to-holo-teal/5 rounded-3xl shadow-2xl max-w-md w-full backdrop-blur-sm border border-holo-teal/20">
             <div className="p-6">
               <h2 className="text-lg font-inter font-bold text-holo-black mb-6">Advanced Controls</h2>
               
