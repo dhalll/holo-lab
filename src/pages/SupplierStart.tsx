@@ -57,12 +57,12 @@ const SupplierStart = () => {
             </div>
           </div>
 
-          {/* Arrow Image */}
+          {/* Arrow Image - Flipped horizontally to point upward */}
           <div className="hidden md:block">
             <img 
               src="/lovable-uploads/812f4522-3587-4914-8f42-e1f6190abb47.png" 
               alt="Arrow" 
-              className="w-40 h-16 mx-8"
+              className="w-40 h-16 mx-8 transform scale-x-[-1]"
             />
           </div>
 
