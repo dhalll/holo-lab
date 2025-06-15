@@ -53,7 +53,7 @@ const SupplierStart = () => {
             
             <div className="text-center mt-6">
               <h2 className="text-lg font-inter font-semibold text-holo-black mb-2">UPLOAD MATERIALS</h2>
-              <p className="text-sm font-inter text-gray-600">View & Manage Existing Inventory</p>
+              <p className="text-sm font-inter text-gray-600">Manage and Upload Inventory Manually</p>
             </div>
           </div>
 
