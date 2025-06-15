@@ -18,15 +18,7 @@ const SupplierStart = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-holo-white via-holo-white to-holo-teal/5 font-inter relative">
-      {/* Subtle geometric background pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute top-20 left-20 w-32 h-32 border border-holo-teal rounded-full"></div>
-        <div className="absolute top-40 right-32 w-24 h-24 border border-holo-coral rounded-full"></div>
-        <div className="absolute bottom-32 left-1/3 w-16 h-16 border border-holo-teal rotate-45"></div>
-        <div className="absolute bottom-40 right-20 w-20 h-20 border border-holo-coral rotate-12"></div>
-      </div>
-
+    <div className="min-h-screen bg-holo-white font-inter relative">
       <ProgressBar currentStep={1} variant="supplier" />
       
       {/* Header */}
@@ -46,7 +38,7 @@ const SupplierStart = () => {
         <div className="flex flex-col md:flex-row items-center gap-12 mb-16">
           {/* Upload Materials Option */}
           <div 
-            className="w-64 h-64 bg-gradient-to-br from-holo-white to-holo-teal/5 border-2 border-holo-teal rounded-full shadow-lg hover:border-holo-coral hover:shadow-xl hover:from-holo-white hover:to-holo-coral/5 transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center backdrop-blur-sm"
+            className="w-64 h-64 bg-holo-white border-2 border-holo-teal rounded-full shadow-lg hover:border-holo-coral hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center"
             onClick={() => handleOptionSelect('browse')}
           >
             <div className="w-16 h-16 bg-holo-black rounded-full flex items-center justify-center mb-4 group-hover:bg-holo-coral transition-colors duration-300">
@@ -61,7 +53,7 @@ const SupplierStart = () => {
 
           {/* Scan Materials Option */}
           <div 
-            className="w-64 h-64 bg-gradient-to-br from-holo-white to-holo-teal/5 border-2 border-holo-teal rounded-full shadow-lg hover:border-holo-coral hover:shadow-xl hover:from-holo-white hover:to-holo-coral/5 transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center backdrop-blur-sm"
+            className="w-64 h-64 bg-holo-white border-2 border-holo-teal rounded-full shadow-lg hover:border-holo-coral hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center"
             onClick={() => handleOptionSelect('scan')}
           >
             <div className="w-16 h-16 bg-holo-black rounded-full flex items-center justify-center mb-4 group-hover:bg-holo-coral transition-colors duration-300">
