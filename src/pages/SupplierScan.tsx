@@ -84,7 +84,7 @@ const SupplierScan = () => {
         {/* Instructions */}
         <div className="max-w-2xl text-center mb-8">
           <p className="font-inter text-base text-gray-700">
-            Allow camera access to photograph reclaimed pipes. We'll extract dimensions automatically.
+            Use your camera to scan materials. We'll extract dimensions automatically.
           </p>
         </div>
 
