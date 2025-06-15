@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -13,6 +14,7 @@ interface ChatMessage {
   showOptions?: boolean;
   showConstraints?: boolean;
   showVariants?: boolean;
+  showProceedButton?: boolean;
 }
 
 const DesignerCustomization = () => {
@@ -47,8 +49,9 @@ const DesignerCustomization = () => {
           { type: 'user', content: `Selected: ${program}`, showOptions: false },
           { 
             type: 'bot', 
-            content: `Great choice! You can select one more program to combine with ${program}, or we can proceed with just this one.`,
-            showOptions: false
+            content: `Great choice! You can select one more program to combine with ${program}, or proceed with just this one.`,
+            showOptions: false,
+            showProceedButton: true
           }
         ]);
       } else if (newPrograms.length === 2) {
@@ -64,6 +67,24 @@ const DesignerCustomization = () => {
           ]);
         }, 500);
       }
+    }
+  };
+
+  const handleProceedWithPrograms = () => {
+    if (selectedPrograms.length >= 1) {
+      const programText = selectedPrograms.length === 1 
+        ? selectedPrograms[0].toLowerCase() 
+        : selectedPrograms.join(' and ').toLowerCase();
+      
+      setMessages(prev => [
+        ...prev,
+        { type: 'user', content: `Proceed with: ${selectedPrograms.join(' + ')}`, showOptions: false },
+        { 
+          type: 'bot', 
+          content: `Perfect! Let's design your ${programText}. Let's gather some more info:`,
+          showConstraints: true
+        }
+      ]);
     }
   };
 
@@ -204,6 +225,18 @@ const DesignerCustomization = () => {
                             </button>
                           ))}
                         </div>
+                      </div>
+                    )}
+
+                    {/* Proceed with Programs Button */}
+                    {message.showProceedButton && selectedPrograms.length >= 1 && (
+                      <div className="mt-4">
+                        <button
+                          onClick={handleProceedWithPrograms}
+                          className="w-full py-2 bg-gradient-teal-coral text-white rounded-lg font-medium hover:bg-gradient-coral-teal transition-all duration-200"
+                        >
+                          Proceed with Selection
+                        </button>
                       </div>
                     )}
 
