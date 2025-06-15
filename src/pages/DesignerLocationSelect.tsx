@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -18,7 +19,15 @@ const DesignerLocationSelect = () => {
   const [advancedClicked, setAdvancedClicked] = useState(false);
 
   const handleProceed = () => {
-    navigate('/designer/customization');
+    console.log('Proceed clicked, selected building:', selectedBuilding);
+    if (selectedBuilding) {
+      navigate('/designer/customization');
+    }
+  };
+
+  const handleBuildingSelect = (buildingId: string) => {
+    console.log('Building selected:', buildingId);
+    setSelectedBuilding(buildingId);
   };
 
   const handleAnalysisClick = () => {
@@ -61,15 +70,15 @@ const DesignerLocationSelect = () => {
                 
                 {/* Overlay building selection areas */}
                 <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                     onClick={() => setSelectedBuilding('london-building1')}>
+                     onClick={() => handleBuildingSelect('shoreditch')}>
                   <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
                 </div>
                 <div className="absolute top-1/2 right-1/3 w-20 h-16 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                     onClick={() => setSelectedBuilding('london-building2')}>
+                     onClick={() => handleBuildingSelect('camden')}>
                   <div className="text-xs text-center pt-4 text-gray-600">Camden</div>
                 </div>
                 <div className="absolute bottom-1/3 left-1/2 w-14 h-18 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                     onClick={() => setSelectedBuilding('london-building3')}>
+                     onClick={() => handleBuildingSelect('westminster')}>
                   <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
                 </div>
               </WorkflowWindow>
@@ -94,7 +103,7 @@ const DesignerLocationSelect = () => {
                 disabled={!selectedBuilding}
                 className={`px-6 py-3 rounded-xl font-inter font-semibold text-[16px] transition-all duration-300 shadow-md whitespace-nowrap ${
                   selectedBuilding
-                    ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105'
+                    ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105 cursor-pointer'
                     : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                 }`}
               >
@@ -117,7 +126,7 @@ const DesignerLocationSelect = () => {
             </div>
             {selectedBuilding && (
               <p className="text-sm font-inter text-gray-600 capitalize">
-                {selectedBuilding.replace('london-building', 'Building ')}
+                {selectedBuilding}
               </p>
             )}
           </div>
