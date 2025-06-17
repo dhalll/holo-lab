@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
-import { Search, Filter, Edit, Trash2 } from 'lucide-react';
+import { Search, Filter, Edit, Trash2, ChevronDown } from 'lucide-react';
 
 interface Material {
   id: number;
@@ -27,6 +27,11 @@ const SupplierDashboard = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+
+  // Filter states
+  const [selectedCondition, setSelectedCondition] = useState('');
+  const [diameterRange, setDiameterRange] = useState({ min: '', max: '' });
+  const [dateFilter, setDateFilter] = useState('');
 
   const [newMaterial, setNewMaterial] = useState({
     type: 'PVC',
@@ -62,10 +67,29 @@ const SupplierDashboard = () => {
     });
   };
 
-  const filteredMaterials = materials.filter(material =>
-    material.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    material.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const clearFilters = () => {
+    setSelectedCondition('');
+    setDiameterRange({ min: '', max: '' });
+    setDateFilter('');
+  };
+
+  const filteredMaterials = materials.filter(material => {
+    // Search filter
+    const matchesSearch = material.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      material.location.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Condition filter
+    const matchesCondition = !selectedCondition || material.condition === selectedCondition;
+
+    // Diameter filter
+    const matchesDiameter = (!diameterRange.min || material.diameter >= parseInt(diameterRange.min)) &&
+      (!diameterRange.max || material.diameter <= parseInt(diameterRange.max));
+
+    // Date filter
+    const matchesDate = !dateFilter || material.dateAdded >= dateFilter;
+
+    return matchesSearch && matchesCondition && matchesDiameter && matchesDate;
+  });
 
   return (
     <div className="min-h-screen bg-holo-white font-inter">
@@ -74,14 +98,14 @@ const SupplierDashboard = () => {
         <div className="flex items-center justify-between p-6">
           <div className="flex items-center gap-4">
             <BackButton to="/role-selection" />
-            <h1 className="text-xl font-inter font-bold text-holo-black">Material Dashboard</h1>
+            <h1 className="text-xl font-inter font-bold text-holo-black ml-12">Material Dashboard</h1>
           </div>
           
           <button
             onClick={() => setShowUploadModal(true)}
             className="px-6 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300"
           >
-            Upload New Batch
+            Upload New Material
           </button>
         </div>
       </div>
@@ -106,8 +130,74 @@ const SupplierDashboard = () => {
           >
             <Filter size={20} className="text-holo-black" />
             <span className="text-holo-black font-inter">Filters</span>
+            <ChevronDown size={16} className={`transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
           </button>
         </div>
+
+        {/* Filter Panel */}
+        {showFilters && (
+          <div className="mt-4 p-4 bg-holo-white border border-holo-teal/20 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* Condition Filter */}
+              <div>
+                <label className="block text-sm font-inter font-medium text-holo-black mb-2">Condition</label>
+                <select
+                  value={selectedCondition}
+                  onChange={(e) => setSelectedCondition(e.target.value)}
+                  className="w-full p-2 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
+                >
+                  <option value="">All Conditions</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Good">Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Poor">Poor</option>
+                </select>
+              </div>
+
+              {/* Diameter Range Filter */}
+              <div>
+                <label className="block text-sm font-inter font-medium text-holo-black mb-2">Diameter (mm)</label>
+                <div className="flex gap-2">
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={diameterRange.min}
+                    onChange={(e) => setDiameterRange({...diameterRange, min: e.target.value})}
+                    className="w-full p-2 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={diameterRange.max}
+                    onChange={(e) => setDiameterRange({...diameterRange, max: e.target.value})}
+                    className="w-full p-2 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
+                  />
+                </div>
+              </div>
+
+              {/* Date Added Filter */}
+              <div>
+                <label className="block text-sm font-inter font-medium text-holo-black mb-2">Date Added (From)</label>
+                <input
+                  type="date"
+                  value={dateFilter}
+                  onChange={(e) => setDateFilter(e.target.value)}
+                  className="w-full p-2 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
+                />
+              </div>
+
+              {/* Clear Filters */}
+              <div className="flex items-end">
+                <button
+                  onClick={clearFilters}
+                  className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Materials Table */}
@@ -160,6 +250,11 @@ const SupplierDashboard = () => {
                 ))}
               </tbody>
             </table>
+            {filteredMaterials.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No materials found matching your filters.
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -212,17 +307,17 @@ const SupplierDashboard = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-inter font-medium text-holo-black mb-2">Condition Rating</label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <label className="block text-sm font-inter font-medium text-holo-black mb-3">Condition Rating</label>
+                  <div className="space-y-2">
                     {['Excellent', 'Good', 'Fair', 'Poor'].map((condition) => (
-                      <label key={condition} className="flex items-center">
+                      <label key={condition} className="flex items-center cursor-pointer p-2 rounded-lg hover:bg-gray-50">
                         <input
                           type="radio"
                           name="condition"
                           value={condition}
                           checked={newMaterial.condition === condition}
                           onChange={(e) => setNewMaterial({...newMaterial, condition: e.target.value})}
-                          className="mr-2"
+                          className="mr-3 w-4 h-4 text-holo-coral border-gray-300 focus:ring-holo-coral"
                         />
                         <span className="text-sm font-inter text-holo-black">{condition}</span>
                       </label>
