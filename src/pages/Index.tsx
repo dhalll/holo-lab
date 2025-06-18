@@ -27,7 +27,7 @@ const Index = () => {
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: 'url(/lovable-uploads/36cfb501-b869-4d67-af44-c5b6ac73aab2.png)',
-          opacity: 0.22
+          opacity: 0.32
         }}
       />
       
