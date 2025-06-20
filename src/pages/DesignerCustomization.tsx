@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -154,7 +153,7 @@ const DesignerCustomization = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-holo-teal/30 to-holo-white font-inter relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative overflow-hidden">
       <ProgressBar currentStep={3} />
       
       <BackButton onClick={() => navigate('/designer/location')} />
