@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -33,7 +32,7 @@ const DesignerLocationSelect = () => {
   };
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter relative">
+    <div className="min-h-screen bg-gradient-to-b from-holo-teal to-holo-white font-inter relative">
       <ProgressBar currentStep={2} />
       
       <BackButton to="/role-selection" />
