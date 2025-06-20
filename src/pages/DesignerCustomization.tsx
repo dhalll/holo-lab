@@ -154,7 +154,7 @@ const DesignerCustomization = () => {
   };
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-holo-teal/30 to-holo-white font-inter relative overflow-hidden">
       <ProgressBar currentStep={3} />
       
       <BackButton onClick={() => navigate('/designer/location')} />
