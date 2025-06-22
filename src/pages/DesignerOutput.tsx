@@ -26,10 +26,12 @@ const DesignerOutput = () => {
   ];
 
   const joints = [
-    { id: 1, name: 'Joint #001', type: 'T-Junction' },
-    { id: 2, name: 'Joint #002', type: 'Elbow' },
-    { id: 3, name: 'Joint #003', type: 'Cross' },
-    { id: 4, name: 'Joint #004', type: 'Reducer' },
+    { id: 1, name: 'Joint #001', type: 'T-Junction', image: '/lovable-uploads/7dffaa5f-35a0-4e14-9f80-61311c383ecb.png' },
+    { id: 2, name: 'Joint #002', type: 'Elbow', image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png' },
+    { id: 3, name: 'Joint #003', type: 'Cross', image: '/lovable-uploads/7dffaa5f-35a0-4e14-9f80-61311c383ecb.png' },
+    { id: 4, name: 'Joint #004', type: 'Reducer', image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png' },
+    { id: 5, name: 'Joint #005', type: 'Y-Junction', image: '/lovable-uploads/7dffaa5f-35a0-4e14-9f80-61311c383ecb.png' },
+    { id: 6, name: 'Joint #006', type: 'Coupling', image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png' },
   ];
 
   const handleFinalize = () => {
@@ -38,7 +40,7 @@ const DesignerOutput = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
-      <ProgressBar currentStep={5} stepLabels={['Select Experience', 'Location', 'Customize', 'Generate', 'Export', 'Complete']} />
+      <ProgressBar currentStep={4} stepLabels={['Experience', 'Location', 'Customize', 'Finalize']} />
       
       <BackButton to="/designer/customization" />
 
@@ -181,12 +183,16 @@ const DesignerOutput = () => {
                 )}
 
                 {activeTab === 'joints' && (
-                  <div>
-                    <div className="grid grid-cols-2 gap-3">
+                  <div className="h-full">
+                    <div className="grid grid-cols-2 gap-3 max-h-full overflow-y-auto">
                       {joints.map((joint) => (
                         <div key={joint.id} className="border border-holo-teal/20 rounded-lg p-3 hover:shadow-md transition-shadow duration-200">
-                          <div className="w-full h-16 bg-gray-100 rounded mb-2 flex items-center justify-center">
-                            <div className="w-8 h-8 bg-holo-coral rounded-lg"></div>
+                          <div className="w-full h-16 bg-white rounded mb-2 flex items-center justify-center overflow-hidden">
+                            <img 
+                              src={joint.image} 
+                              alt={joint.name}
+                              className="w-full h-full object-cover rounded"
+                            />
                           </div>
                           <p className="text-xs font-inter font-medium text-holo-black">{joint.name}</p>
                           <p className="text-xs font-inter text-gray-600 mb-2">{joint.type}</p>

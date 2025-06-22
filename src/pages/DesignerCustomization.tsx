@@ -344,7 +344,7 @@ const DesignerCustomization = () => {
               )}
             </div>
 
-            {/* Chat Input with proper positioning */}
+            {/* Chat Input with proper positioning and smaller font */}
             <div className="mt-4">
               <div className="relative">
                 <input
@@ -353,7 +353,7 @@ const DesignerCustomization = () => {
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  className="w-full h-14 bg-white rounded-full px-4 border-2 border-holo-teal focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-teal text-[#333333]"
+                  className="w-full h-14 bg-white rounded-full px-4 pr-16 border-2 border-holo-teal focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-teal text-[#333333] text-xs"
                 />
                 <button
                   onClick={handleSendMessage}
