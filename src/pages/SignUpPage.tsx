@@ -24,10 +24,15 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter flex flex-col items-center pt-20 px-4">
+    <div className="min-h-screen bg-holo-white font-inter flex flex-col items-center pt-20 px-4 relative">
+      {/* Small logo in top right */}
+      <div className="absolute top-6 right-6">
+        <HoloLogo size="small" variant="dots" />
+      </div>
+
       <HoloLogo size="medium" variant="full" />
       
-      <h2 className="text-[24px] font-semibold text-holo-black mb-6 mt-8">
+      <h2 className="text-[24px] font-semibold text-holo-black mb-6 mt-8 bg-gradient-to-r from-holo-teal to-holo-coral bg-clip-text text-transparent">
         Create Your Account
       </h2>
       
