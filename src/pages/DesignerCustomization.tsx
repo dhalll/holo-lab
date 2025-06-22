@@ -349,7 +349,7 @@ const DesignerCustomization = () => {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Enter goals or select options..."
+                  placeholder="Enter goals for your space, or select from above options..."
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
