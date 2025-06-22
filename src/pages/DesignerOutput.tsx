@@ -1,9 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
-import { Download } from 'lucide-react';
+import { Download, Package, Wrench, Clock, Leaf } from 'lucide-react';
 
 const DesignerOutput = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('materials');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,8 +32,12 @@ const DesignerOutput = () => {
     { id: 4, name: 'Joint #004', type: 'Reducer' },
   ];
 
+  const handleFinalize = () => {
+    navigate('/designer/final-rendering');
+  };
+
   return (
-    <div className="min-h-screen bg-holo-white font-inter relative">
+    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={5} stepLabels={['Select Experience', 'Location', 'Customize', 'Generate', 'Export', 'Complete']} />
       
       <BackButton to="/designer/customization" />
@@ -52,15 +59,20 @@ const DesignerOutput = () => {
               </div>
             ) : (
               <div className="absolute inset-0">
-                {/* Mock 3D Scene */}
+                {/* Mock 3D Scene - Centered and Square */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white">
-                    <div className="w-48 h-32 bg-gradient-to-r from-holo-coral/30 to-holo-teal/30 rounded-lg mx-auto mb-4 flex items-center justify-center border border-holo-coral/50">
-                      <div className="grid grid-cols-4 gap-2">
-                        {Array.from({ length: 12 }, (_, i) => (
-                          <div key={i} className="w-2 h-8 bg-holo-coral/60 rounded-full"></div>
+                    <div className="w-64 h-64 bg-gradient-to-r from-holo-coral/30 to-holo-teal/30 rounded-lg mx-auto mb-4 flex items-center justify-center border border-holo-coral/50 relative">
+                      <div className="grid grid-cols-4 gap-3">
+                        {Array.from({ length: 16 }, (_, i) => (
+                          <div key={i} className="w-3 h-12 bg-holo-coral/60 rounded-full"></div>
                         ))}
                       </div>
+                      {/* Corner connectors to make it look more structural */}
+                      <div className="absolute top-2 left-2 w-4 h-4 bg-holo-teal rounded-full"></div>
+                      <div className="absolute top-2 right-2 w-4 h-4 bg-holo-teal rounded-full"></div>
+                      <div className="absolute bottom-2 left-2 w-4 h-4 bg-holo-teal rounded-full"></div>
+                      <div className="absolute bottom-2 right-2 w-4 h-4 bg-holo-teal rounded-full"></div>
                     </div>
                     <p className="font-inter text-lg">Parametric Structure Model</p>
                     <p className="font-inter text-sm text-gray-300 mt-1">Gym + Bar Configuration</p>
@@ -85,14 +97,32 @@ const DesignerOutput = () => {
           <div className="w-96 flex flex-col space-y-6">
             {/* Design Summary */}
             <div className="bg-holo-white border border-holo-teal/20 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-inter font-semibold text-holo-black mb-4">Design Summary</h3>
-              <div className="space-y-3 text-sm">
-                <div><span className="font-medium">Program:</span> Gym + Bar</div>
-                <div><span className="font-medium">Total Height Zones:</span> &lt;2m: 60 m²; &lt;3m: 80 m²</div>
-                <div><span className="font-medium">Material Usage:</span> PVC: 85 pipes (120 ft); Steel: 20 pipes (50 ft); Copper: 12 pipes (30 ft)</div>
-                <div><span className="font-medium">Joints:</span> 45 custom 3D-printed blobs</div>
-                <div><span className="font-medium">Build Time:</span> ~120 hrs</div>
-                <div><span className="font-medium text-holo-coral">CO₂ Saved:</span> <span className="font-semibold text-holo-coral">1.35 t</span></div>
+              <h3 className="font-inter font-semibold text-holo-black mb-4 text-lg">Design Summary</h3>
+              <div className="space-y-4 text-sm">
+                <div className="flex items-center gap-3">
+                  <Package className="text-holo-coral" size={16} />
+                  <div><span className="font-bold">Program:</span> Gym + Bar</div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Wrench className="text-holo-teal mt-0.5" size={16} />
+                  <div><span className="font-bold">Total Height Zones:</span> &lt;2m: 60 m²; &lt;3m: 80 m²</div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Package className="text-holo-coral mt-0.5" size={16} />
+                  <div><span className="font-bold">Material Usage:</span> PVC: 85 pipes (120 ft); Steel: 20 pipes (50 ft); Copper: 12 pipes (30 ft)</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Wrench className="text-holo-teal" size={16} />
+                  <div><span className="font-bold">Joints:</span> 45 custom 3D-printed blobs</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="text-gray-600" size={16} />
+                  <div><span className="font-bold">Build Time:</span> ~120 hrs</div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-holo-coral/10 rounded-lg">
+                  <Leaf className="text-holo-coral" size={16} />
+                  <div><span className="font-bold text-holo-coral">CO₂ Saved:</span> <span className="font-bold text-holo-coral text-lg">1.35 t</span></div>
+                </div>
               </div>
             </div>
 
@@ -201,7 +231,10 @@ const DesignerOutput = () => {
               >
                 Go Back to Edit
               </button>
-              <button className="flex-1 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300">
+              <button 
+                onClick={handleFinalize}
+                className="flex-1 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300"
+              >
                 Finalize & Save
               </button>
             </div>

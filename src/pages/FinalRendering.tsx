@@ -1,17 +1,21 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Download, Share } from 'lucide-react';
+import { ArrowLeft, Download, Share, RotateCcw } from 'lucide-react';
 
 const FinalRendering = () => {
   const navigate = useNavigate();
+
+  const handleStartOver = () => {
+    navigate('/role-selection');
+  };
 
   return (
     <div className="min-h-screen bg-holo-black flex flex-col">
       {/* Header with controls */}
       <div className="flex items-center justify-between p-6 bg-holo-black/90 backdrop-blur-sm z-10">
         <button
-          onClick={() => navigate('/designer/final-output')}
+          onClick={() => navigate('/designer/output')}
           className="flex items-center gap-2 text-holo-white hover:text-holo-coral transition-colors duration-200"
         >
           <ArrowLeft size={20} />
@@ -30,6 +34,13 @@ const FinalRendering = () => {
           <button className="flex items-center gap-2 px-4 py-2 bg-holo-coral text-holo-white rounded-lg hover:bg-holo-coral/80 transition-all duration-200">
             <Download size={16} />
             <span className="font-inter text-sm">Download</span>
+          </button>
+          <button 
+            onClick={handleStartOver}
+            className="flex items-center gap-2 px-4 py-2 bg-holo-white/20 text-holo-white rounded-lg hover:bg-holo-white/30 transition-all duration-200"
+          >
+            <RotateCcw size={16} />
+            <span className="font-inter text-sm">Start Over</span>
           </button>
         </div>
       </div>
