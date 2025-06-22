@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import HoloLogo from '@/components/HoloLogo';
 import { ArrowLeft, Download, Share, RotateCcw } from 'lucide-react';
 
 const FinalRendering = () => {
@@ -23,12 +22,11 @@ const FinalRendering = () => {
           <span className="font-inter text-sm">Back to Project</span>
         </button>
         
-        <h1 className="text-holo-white text-xl font-inter font-semibold bg-gradient-to-r from-holo-teal to-holo-coral bg-clip-text text-transparent">
+        <h1 className="text-holo-white text-xl font-inter font-semibold">
           Final Design Rendering
         </h1>
         
         <div className="flex items-center gap-4">
-          <HoloLogo size="small" variant="dots" className="text-holo-white" />
           <button className="flex items-center gap-2 px-4 py-2 bg-holo-teal text-holo-white rounded-lg hover:bg-holo-teal/80 transition-all duration-200">
             <Share size={16} />
             <span className="font-inter text-sm">Share</span>

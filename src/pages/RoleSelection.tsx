@@ -24,13 +24,10 @@ const RoleSelection = () => {
       {/* Back Button aligned with progress bar */}
       <BackButton to="/" />
 
-      {/* Title positioned with better integration */}
-      <div className="absolute top-6 left-20 right-20 flex items-center justify-between">
-        <h1 className="text-[20px] font-semibold text-holo-black tracking-wide bg-gradient-to-r from-holo-teal to-holo-coral bg-clip-text text-transparent">
-          SELECT YOUR EXPERIENCE
-        </h1>
-        <HoloLogo size="small" variant="dots" />
-      </div>
+      {/* Title positioned after back button */}
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black tracking-wide">
+        SELECT YOUR EXPERIENCE
+      </h1>
 
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
         {/* Role Options */}
@@ -85,6 +82,13 @@ const RoleSelection = () => {
               <p className="text-sm font-inter text-gray-600">Upload Materials</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Footer Logo - Six-dot version */}
+      <div className="fixed bottom-4 right-4">
+        <div className="w-12 h-12 flex items-center justify-center">
+          <HoloLogo size="small" variant="dots" />
         </div>
       </div>
     </div>

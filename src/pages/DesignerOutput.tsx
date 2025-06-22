@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
-import HoloLogo from '@/components/HoloLogo';
 import { Download, Package, Wrench, Clock, Leaf } from 'lucide-react';
 
 const DesignerOutput = () => {
@@ -45,13 +44,9 @@ const DesignerOutput = () => {
       
       <BackButton to="/designer/customization" />
 
-      {/* Title positioned with better integration and logo */}
-      <div className="absolute top-6 left-20 right-6 flex items-center justify-between">
-        <h1 className="text-[20px] font-semibold text-holo-black tracking-wide bg-gradient-to-r from-holo-teal to-holo-coral bg-clip-text text-transparent">
-          YOUR DESIGN OUTPUT
-        </h1>
-        <HoloLogo size="small" variant="dots" />
-      </div>
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
+        YOUR DESIGN OUTPUT
+      </h1>
 
       <div className="pl-20 pr-8 pt-16 pb-8">
         <div className="flex gap-8 h-[calc(100vh-200px)]">
