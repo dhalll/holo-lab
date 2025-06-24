@@ -1,9 +1,10 @@
+
 import React, { useRef, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
-const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string) => void }) => {
+const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string, mesh?: THREE.Mesh) => void }) => {
   console.log('Loading GLTF from: /lovable-uploads/test to upload to three,js 2.gltf');
   
   try {
@@ -11,12 +12,13 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
     const modelRef = useRef<THREE.Group>(null);
     const { camera, gl } = useThree();
     const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
+    const [selectedObject, setSelectedObject] = useState<THREE.Mesh | null>(null);
     const raycaster = useRef(new THREE.Raycaster());
     const mouse = useRef(new THREE.Vector2());
 
     console.log('GLTF scene loaded:', scene);
 
-    // Store original materials for hover effects
+    // Store original materials for hover and selection effects
     const originalMaterials = useRef(new Map<THREE.Object3D, THREE.Material | THREE.Material[]>());
 
     const handlePointerMove = useCallback((event: ThreeEvent<PointerEvent>) => {
@@ -28,8 +30,8 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
       raycaster.current.setFromCamera(mouse.current, camera);
       const intersects = raycaster.current.intersectObjects(modelRef.current.children, true);
 
-      // Reset previous hover
-      if (hoveredObject && hoveredObject !== intersects[0]?.object) {
+      // Reset previous hover (but don't reset selected object)
+      if (hoveredObject && hoveredObject !== intersects[0]?.object && hoveredObject !== selectedObject) {
         const originalMaterial = originalMaterials.current.get(hoveredObject);
         if (originalMaterial && hoveredObject instanceof THREE.Mesh) {
           hoveredObject.material = originalMaterial;
@@ -37,10 +39,10 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
         setHoveredObject(null);
       }
 
-      // Apply hover effect to new object
+      // Apply hover effect to new object (if it's not already selected)
       if (intersects.length > 0) {
         const object = intersects[0].object;
-        if (object instanceof THREE.Mesh && object !== hoveredObject) {
+        if (object instanceof THREE.Mesh && object !== hoveredObject && object !== selectedObject) {
           // Store original material if not already stored
           if (!originalMaterials.current.has(object)) {
             originalMaterials.current.set(object, object.material);
@@ -53,7 +55,6 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
 
           if (highlightMaterial instanceof Array) {
             highlightMaterial.forEach(mat => {
-              // Type guard to check if material has emissive property
               if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
                 mat.emissive = new THREE.Color(0x444444);
               }
@@ -66,7 +67,7 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
           setHoveredObject(object);
         }
       }
-    }, [camera, gl, hoveredObject]);
+    }, [camera, gl, hoveredObject, selectedObject]);
 
     const handleClick = useCallback((event: ThreeEvent<MouseEvent>) => {
       if (!modelRef.current) return;
@@ -79,11 +80,54 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
 
       if (intersects.length > 0) {
         const object = intersects[0].object;
-        const buildingName = object.name || object.parent?.name || 'Unknown Building';
-        console.log('Building clicked:', buildingName);
-        onBuildingClick(buildingName);
+        
+        if (object instanceof THREE.Mesh) {
+          // Reset previous selection
+          if (selectedObject && selectedObject !== object) {
+            const originalMaterial = originalMaterials.current.get(selectedObject);
+            if (originalMaterial) {
+              selectedObject.material = originalMaterial;
+            }
+          }
+
+          // Store original material if not already stored
+          if (!originalMaterials.current.has(object)) {
+            originalMaterials.current.set(object, object.material);
+          }
+
+          // Apply holo orange selection material
+          const selectionMaterial = object.material instanceof Array 
+            ? object.material.map(mat => mat.clone())
+            : object.material.clone();
+
+          // Holo orange color (#FF6B35)
+          if (selectionMaterial instanceof Array) {
+            selectionMaterial.forEach(mat => {
+              if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
+                mat.emissive = new THREE.Color(0xFF6B35);
+              }
+              if ('color' in mat && mat.color instanceof THREE.Color) {
+                mat.color = new THREE.Color(0xFF6B35);
+              }
+            });
+          } else {
+            if ('emissive' in selectionMaterial && selectionMaterial.emissive instanceof THREE.Color) {
+              selectionMaterial.emissive = new THREE.Color(0xFF6B35);
+            }
+            if ('color' in selectionMaterial && selectionMaterial.color instanceof THREE.Color) {
+              selectionMaterial.color = new THREE.Color(0xFF6B35);
+            }
+          }
+
+          object.material = selectionMaterial;
+          setSelectedObject(object);
+
+          const buildingName = object.name || object.parent?.name || `Mesh_${object.uuid.slice(0, 8)}`;
+          console.log('Building clicked:', buildingName);
+          onBuildingClick(buildingName, object);
+        }
       }
-    }, [camera, gl, onBuildingClick]);
+    }, [camera, gl, onBuildingClick, selectedObject]);
 
     useFrame((state, delta) => {
       if (modelRef.current) {
@@ -113,12 +157,12 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
 
 interface ThreeSceneProps {
   className?: string;
-  onBuildingClick?: (buildingName: string) => void;
+  onBuildingClick?: (buildingName: string, mesh?: THREE.Mesh) => void;
 }
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({ 
   className = '', 
-  onBuildingClick = (name) => console.log('Building clicked:', name)
+  onBuildingClick = (name, mesh) => console.log('Building clicked:', name, mesh)
 }) => {
   return (
     <div className={`w-full h-full ${className}`}>

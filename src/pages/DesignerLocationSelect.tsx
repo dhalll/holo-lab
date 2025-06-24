@@ -7,10 +7,12 @@ import HoloLogo from '@/components/HoloLogo';
 import WorkflowWindow from '@/components/WorkflowWindow';
 import ThreeScene from '@/components/ThreeScene';
 import { Building, Sliders, Search } from 'lucide-react';
+import * as THREE from 'three';
 
 const DesignerLocationSelect = () => {
   const navigate = useNavigate();
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+  const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -32,9 +34,10 @@ const DesignerLocationSelect = () => {
     setShowAdvanced(true);
   };
 
-  const handleBuildingClick = (buildingName: string) => {
+  const handleBuildingClick = (buildingName: string, mesh?: THREE.Mesh) => {
     console.log('3D Building selected:', buildingName);
     setSelectedBuilding(buildingName);
+    setSelectedMesh(mesh || null);
   };
 
   return (
@@ -108,16 +111,20 @@ const DesignerLocationSelect = () => {
         <div className="ml-12 flex flex-col items-center space-y-8">
           {/* Selected Building Preview */}
           <div className="text-center">
-            <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-teal bg-holo-teal/20' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4`}>
-              {selectedBuilding ? (
+            <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
+              {selectedMesh ? (
+                <div className="w-full h-full flex items-center justify-center bg-holo-coral/20">
+                  <div className="w-8 h-8 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
+                </div>
+              ) : selectedBuilding ? (
                 <div className="w-12 h-8 bg-holo-teal rounded"></div>
               ) : (
                 <span className="text-gray-400 text-xs font-inter text-center px-2">No Building Selected</span>
               )}
             </div>
             {selectedBuilding && (
-              <p className="text-sm font-inter text-gray-600 capitalize">
-                {selectedBuilding.replace('london-building', 'Building ').replace('-', ' ')}
+              <p className="text-sm font-inter text-gray-600">
+                {selectedMesh ? selectedBuilding : selectedBuilding.replace('london-building', 'Building ').replace('-', ' ')}
               </p>
             )}
           </div>
@@ -283,13 +290,6 @@ const DesignerLocationSelect = () => {
           </div>
         </div>
       )}
-
-      {/* Footer Logo */}
-      <div className="fixed bottom-4 right-4">
-        <div className="w-12 h-12 flex items-center justify-center">
-          <HoloLogo size="small" variant="dots" />
-        </div>
-      </div>
     </div>
   );
 };
