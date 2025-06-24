@@ -5,10 +5,10 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string, mesh?: THREE.Mesh) => void }) => {
-  console.log('Loading GLTF from: /lovable-uploads/test to upload to three,js 2.gltf');
+  console.log('Loading GLTF from: /lovable-uploads/scene.gltf');
   
   try {
-    const { scene } = useGLTF('/lovable-uploads/test to upload to three,js 2.gltf');
+    const { scene } = useGLTF('/lovable-uploads/scene.gltf');
     const modelRef = useRef<THREE.Group>(null);
     const { camera, gl } = useThree();
     const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
@@ -50,11 +50,11 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
 
           // Create highlighted material
           const highlightMaterial = object.material instanceof Array 
-            ? object.material.map(mat => mat.clone())
-            : object.material.clone();
+            ? object.material.map((mat: any) => mat.clone())
+            : (object.material as any).clone();
 
           if (highlightMaterial instanceof Array) {
-            highlightMaterial.forEach(mat => {
+            highlightMaterial.forEach((mat: any) => {
               if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
                 mat.emissive = new THREE.Color(0x444444);
               }
@@ -95,27 +95,26 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
             originalMaterials.current.set(object, object.material);
           }
 
-          // Apply holo orange selection material
+          // Apply selection material with hex color #F57B4E
           const selectionMaterial = object.material instanceof Array 
-            ? object.material.map(mat => mat.clone())
-            : object.material.clone();
+            ? object.material.map((mat: any) => mat.clone())
+            : (object.material as any).clone();
 
-          // Holo orange color (#FF6B35)
           if (selectionMaterial instanceof Array) {
-            selectionMaterial.forEach(mat => {
+            selectionMaterial.forEach((mat: any) => {
               if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
-                mat.emissive = new THREE.Color(0xFF6B35);
+                mat.emissive = new THREE.Color(0xF57B4E);
               }
               if ('color' in mat && mat.color instanceof THREE.Color) {
-                mat.color = new THREE.Color(0xFF6B35);
+                mat.color = new THREE.Color(0xF57B4E);
               }
             });
           } else {
             if ('emissive' in selectionMaterial && selectionMaterial.emissive instanceof THREE.Color) {
-              selectionMaterial.emissive = new THREE.Color(0xFF6B35);
+              selectionMaterial.emissive = new THREE.Color(0xF57B4E);
             }
             if ('color' in selectionMaterial && selectionMaterial.color instanceof THREE.Color) {
-              selectionMaterial.color = new THREE.Color(0xFF6B35);
+              selectionMaterial.color = new THREE.Color(0xF57B4E);
             }
           }
 
@@ -128,12 +127,6 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
         }
       }
     }, [camera, gl, onBuildingClick, selectedObject]);
-
-    useFrame((state, delta) => {
-      if (modelRef.current) {
-        modelRef.current.rotation.y += delta * 0.1;
-      }
-    });
 
     return (
       <group 
@@ -169,7 +162,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
       <Canvas 
         camera={{ position: [5, 5, 5], fov: 50 }}
         onCreated={({ gl }) => {
-          gl.setClearColor('#f0f0f0');
+          gl.setClearColor('#A5C1C8'); // Holo blue background
         }}
       >
         <ambientLight intensity={1.2} />
