@@ -5,20 +5,34 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 const GLTFModel = () => {
-  const { scene } = useGLTF('/lovable-uploads/scene.gltf');
-  const modelRef = useRef<THREE.Group>(null);
+  console.log('Loading GLTF from: /lovable-uploads/scene.gltf');
+  
+  try {
+    const { scene } = useGLTF('/lovable-uploads/scene.gltf');
+    const modelRef = useRef<THREE.Group>(null);
 
-  useFrame((state, delta) => {
-    if (modelRef.current) {
-      modelRef.current.rotation.y += delta * 0.1;
-    }
-  });
+    console.log('GLTF scene loaded:', scene);
 
-  return (
-    <group ref={modelRef}>
-      <primitive object={scene} scale={[1, 1, 1]} />
-    </group>
-  );
+    useFrame((state, delta) => {
+      if (modelRef.current) {
+        modelRef.current.rotation.y += delta * 0.1;
+      }
+    });
+
+    return (
+      <group ref={modelRef}>
+        <primitive object={scene} scale={[2, 2, 2]} />
+      </group>
+    );
+  } catch (error) {
+    console.error('Error loading GLTF:', error);
+    return (
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color="red" />
+      </mesh>
+    );
+  }
 };
 
 interface ThreeSceneProps {
@@ -28,10 +42,16 @@ interface ThreeSceneProps {
 const ThreeScene: React.FC<ThreeSceneProps> = ({ className = '' }) => {
   return (
     <div className={`w-full h-full ${className}`}>
-      <Canvas camera={{ position: [3, 3, 3], fov: 50 }}>
-        <ambientLight intensity={0.5} />
+      <Canvas camera={{ position: [5, 5, 5], fov: 50 }}>
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[10, 10, 10]} intensity={1} />
         <pointLight position={[10, 10, 10]} />
-        <Suspense fallback={null}>
+        <Suspense fallback={
+          <mesh>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="gray" />
+          </mesh>
+        }>
           <GLTFModel />
         </Suspense>
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
