@@ -6,18 +6,16 @@ interface HoloLogoProps {
   className?: string;
   variant?: 'full' | 'dots';
   isLanding?: boolean;
-  position?: 'default' | 'top-right';
 }
 
 const HoloLogo: React.FC<HoloLogoProps> = ({ 
   size = 'medium', 
   className = '', 
   variant = 'full',
-  isLanding = false,
-  position = 'default'
+  isLanding = false
 }) => {
   if (variant === 'dots') {
-    // Six-dot logo for bottom-right corner or top-right corner
+    // Six-dot logo for bottom-right corner
     const sizeClasses = {
       small: 'w-12 h-12',
       medium: 'w-12 h-16',
@@ -30,12 +28,8 @@ const HoloLogo: React.FC<HoloLogoProps> = ({
       large: 'w-5 h-5'
     };
 
-    const positionClasses = position === 'top-right' 
-      ? 'fixed top-4 right-4 z-50' 
-      : '';
-
     return (
-      <div className={`${sizeClasses[size]} ${className} ${positionClasses} flex flex-col justify-between items-center`}>
+      <div className={`${sizeClasses[size]} ${className} flex flex-col justify-between items-center`}>
         {/* Top row - Black circles */}
         <div className="flex gap-1">
           <div className={`${circleSize[size]} bg-holo-black rounded-full`}></div>

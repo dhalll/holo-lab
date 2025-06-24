@@ -1,7 +1,7 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, Share, RotateCcw } from 'lucide-react';
-import HoloLogo from '@/components/HoloLogo';
 
 const FinalRendering = () => {
   const navigate = useNavigate();
@@ -12,9 +12,6 @@ const FinalRendering = () => {
 
   return (
     <div className="min-h-screen bg-holo-black flex flex-col">
-      {/* Top-right HoloLab Logo */}
-      <HoloLogo size="small" variant="dots" position="top-right" />
-      
       {/* Header with controls */}
       <div className="flex items-center justify-between p-6 bg-holo-black/90 backdrop-blur-sm z-10">
         <button

@@ -23,9 +23,6 @@ const ForgotPasswordPage = () => {
 
   return (
     <div className="min-h-screen bg-holo-white font-inter flex flex-col items-center pt-20 px-4">
-      {/* Top-right HoloLab Logo */}
-      <HoloLogo size="small" variant="dots" position="top-right" />
-      
       <HoloLogo size="medium" variant="full" />
       
       <h2 className="text-[24px] font-semibold text-holo-black mb-6 mt-8">

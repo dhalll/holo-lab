@@ -29,9 +29,6 @@ const RoleSelection = () => {
         SELECT YOUR EXPERIENCE
       </h1>
 
-      {/* Top-right HoloLab Logo */}
-      <HoloLogo size="small" variant="dots" position="top-right" />
-
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
         {/* Role Options */}
         <div className="flex flex-col md:flex-row items-center gap-16 mb-16">
