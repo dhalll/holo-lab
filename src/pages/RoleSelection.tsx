@@ -29,6 +29,9 @@ const RoleSelection = () => {
         SELECT YOUR EXPERIENCE
       </h1>
 
+      {/* Top-right HoloLab Logo */}
+      <HoloLogo size="small" variant="dots" position="top-right" />
+
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
         {/* Role Options */}
         <div className="flex flex-col md:flex-row items-center gap-16 mb-16">
@@ -82,13 +85,6 @@ const RoleSelection = () => {
               <p className="text-sm font-inter text-gray-600">Upload Materials</p>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Footer Logo - Six-dot version */}
-      <div className="fixed bottom-4 right-4">
-        <div className="w-12 h-12 flex items-center justify-center">
-          <HoloLogo size="small" variant="dots" />
         </div>
       </div>
     </div>

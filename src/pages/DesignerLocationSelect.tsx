@@ -46,6 +46,9 @@ const DesignerLocationSelect = () => {
         SELECT YOUR BUILDING
       </h1>
 
+      {/* Top-right HoloLab Logo */}
+      <HoloLogo size="small" variant="dots" position="top-right" />
+
       <div className="px-8 pt-16 pb-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
         {/* Centered Map */}
         <div className="flex items-center justify-center">
