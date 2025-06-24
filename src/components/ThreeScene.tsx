@@ -1,63 +1,22 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
-const RotatingStructure = () => {
-  const meshRef = useRef<THREE.Group>(null);
+const GLTFModel = () => {
+  const { scene } = useGLTF('/lovable-uploads/scene.gltf');
+  const modelRef = useRef<THREE.Group>(null);
 
   useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.1;
+    if (modelRef.current) {
+      modelRef.current.rotation.y += delta * 0.1;
     }
   });
 
   return (
-    <group ref={meshRef}>
-      {/* Mock pipe structure */}
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[0.1, 2, 0.1]} />
-        <meshStandardMaterial color="#C8C8C8" />
-      </mesh>
-      <mesh position={[1, 0, 0]}>
-        <boxGeometry args={[0.1, 2, 0.1]} />
-        <meshStandardMaterial color="#C8C8C8" />
-      </mesh>
-      <mesh position={[-1, 0, 0]}>
-        <boxGeometry args={[0.1, 2, 0.1]} />
-        <meshStandardMaterial color="#C8C8C8" />
-      </mesh>
-      <mesh position={[0, 0, 1]}>
-        <boxGeometry args={[0.1, 2, 0.1]} />
-        <meshStandardMaterial color="#C8C8C8" />
-      </mesh>
-      <mesh position={[0, 0, -1]}>
-        <boxGeometry args={[0.1, 2, 0.1]} />
-        <meshStandardMaterial color="#C8C8C8" />
-      </mesh>
-      
-      {/* Joints */}
-      <mesh position={[0, 1, 0]}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-        <meshStandardMaterial color="#F57B4E" />
-      </mesh>
-      <mesh position={[1, 1, 0]}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-        <meshStandardMaterial color="#F57B4E" />
-      </mesh>
-      <mesh position={[-1, 1, 0]}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-        <meshStandardMaterial color="#F57B4E" />
-      </mesh>
-      <mesh position={[0, 1, 1]}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-        <meshStandardMaterial color="#F57B4E" />
-      </mesh>
-      <mesh position={[0, 1, -1]}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-        <meshStandardMaterial color="#F57B4E" />
-      </mesh>
+    <group ref={modelRef}>
+      <primitive object={scene} scale={[1, 1, 1]} />
     </group>
   );
 };
@@ -72,7 +31,9 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ className = '' }) => {
       <Canvas camera={{ position: [3, 3, 3], fov: 50 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
-        <RotatingStructure />
+        <Suspense fallback={null}>
+          <GLTFModel />
+        </Suspense>
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
         <gridHelper args={[10, 10]} />
       </Canvas>
