@@ -57,6 +57,20 @@ const DesignerLocationSelect = () => {
                   className="w-full h-full" 
                   onBuildingClick={handleBuildingClick}
                 />
+                
+                {/* Overlay building selection areas */}
+                <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                     onClick={() => setSelectedBuilding('london-building1')}>
+                  <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
+                </div>
+                <div className="absolute top-1/2 right-1/3 w-20 h-16 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                     onClick={() => setSelectedBuilding('london-building2')}>
+                  <div className="text-xs text-center pt-4 text-gray-600">Camden</div>
+                </div>
+                <div className="absolute bottom-1/3 left-1/2 w-14 h-18 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
+                     onClick={() => setSelectedBuilding('london-building3')}>
+                  <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
+                </div>
               </WorkflowWindow>
             </div>
             
