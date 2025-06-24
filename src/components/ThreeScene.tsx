@@ -1,3 +1,4 @@
+
 import React, { useRef, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -11,6 +12,7 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
     const modelRef = useRef<THREE.Group>(null);
     const { camera, gl } = useThree();
     const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
+    const [selectedObject, setSelectedObject] = useState<THREE.Object3D | null>(null);
     const raycaster = useRef(new THREE.Raycaster());
     const mouse = useRef(new THREE.Vector2());
 
@@ -18,6 +20,24 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
 
     // Store original materials for hover effects
     const originalMaterials = useRef(new Map<THREE.Object3D, THREE.Material | THREE.Material[]>());
+
+    const createMaterialWithColor = (originalMaterial: THREE.Material | THREE.Material[], color: THREE.Color) => {
+      if (originalMaterial instanceof Array) {
+        return originalMaterial.map(mat => {
+          const clonedMat = mat.clone();
+          if ('emissive' in clonedMat && clonedMat.emissive instanceof THREE.Color) {
+            clonedMat.emissive = color;
+          }
+          return clonedMat;
+        });
+      } else {
+        const clonedMat = originalMaterial.clone();
+        if ('emissive' in clonedMat && clonedMat.emissive instanceof THREE.Color) {
+          clonedMat.emissive = color;
+        }
+        return clonedMat;
+      }
+    };
 
     const handlePointerMove = useCallback((event: ThreeEvent<PointerEvent>) => {
       if (!modelRef.current) return;
@@ -28,8 +48,8 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
       raycaster.current.setFromCamera(mouse.current, camera);
       const intersects = raycaster.current.intersectObjects(modelRef.current.children, true);
 
-      // Reset previous hover
-      if (hoveredObject && hoveredObject !== intersects[0]?.object) {
+      // Reset previous hover if it's not the selected object
+      if (hoveredObject && hoveredObject !== intersects[0]?.object && hoveredObject !== selectedObject) {
         const originalMaterial = originalMaterials.current.get(hoveredObject);
         if (originalMaterial && hoveredObject instanceof THREE.Mesh) {
           hoveredObject.material = originalMaterial;
@@ -37,36 +57,24 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
         setHoveredObject(null);
       }
 
-      // Apply hover effect to new object
+      // Apply hover effect to new object (only if it's not already selected)
       if (intersects.length > 0) {
         const object = intersects[0].object;
-        if (object instanceof THREE.Mesh && object !== hoveredObject) {
+        if (object instanceof THREE.Mesh && object !== hoveredObject && object !== selectedObject) {
           // Store original material if not already stored
           if (!originalMaterials.current.has(object)) {
             originalMaterials.current.set(object, object.material);
           }
 
-          // Create highlighted material
-          const highlightMaterial = object.material instanceof Array 
-            ? object.material.map(mat => mat.clone())
-            : object.material.clone();
-
-          if (highlightMaterial instanceof Array) {
-            highlightMaterial.forEach(mat => {
-              // Type guard to check if material has emissive property
-              if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
-                mat.emissive = new THREE.Color(0x444444);
-              }
-            });
-          } else if ('emissive' in highlightMaterial && highlightMaterial.emissive instanceof THREE.Color) {
-            highlightMaterial.emissive = new THREE.Color(0x444444);
-          }
+          // Create holo blue highlight material for hover
+          const holoBlueColor = new THREE.Color(0x00CED1); // holo blue/cyan
+          const highlightMaterial = createMaterialWithColor(object.material, holoBlueColor);
 
           object.material = highlightMaterial;
           setHoveredObject(object);
         }
       }
-    }, [camera, gl, hoveredObject]);
+    }, [camera, gl, hoveredObject, selectedObject]);
 
     const handleClick = useCallback((event: ThreeEvent<MouseEvent>) => {
       if (!modelRef.current) return;
@@ -79,11 +87,40 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
 
       if (intersects.length > 0) {
         const object = intersects[0].object;
-        const buildingName = object.name || object.parent?.name || 'Unknown Building';
-        console.log('Building clicked:', buildingName);
-        onBuildingClick(buildingName);
+        
+        // Reset previous selection
+        if (selectedObject && selectedObject instanceof THREE.Mesh) {
+          const originalMaterial = originalMaterials.current.get(selectedObject);
+          if (originalMaterial) {
+            selectedObject.material = originalMaterial;
+          }
+        }
+
+        // Set new selection
+        if (object instanceof THREE.Mesh) {
+          // Store original material if not already stored
+          if (!originalMaterials.current.has(object)) {
+            originalMaterials.current.set(object, object.material);
+          }
+
+          // Create orange selection material
+          const orangeColor = new THREE.Color(0xFF6600); // orange
+          const selectionMaterial = createMaterialWithColor(object.material, orangeColor);
+
+          object.material = selectionMaterial;
+          setSelectedObject(object);
+          
+          // Clear hover state since this object is now selected
+          if (hoveredObject === object) {
+            setHoveredObject(null);
+          }
+
+          const buildingName = object.name || object.parent?.name || 'Unknown Building';
+          console.log('Building clicked:', buildingName);
+          onBuildingClick(buildingName);
+        }
       }
-    }, [camera, gl, onBuildingClick]);
+    }, [camera, gl, onBuildingClick, selectedObject, hoveredObject]);
 
     useFrame((state, delta) => {
       if (modelRef.current) {
