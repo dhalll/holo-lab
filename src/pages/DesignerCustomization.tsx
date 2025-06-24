@@ -169,7 +169,10 @@ const DesignerCustomization = () => {
             {/* 3D Map Window */}
             <div className="mb-6">
               <WorkflowWindow className="w-[600px] h-[600px]">
-                <ThreeScene className="w-full h-full" />
+                <ThreeScene 
+                  className="w-full h-full" 
+                  modelPath="/lovable-uploads/structure example.gltf"
+                />
               </WorkflowWindow>
             </div>
           </div>

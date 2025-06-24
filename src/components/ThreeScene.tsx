@@ -1,14 +1,19 @@
-
 import React, { useRef, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
-const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string, mesh?: THREE.Mesh) => void }) => {
-  console.log('Loading GLTF from: /lovable-uploads/scene (2).gltf');
+const GLTFModel = ({ 
+  onBuildingClick, 
+  modelPath = '/lovable-uploads/scene (2).gltf' 
+}: { 
+  onBuildingClick: (buildingName: string, mesh?: THREE.Mesh) => void;
+  modelPath?: string;
+}) => {
+  console.log('Loading GLTF from:', modelPath);
   
   try {
-    const { scene } = useGLTF('/lovable-uploads/scene (2).gltf');
+    const { scene } = useGLTF(modelPath);
     const modelRef = useRef<THREE.Group>(null);
     const { camera, gl } = useThree();
     const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
@@ -151,11 +156,13 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
 interface ThreeSceneProps {
   className?: string;
   onBuildingClick?: (buildingName: string, mesh?: THREE.Mesh) => void;
+  modelPath?: string;
 }
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({ 
   className = '', 
-  onBuildingClick = (name, mesh) => console.log('Building clicked:', name, mesh)
+  onBuildingClick = (name, mesh) => console.log('Building clicked:', name, mesh),
+  modelPath = '/lovable-uploads/scene (2).gltf'
 }) => {
   return (
     <div className={`w-full h-full ${className}`}>
@@ -174,7 +181,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
             <meshStandardMaterial color="gray" />
           </mesh>
         }>
-          <GLTFModel onBuildingClick={onBuildingClick} />
+          <GLTFModel onBuildingClick={onBuildingClick} modelPath={modelPath} />
         </Suspense>
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
       </Canvas>
