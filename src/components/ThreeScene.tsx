@@ -4,10 +4,10 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string) => void }) => {
-  console.log('Loading GLTF from: /lovable-uploads/scene.gltf');
+  console.log('Loading GLTF from: /lovable-uploads/test to upload to three,js 2.gltf');
   
   try {
-    const { scene } = useGLTF('/lovable-uploads/scene.gltf');
+    const { scene } = useGLTF('/lovable-uploads/test to upload to three,js 2.gltf');
     const modelRef = useRef<THREE.Group>(null);
     const { camera, gl } = useThree();
     const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
