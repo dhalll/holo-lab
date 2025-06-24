@@ -1,4 +1,3 @@
-
 import React, { useRef, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -128,12 +127,6 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
         }
       }
     }, [camera, gl, onBuildingClick, selectedObject]);
-
-    useFrame((state, delta) => {
-      if (modelRef.current) {
-        modelRef.current.rotation.y += delta * 0.1;
-      }
-    });
 
     return (
       <group 
