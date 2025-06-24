@@ -31,6 +31,11 @@ const DesignerLocationSelect = () => {
     setShowAdvanced(true);
   };
 
+  const handleBuildingClick = (buildingName: string) => {
+    console.log('3D Building selected:', buildingName);
+    setSelectedBuilding(buildingName);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={2} />
@@ -48,7 +53,10 @@ const DesignerLocationSelect = () => {
             {/* 3D Map Window */}
             <div className="mb-6">
               <WorkflowWindow className="w-[600px] h-[600px]">
-                <ThreeScene className="w-full h-full" />
+                <ThreeScene 
+                  className="w-full h-full" 
+                  onBuildingClick={handleBuildingClick}
+                />
                 
                 {/* Overlay building selection areas */}
                 <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
@@ -108,7 +116,7 @@ const DesignerLocationSelect = () => {
             </div>
             {selectedBuilding && (
               <p className="text-sm font-inter text-gray-600 capitalize">
-                {selectedBuilding.replace('london-building', 'Building ')}
+                {selectedBuilding.replace('london-building', 'Building ').replace('-', ' ')}
               </p>
             )}
           </div>
