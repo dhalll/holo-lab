@@ -1,6 +1,5 @@
-
 import React, { useRef, Suspense, useState, useCallback } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -20,12 +19,11 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
     // Store original materials for hover effects
     const originalMaterials = useRef(new Map<THREE.Object3D, THREE.Material | THREE.Material[]>());
 
-    const handlePointerMove = useCallback((event: React.PointerEvent) => {
+    const handlePointerMove = useCallback((event: ThreeEvent<PointerEvent>) => {
       if (!modelRef.current) return;
 
-      const rect = gl.domElement.getBoundingClientRect();
-      mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      mouse.current.x = (event.clientX / gl.domElement.clientWidth) * 2 - 1;
+      mouse.current.y = -(event.clientY / gl.domElement.clientHeight) * 2 + 1;
 
       raycaster.current.setFromCamera(mouse.current, camera);
       const intersects = raycaster.current.intersectObjects(modelRef.current.children, true);
@@ -55,11 +53,12 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
 
           if (highlightMaterial instanceof Array) {
             highlightMaterial.forEach(mat => {
-              if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshBasicMaterial) {
+              // Type guard to check if material has emissive property
+              if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
                 mat.emissive = new THREE.Color(0x444444);
               }
             });
-          } else if (highlightMaterial instanceof THREE.MeshStandardMaterial || highlightMaterial instanceof THREE.MeshBasicMaterial) {
+          } else if ('emissive' in highlightMaterial && highlightMaterial.emissive instanceof THREE.Color) {
             highlightMaterial.emissive = new THREE.Color(0x444444);
           }
 
@@ -69,12 +68,11 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
       }
     }, [camera, gl, hoveredObject]);
 
-    const handleClick = useCallback((event: React.PointerEvent) => {
+    const handleClick = useCallback((event: ThreeEvent<MouseEvent>) => {
       if (!modelRef.current) return;
 
-      const rect = gl.domElement.getBoundingClientRect();
-      mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      mouse.current.x = (event.clientX / gl.domElement.clientWidth) * 2 - 1;
+      mouse.current.y = -(event.clientY / gl.domElement.clientHeight) * 2 + 1;
 
       raycaster.current.setFromCamera(mouse.current, camera);
       const intersects = raycaster.current.intersectObjects(modelRef.current.children, true);
@@ -99,7 +97,7 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
         onPointerMove={handlePointerMove}
         onClick={handleClick}
       >
-        <primitive object={scene} scale={[2, 2, 2]} />
+        <primitive object={scene} scale={[5, 5, 5]} />
       </group>
     );
   } catch (error) {
@@ -124,10 +122,15 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
 }) => {
   return (
     <div className={`w-full h-full ${className}`}>
-      <Canvas camera={{ position: [5, 5, 5], fov: 50 }}>
-        <ambientLight intensity={0.8} />
-        <directionalLight position={[10, 10, 10]} intensity={1} />
-        <pointLight position={[10, 10, 10]} />
+      <Canvas 
+        camera={{ position: [5, 5, 5], fov: 50 }}
+        onCreated={({ gl }) => {
+          gl.setClearColor('#f0f0f0');
+        }}
+      >
+        <ambientLight intensity={1.2} />
+        <directionalLight position={[10, 10, 10]} intensity={1.5} />
+        <pointLight position={[10, 10, 10]} intensity={0.8} />
         <Suspense fallback={
           <mesh>
             <boxGeometry args={[1, 1, 1]} />
