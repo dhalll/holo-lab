@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -45,9 +46,6 @@ const DesignerLocationSelect = () => {
       <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
         SELECT YOUR BUILDING
       </h1>
-
-      {/* Top-right HoloLab Logo */}
-      <HoloLogo size="small" variant="dots" position="top-right" />
 
       <div className="px-8 pt-16 pb-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
         {/* Centered Map */}
