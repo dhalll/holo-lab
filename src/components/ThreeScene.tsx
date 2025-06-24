@@ -1,14 +1,13 @@
-
 import React, { useRef, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string, mesh?: THREE.Mesh) => void }) => {
-  console.log('Loading GLTF from: /lovable-uploads/scene.gltf');
+  console.log('Loading GLTF from: /lovable-uploads/scene (2).gltf');
   
   try {
-    const { scene } = useGLTF('/lovable-uploads/scene.gltf');
+    const { scene } = useGLTF('/lovable-uploads/scene (2).gltf');
     const modelRef = useRef<THREE.Group>(null);
     const { camera, gl } = useThree();
     const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
