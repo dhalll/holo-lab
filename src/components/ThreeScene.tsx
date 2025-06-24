@@ -1,4 +1,3 @@
-
 import React, { useRef, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -95,27 +94,27 @@ const GLTFModel = ({ onBuildingClick }: { onBuildingClick: (buildingName: string
             originalMaterials.current.set(object, object.material);
           }
 
-          // Apply selection material with exact hex color #F57B4E
+          // Apply holo orange selection material
           const selectionMaterial = object.material instanceof Array 
             ? object.material.map(mat => mat.clone())
             : object.material.clone();
 
-          // Use exact hex color #F57B4E
+          // Holo orange color (#FF6B35)
           if (selectionMaterial instanceof Array) {
             selectionMaterial.forEach(mat => {
               if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
-                mat.emissive = new THREE.Color(0xF57B4E);
+                mat.emissive = new THREE.Color(0xFF6B35);
               }
               if ('color' in mat && mat.color instanceof THREE.Color) {
-                mat.color = new THREE.Color(0xF57B4E);
+                mat.color = new THREE.Color(0xFF6B35);
               }
             });
           } else {
             if ('emissive' in selectionMaterial && selectionMaterial.emissive instanceof THREE.Color) {
-              selectionMaterial.emissive = new THREE.Color(0xF57B4E);
+              selectionMaterial.emissive = new THREE.Color(0xFF6B35);
             }
             if ('color' in selectionMaterial && selectionMaterial.color instanceof THREE.Color) {
-              selectionMaterial.color = new THREE.Color(0xF57B4E);
+              selectionMaterial.color = new THREE.Color(0xFF6B35);
             }
           }
 
@@ -163,7 +162,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
       <Canvas 
         camera={{ position: [5, 5, 5], fov: 50 }}
         onCreated={({ gl }) => {
-          gl.setClearColor('#A5C1C8');
+          gl.setClearColor('#f0f0f0');
         }}
       >
         <ambientLight intensity={1.2} />
