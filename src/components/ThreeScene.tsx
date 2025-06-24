@@ -1,3 +1,4 @@
+
 import React, { useRef, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -161,7 +162,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
       <Canvas 
         camera={{ position: [5, 5, 5], fov: 50 }}
         onCreated={({ gl }) => {
-          gl.setClearColor('#A5C1C8'); // Holo blue background
+          gl.setClearColor('#FFFFFF'); // White background
         }}
       >
         <ambientLight intensity={1.2} />
@@ -176,7 +177,6 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
           <GLTFModel onBuildingClick={onBuildingClick} />
         </Suspense>
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
-        <gridHelper args={[10, 10]} />
       </Canvas>
     </div>
   );
