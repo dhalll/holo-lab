@@ -5,6 +5,7 @@ import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import WorkflowWindow from '@/components/WorkflowWindow';
 import ThreeScene from '@/components/ThreeScene';
+import MaterialsDatabase from '@/components/MaterialsDatabase';
 import { Send, Bot, User, Database, Building } from 'lucide-react';
 
 interface ChatMessage {
@@ -18,6 +19,7 @@ interface ChatMessage {
 
 const DesignerCustomization = () => {
   const navigate = useNavigate();
+  const [showMaterialsDatabase, setShowMaterialsDatabase] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       type: 'bot',
@@ -152,6 +154,10 @@ const DesignerCustomization = () => {
     navigate('/designer/output');
   };
 
+  const handleMaterialsDatabaseClick = () => {
+    setShowMaterialsDatabase(true);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative overflow-hidden">
       <ProgressBar currentStep={3} />
@@ -184,7 +190,7 @@ const DesignerCustomization = () => {
             {/* Top-right icon buttons */}
             <div className="flex justify-end space-x-3 mb-4">
               <button
-                onClick={() => navigate('/materials')}
+                onClick={handleMaterialsDatabaseClick}
                 className="w-10 h-10 bg-holo-black border-2 border-holo-coral rounded-full flex items-center justify-center hover:bg-holo-coral transition-colors duration-200"
               >
                 <Database size={20} className="text-white" />
@@ -384,6 +390,12 @@ const DesignerCustomization = () => {
           </div>
         </div>
       </div>
+
+      {/* Materials Database Modal */}
+      <MaterialsDatabase 
+        isOpen={showMaterialsDatabase}
+        onClose={() => setShowMaterialsDatabase(false)}
+      />
 
       {/* Footer Logo */}
       <div className="fixed bottom-4 right-4">
