@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -39,6 +38,9 @@ const DesignerLocationSelect = () => {
     setSelectedBuilding(buildingName);
     setSelectedMesh(mesh || null);
   };
+
+  // Log component render to help with debugging
+  console.log('DesignerLocationSelect rendered with selectedBuilding:', selectedBuilding);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">

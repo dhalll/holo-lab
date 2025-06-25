@@ -1,3 +1,4 @@
+
 import React, { useRef, Suspense, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -5,15 +6,18 @@ import * as THREE from 'three';
 
 const GLTFModel = ({ 
   onBuildingClick, 
-  modelPath = '/lovable-uploads/scene (2).gltf' 
+  modelPath = '/lovable-uploads/scene%20(2).gltf' 
 }: { 
   onBuildingClick: (buildingName: string, mesh?: THREE.Mesh) => void;
   modelPath?: string;
 }) => {
+  // URL encode the path to handle spaces and special characters
+  const encodedPath = encodeURI(modelPath);
   console.log('Loading GLTF from:', modelPath);
+  console.log('Encoded path:', encodedPath);
   
   try {
-    const { scene } = useGLTF(modelPath);
+    const { scene } = useGLTF(encodedPath);
     const modelRef = useRef<THREE.Group>(null);
     const { camera, gl } = useThree();
     const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
@@ -21,7 +25,7 @@ const GLTFModel = ({
     const raycaster = useRef(new THREE.Raycaster());
     const mouse = useRef(new THREE.Vector2());
 
-    console.log('GLTF scene loaded:', scene);
+    console.log('GLTF scene loaded successfully:', scene);
 
     // Store original materials for hover and selection effects
     const originalMaterials = useRef(new Map<THREE.Object3D, THREE.Material | THREE.Material[]>());
@@ -144,11 +148,28 @@ const GLTFModel = ({
     );
   } catch (error) {
     console.error('Error loading GLTF:', error);
+    console.error('Failed to load model from path:', modelPath);
+    console.error('Encoded path was:', encodedPath);
+    
+    // Return fallback mesh with building-like appearance
     return (
-      <mesh>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="red" />
-      </mesh>
+      <group onClick={(event) => {
+        console.log('Fallback building clicked');
+        onBuildingClick('Fallback Building', undefined);
+      }}>
+        <mesh position={[0, 0.5, 0]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color="#4A90E2" />
+        </mesh>
+        <mesh position={[1.5, 0.5, 0]}>
+          <boxGeometry args={[0.8, 1.2, 0.8]} />
+          <meshStandardMaterial color="#F57B4E" />
+        </mesh>
+        <mesh position={[-1.5, 0.3, 0]}>
+          <boxGeometry args={[0.6, 0.6, 0.6]} />
+          <meshStandardMaterial color="#7ED321" />
+        </mesh>
+      </group>
     );
   }
 };
@@ -164,12 +185,15 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
   onBuildingClick = (name, mesh) => console.log('Building clicked:', name, mesh),
   modelPath = '/lovable-uploads/scene (2).gltf'
 }) => {
+  console.log('ThreeScene initialized with modelPath:', modelPath);
+  
   return (
     <div className={`w-full h-full ${className}`}>
       <Canvas 
         camera={{ position: [5, 5, 5], fov: 50 }}
         onCreated={({ gl }) => {
           gl.setClearColor('#FFFFFF'); // White background
+          console.log('Canvas created successfully');
         }}
       >
         <ambientLight intensity={1.2} />
