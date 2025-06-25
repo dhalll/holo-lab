@@ -6,18 +6,18 @@ import * as THREE from 'three';
 
 const GLTFModel = ({ 
   onBuildingClick, 
-  modelPath = '/lovable-uploads/scene%20(2).gltf' 
+  modelPath = '/lovable-uploads/scene (2).gltf' 
 }: { 
   onBuildingClick: (buildingName: string, mesh?: THREE.Mesh) => void;
   modelPath?: string;
 }) => {
-  // URL encode the path to handle spaces and special characters
-  const encodedPath = encodeURI(modelPath);
-  console.log('Loading GLTF from:', modelPath);
-  console.log('Encoded path:', encodedPath);
+  // Only encode if the path contains spaces and isn't already encoded
+  const finalPath = modelPath.includes('%20') ? modelPath : encodeURI(modelPath);
+  console.log('Loading GLTF from original path:', modelPath);
+  console.log('Final encoded path:', finalPath);
   
   try {
-    const { scene } = useGLTF(encodedPath);
+    const { scene } = useGLTF(finalPath);
     const modelRef = useRef<THREE.Group>(null);
     const { camera, gl } = useThree();
     const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(null);
@@ -149,7 +149,7 @@ const GLTFModel = ({
   } catch (error) {
     console.error('Error loading GLTF:', error);
     console.error('Failed to load model from path:', modelPath);
-    console.error('Encoded path was:', encodedPath);
+    console.error('Final path attempted:', finalPath);
     
     // Return fallback mesh with building-like appearance
     return (
