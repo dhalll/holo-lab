@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -19,6 +18,7 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
   const { scene } = useGLTF(modelPath);
   const meshRef = useRef<THREE.Group>(null);
   const [hoveredBuilding, setHoveredBuilding] = useState<string | null>(null);
+  const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
 
   useEffect(() => {
     if (scene && meshRef.current) {
@@ -44,9 +44,29 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
     event.stopPropagation();
     const intersected = event.intersections[0];
     if (intersected && intersected.object.userData.isBuilding && onBuildingClick) {
+      const clickedMesh = intersected.object as THREE.Mesh;
       const buildingName = intersected.object.userData.buildingName;
+      
+      // Deselect previous mesh if there was one
+      if (selectedMesh && selectedMesh !== clickedMesh) {
+        if (selectedMesh.userData.originalMaterial) {
+          selectedMesh.material = selectedMesh.userData.originalMaterial;
+        }
+      }
+      
+      // Select the new mesh with orange highlighting but keep it visible
+      if (clickedMesh.userData.originalMaterial) {
+        const originalMaterial = clickedMesh.userData.originalMaterial as THREE.Material;
+        clickedMesh.material = new THREE.MeshLambertMaterial({ 
+          color: 0xF57B4E,
+          transparent: false,
+          opacity: 1
+        });
+      }
+      
+      setSelectedMesh(clickedMesh);
       console.log('Building clicked:', buildingName);
-      onBuildingClick(buildingName, intersected.object);
+      onBuildingClick(buildingName, clickedMesh);
     }
   };
 
@@ -58,9 +78,16 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
       setHoveredBuilding(buildingName);
       document.body.style.cursor = 'pointer';
       
-      // Highlight the building with orange color #F57B4E
-      if (intersected.object.material) {
-        intersected.object.material = new THREE.MeshBasicMaterial({ color: 0xF57B4E });
+      // Only highlight on hover if it's not the selected mesh
+      if (selectedMesh !== intersected.object) {
+        // Highlight the building with orange color #F57B4E but keep it visible
+        if (intersected.object.material) {
+          intersected.object.material = new THREE.MeshLambertMaterial({ 
+            color: 0xF57B4E,
+            transparent: true,
+            opacity: 0.8
+          });
+        }
       }
     }
   };
@@ -72,9 +99,12 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
       setHoveredBuilding(null);
       document.body.style.cursor = 'default';
       
-      // Restore original material
-      if (intersected.object.userData.originalMaterial) {
-        intersected.object.material = intersected.object.userData.originalMaterial;
+      // Only restore original material if it's not the selected mesh
+      if (selectedMesh !== intersected.object) {
+        // Restore original material
+        if (intersected.object.userData.originalMaterial) {
+          intersected.object.material = intersected.object.userData.originalMaterial;
+        }
       }
     }
   };
