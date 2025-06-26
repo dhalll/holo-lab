@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
@@ -28,46 +29,52 @@ const SupplierScan = () => {
         SCAN MATERIALS
       </h1>
 
-      <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16">
+      <div className="flex items-center justify-center min-h-screen px-8 pt-16">
         {!isScanning ? (
-          <div className="flex flex-col items-center max-w-2xl mx-auto text-center">
-            <div className="w-80 h-80 bg-gradient-to-br from-gray-100 to-gray-300 rounded-2xl mb-8 flex items-center justify-center border-4 border-dashed border-holo-teal/50 relative overflow-hidden">
-              <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                <Camera size={80} className="text-holo-teal opacity-60" />
+          <div className="flex items-center gap-12 max-w-6xl mx-auto w-full">
+            {/* Camera View - Left Side */}
+            <div className="flex-1 flex flex-col items-center">
+              <div className="w-96 h-96 bg-gradient-to-br from-gray-100 to-gray-300 rounded-2xl mb-8 flex items-center justify-center border-4 border-dashed border-holo-teal/50 relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                  <Camera size={80} className="text-holo-teal opacity-60" />
+                </div>
+                <div className="absolute top-4 left-4 w-4 h-4 border-l-2 border-t-2 border-holo-coral"></div>
+                <div className="absolute top-4 right-4 w-4 h-4 border-r-2 border-t-2 border-holo-coral"></div>
+                <div className="absolute bottom-4 left-4 w-4 h-4 border-l-2 border-b-2 border-holo-coral"></div>
+                <div className="absolute bottom-4 right-4 w-4 h-4 border-r-2 border-b-2 border-holo-coral"></div>
               </div>
-              <div className="absolute top-4 left-4 w-4 h-4 border-l-2 border-t-2 border-holo-coral"></div>
-              <div className="absolute top-4 right-4 w-4 h-4 border-r-2 border-t-2 border-holo-coral"></div>
-              <div className="absolute bottom-4 left-4 w-4 h-4 border-l-2 border-b-2 border-holo-coral"></div>
-              <div className="absolute bottom-4 right-4 w-4 h-4 border-r-2 border-b-2 border-holo-coral"></div>
+              
+              <button
+                onClick={handleScanComplete}
+                className="w-64 h-14 bg-gradient-teal-coral text-white rounded-[32px] font-inter font-bold text-lg hover:bg-gradient-coral-teal hover:scale-105 transition-all duration-300 shadow-lg"
+              >
+                START SCANNING
+              </button>
             </div>
-            
-            <h2 className="text-2xl font-inter font-bold text-holo-black mb-4">Position Your Pipes</h2>
-            <p className="text-gray-600 font-inter mb-8 max-w-md">
-              Place the reclaimed materials within the viewfinder. Make sure they are well-lit and clearly visible. 
-              Holo AI will automatically detect and catalog the materials, noting their quality.
-            </p>
-            
-            <div className="space-y-4 mb-8 text-left">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-holo-coral rounded-full"></div>
-                <span className="text-sm font-inter text-gray-700">Ensure good lighting conditions</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-holo-coral rounded-full"></div>
-                <span className="text-sm font-inter text-gray-700">Keep materials separated for better detection</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-holo-coral rounded-full"></div>
-                <span className="text-sm font-inter text-gray-700">Include any visible markings or labels</span>
+
+            {/* Instructions - Right Side */}
+            <div className="flex-1 pl-8">
+              <h2 className="text-2xl font-inter font-bold text-holo-black mb-4">Position Your Pipes</h2>
+              <p className="text-gray-600 font-inter mb-8">
+                Place the reclaimed materials within the viewfinder. Make sure they are well-lit and clearly visible. 
+                Holo AI will automatically detect and catalog the materials, noting their quality.
+              </p>
+              
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-holo-coral rounded-full flex-shrink-0"></div>
+                  <span className="text-sm font-inter text-gray-700">Ensure good lighting conditions</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-holo-coral rounded-full flex-shrink-0"></div>
+                  <span className="text-sm font-inter text-gray-700">Keep materials separated for better detection</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-holo-coral rounded-full flex-shrink-0"></div>
+                  <span className="text-sm font-inter text-gray-700">Include any visible markings or labels</span>
+                </div>
               </div>
             </div>
-            
-            <button
-              onClick={handleScanComplete}
-              className="w-64 h-14 bg-gradient-teal-coral text-white rounded-[32px] font-inter font-bold text-lg hover:bg-gradient-coral-teal hover:scale-105 transition-all duration-300 shadow-lg"
-            >
-              START SCANNING
-            </button>
           </div>
         ) : (
           <div className="flex flex-col items-center max-w-2xl mx-auto text-center">
