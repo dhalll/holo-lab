@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -217,12 +215,12 @@ const DesignerLocationSelect = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-inter font-medium text-holo-black mb-2">
-                    Approx. Area Override (sq m)
+                    Specify Area (sqm)
                   </label>
                   <input
                     type="number"
                     className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
-                    placeholder="Optional override"
+                    placeholder="Approximate area"
                   />
                 </div>
 
@@ -273,4 +271,3 @@ const DesignerLocationSelect = () => {
 };
 
 export default DesignerLocationSelect;
-
