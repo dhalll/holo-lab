@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton'; // Assuming this component exists
@@ -24,7 +25,7 @@ const getMaterialImage = (type: string) => {
     case 'copper':
       return '/lovable-uploads/5ba08a5c-46f4-46b8-8205-3607d9f75e28.png'; // Copper pipes
     case 'hdpe':
-      return '/lovable-uploads/7b775965-3c91-4858-a229-22200248f865.png'; // Use PVC image for HDPE
+      return '/lovable-uploads/d286aab1-3a11-4988-aa7c-571abbbedfbb.png'; // Black HDPE pipes
     case 'cast iron':
       return '/lovable-uploads/ec7cfbfd-6402-4896-8b89-d4763dc32534.png'; // Use steel image for cast iron
     case 'galvanized':
