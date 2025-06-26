@@ -13,13 +13,13 @@ const HoloLogo: React.FC<HoloLogoProps> = ({
   variant = 'full',
   isLanding = false
 }) => {
-  // Top-right corner logo variant
+  // Top-right corner logo variant - increased size
   if (variant === 'top-right') {
     return (
       <img 
         src="/lovable-uploads/cbd5629b-35d4-4351-8070-3528ec5cec35.png" 
         alt="HoloLab Logo" 
-        className={`w-12 h-12 object-contain ${className}`}
+        className={`w-16 h-16 object-contain ${className}`}
       />
     );
   }

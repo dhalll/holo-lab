@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
+import HoloLogo from '@/components/HoloLogo';
 import { Download, Package, Wrench, Clock, Leaf } from 'lucide-react';
 
 const DesignerOutput = () => {
@@ -47,6 +47,11 @@ const DesignerOutput = () => {
       <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
         YOUR DESIGN OUTPUT
       </h1>
+
+      {/* Top Right Logo */}
+      <div className="absolute top-6 right-6 z-10">
+        <HoloLogo variant="top-right" />
+      </div>
 
       {/* Added padding-top to create space between header and content */}
       <div className="pl-32 pr-8 pt-24 pb-8">

@@ -23,16 +23,35 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
         
         // Clone the scene and add to our mesh
         const clonedScene = scene.clone();
-        meshRef.current.add(clonedScene);
-
-        // Set up building interactions
-        scene.traverse((child) => {
+        
+        // Filter out green planes and black blocks
+        clonedScene.traverse((child) => {
           if (child instanceof THREE.Mesh) {
+            const material = child.material as THREE.Material;
+            
+            // Check if it's a green plane or black block and remove it
+            if (material instanceof THREE.MeshLambertMaterial || material instanceof THREE.MeshBasicMaterial) {
+              const color = material.color;
+              // Remove green planes (green color check)
+              if (color.r < 0.2 && color.g > 0.4 && color.b < 0.2) {
+                child.visible = false;
+                return;
+              }
+              // Remove black blocks (very dark colors)
+              if (color.r < 0.1 && color.g < 0.1 && color.b < 0.1) {
+                child.visible = false;
+                return;
+              }
+            }
+            
+            // Set up building interactions for visible meshes
             child.userData.originalMaterial = child.material;
             child.userData.isBuilding = true;
             child.userData.buildingName = child.name || `mesh_${Math.random().toString(36).substr(2, 9)}`;
           }
         });
+        
+        meshRef.current.add(clonedScene);
       }
     }, [scene]);
 
