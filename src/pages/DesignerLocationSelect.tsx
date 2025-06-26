@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
-import HoloLogo from '@/components/HoloLogo';
+import HoloLogo from '@/components/HoloLogo'; // HoloLogo is imported but not used in this specific component
 import WorkflowWindow from '@/components/WorkflowWindow';
 import ThreeScene from '@/components/ThreeScene';
 import { Building, Sliders, Search } from 'lucide-react';
@@ -65,19 +65,22 @@ const DesignerLocationSelect = () => {
                   modelPath="/lovable-uploads/scene (2).gltf"
                 />
                 
-                {/* Overlay building selection areas */}
+                {/* REMOVED: Overlay building selection areas for Shoreditch, Camden, Westminster */}
+                {/* The following div blocks are removed to eliminate the text overlays */}
+                {/*
                 <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                     onClick={() => setSelectedBuilding('london-building1')}>
+                    onClick={() => setSelectedBuilding('london-building1')}>
                   <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
                 </div>
                 <div className="absolute top-1/2 right-1/3 w-20 h-16 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                     onClick={() => setSelectedBuilding('london-building2')}>
+                    onClick={() => setSelectedBuilding('london-building2')}>
                   <div className="text-xs text-center pt-4 text-gray-600">Camden</div>
                 </div>
                 <div className="absolute bottom-1/3 left-1/2 w-14 h-18 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                     onClick={() => setSelectedBuilding('london-building3')}>
+                    onClick={() => setSelectedBuilding('london-building3')}>
                   <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
                 </div>
+                */}
               </WorkflowWindow>
             </div>
             
@@ -116,6 +119,7 @@ const DesignerLocationSelect = () => {
           <div className="text-center">
             <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
               {selectedMesh ? (
+                // This part displays the orange square for mesh_481 etc.
                 <div className="w-full h-full flex items-center justify-center bg-holo-coral/20">
                   <div className="w-8 h-8 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
                 </div>
