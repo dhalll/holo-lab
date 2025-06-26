@@ -4,10 +4,12 @@ import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import { Download, Package, Wrench, Clock, Leaf } from 'lucide-react';
+
 const DesignerOutput = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('materials');
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     // Simulate loading 3D model
     const timer = setTimeout(() => {
@@ -15,6 +17,7 @@ const DesignerOutput = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
   const materials = [{
     type: 'PVC',
     qty: 85,
@@ -71,10 +74,13 @@ const DesignerOutput = () => {
     type: 'Coupling',
     image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png'
   }];
+
   const handleFinalize = () => {
     navigate('/designer/final-rendering');
   };
-  return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={4} stepLabels={['Experience', 'Location', 'Customize', 'Finalize']} />
       
       <BackButton to="/designer/customization" />
@@ -84,13 +90,13 @@ const DesignerOutput = () => {
       </h1>
 
       {/* Top Right Logo */}
-       <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
-        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
-      </div>
+      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0">
+        <HoloLogo variant="top-right" className="w-24 h-24" />
+      </div>
 
       {/* Added padding-top to create space between header and content */}
       <div className="pl-32 pr-8 pt-24 pb-8">
-        <div className="flex gap-4 h-[calc(100vh-250px)]">
+        <div className="flex gap-4 h-[calc(100vh-300px)]">
           {/* 3D Viewport - Takes remaining space */}
           <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-[58px]">
             {isLoading ? <div className="absolute inset-0 flex items-center justify-center">
@@ -133,11 +139,11 @@ const DesignerOutput = () => {
           </div>
 
           {/* Info Panel - Smaller width, positioned below logo */}
-          <div className="w-64 flex flex-col space-y-4 mt-20 py-[9px] my-[20px]">
+          <div className="w-56 flex flex-col space-y-3 mt-16 py-[6px] my-[15px]">
             {/* Design Summary */}
-            <div className="bg-holo-white border border-holo-teal/20 p-4 shadow-sm rounded-md py-0">
-              <h3 className="font-inter font-semibold text-holo-black mb-3 text-base py-[8px]">Design Summary</h3>
-              <div className="space-y-3 text-xs">
+            <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-md">
+              <h3 className="font-inter font-semibold text-holo-black mb-2 text-sm">Design Summary</h3>
+              <div className="space-y-2 text-xs">
                 <div className="flex items-center gap-2">
                   <Package className="text-holo-coral" size={14} />
                   <div><span className="font-bold">Program:</span> Gym + Bar</div>
@@ -185,7 +191,7 @@ const DesignerOutput = () => {
                   </button>)}
               </div>
 
-              <div className="p-3">
+              <div className="p-2">
                 {activeTab === 'materials' && <div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
@@ -246,19 +252,27 @@ const DesignerOutput = () => {
                   </div>}
               </div>
             </div>
-
-            {/* Bottom Actions */}
-            <div className="flex gap-2 gap-0.5 py-0">
-              <button onClick={() => window.history.back()} className="flex-1 py-2 bg-holo-white border border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-xs hover:bg-holo-teal/10 transition-colors duration-200">
-                Go Back to Edit
-              </button>
-              <button onClick={handleFinalize} className="flex-1 py-2 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-xs hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300">
-                Finalize & Save
-              </button>
-            </div>
           </div>
         </div>
+
+        {/* Moved buttons to be centered below the GLTF model */}
+        <div className="flex justify-center gap-4 mt-8">
+          <button 
+            onClick={() => window.history.back()} 
+            className="px-8 py-3 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-base hover:bg-holo-teal/10 transition-colors duration-200 min-w-[180px]"
+          >
+            Go Back to Edit
+          </button>
+          <button 
+            onClick={handleFinalize} 
+            className="px-8 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-base hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[180px]"
+          >
+            Finalize & Save
+          </button>
+        </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default DesignerOutput;
