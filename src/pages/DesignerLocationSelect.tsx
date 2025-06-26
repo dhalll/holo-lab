@@ -97,20 +97,13 @@ const DesignerLocationSelect = () => {
         </div>
 
         {/* Right Panel - Vertical Button Column - Adjusted Positioning and Styling */}
-        {/* Changed ml-12 to absolute positioning relative to the map window for better alignment */}
         <div className="absolute right-[calc(50vw-300px-8rem)] top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-8">
-            {/* Explanation of right calculation:
-                - 50vw: Half of the viewport width.
-                - 300px: Half of the map window's width (600px / 2).
-                - 8rem: Approx. horizontal distance you want between the map and the right panel.
-                This centers the map, then places the right panel relative to that center.
-                You might need to adjust the '8rem' or use a fixed px value based on desired spacing.
-            */}
           
           {/* Selected Building Preview */}
           <div className="text-center">
             <div className={`w-28 h-28 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
               {selectedMesh ? (
+                // This part displays the orange square for mesh_481 etc.
                 <div className="w-full h-full flex items-center justify-center bg-holo-coral/20">
                   <div className="w-8 h-8 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
                 </div>
@@ -138,10 +131,10 @@ const DesignerLocationSelect = () => {
                   : analysisClicked // If already clicked, keep orange
                     ? 'bg-holo-coral border-holo-coral text-holo-white'
                     : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral' // Default blue, hover orange
-              } hover:scale-105`} {/* Added hover:scale-105 for all states on hover */}
+              } hover:scale-105`} {/* Corrected position of hover:scale-105 */}
             >
-              <Building size={48} /> {/* Increased icon size */}
-              <span className="text-sm font-inter mt-1">Analysis</span> {/* Adjusted text size */}
+              <Building size={48} />
+              <span className="text-sm font-inter mt-1">Analysis</span>
             </button>
 
             <button
@@ -153,10 +146,10 @@ const DesignerLocationSelect = () => {
                   : advancedClicked // If already clicked, keep orange
                     ? 'bg-holo-coral border-holo-coral text-holo-white'
                     : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral' // Default blue, hover orange
-              } hover:scale-105`} {/* Added hover:scale-105 for all states on hover */}
+              } hover:scale-105`} {/* Corrected position of hover:scale-105 */}
             >
-              <Sliders size={48} /> {/* Increased icon size */}
-              <span className="text-sm font-inter mt-1">Controls</span> {/* Adjusted text size */}
+              <Sliders size={48} />
+              <span className="text-sm font-inter mt-1">Controls</span>
             </button>
           </div>
         </div>
