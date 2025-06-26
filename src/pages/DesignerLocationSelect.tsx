@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -97,19 +96,19 @@ const DesignerLocationSelect = () => {
           </div>
         </div>
 
-        {/* Right Panel - Vertical Button Column - Adjusted Positioning and Styling */}
-        <div className="absolute right-[calc(50vw-300px-12rem)] top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-8">
+        {/* Right Panel - Vertical Button Column - Better aligned and styled */}
+        <div className="absolute right-[calc(50vw-300px-10rem)] top-[calc(50%-80px)] flex flex-col items-center space-y-6">
           
-          {/* Selected Building Preview - Made same size as buttons */}
+          {/* Selected Building Preview - Slightly smaller and better aligned */}
           <div className="text-center">
-            <div className={`w-40 h-40 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
+            <div className={`w-32 h-32 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
               {selectedMesh ? (
                 // This part displays the orange square for mesh_481 etc.
                 <div className="w-full h-full flex items-center justify-center bg-holo-coral/20">
-                  <div className="w-16 h-16 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
                 </div>
               ) : selectedBuilding ? (
-                <div className="w-24 h-16 bg-holo-teal rounded"></div>
+                <div className="w-20 h-12 bg-holo-teal rounded"></div>
               ) : (
                 <span className="text-gray-400 text-sm font-inter text-center px-4">No Building Selected</span>
               )}
@@ -121,36 +120,36 @@ const DesignerLocationSelect = () => {
             )}
           </div>
 
-          {/* Control Buttons - Vertical Stack - Made larger to match map height */}
-          <div className="flex flex-col gap-8">
+          {/* Control Buttons - Vertical Stack - Subtle by default, prominent on hover */}
+          <div className="flex flex-col gap-6">
             <button
               onClick={handleAnalysisClick}
               disabled={!selectedBuilding}
-              className={`w-40 h-40 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+              className={`w-32 h-32 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                 !selectedBuilding 
                   ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
                   : analysisClicked
                     ? 'bg-holo-coral border-holo-coral text-holo-white'
-                    : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral'
+                    : 'bg-holo-teal/20 border-holo-teal/30 text-holo-teal/70 hover:bg-holo-coral hover:border-holo-coral hover:text-holo-white hover:shadow-lg'
               } hover:scale-105`}
             >
-              <Building size={64} />
-              <span className="text-base font-inter mt-2">Analysis</span>
+              <Building size={48} />
+              <span className="text-sm font-inter mt-2">Analysis</span>
             </button>
 
             <button
               onClick={handleAdvancedClick}
               disabled={!selectedBuilding}
-              className={`w-40 h-40 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+              className={`w-32 h-32 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                 !selectedBuilding 
                   ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
                   : advancedClicked
                     ? 'bg-holo-coral border-holo-coral text-holo-white'
-                    : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral'
+                    : 'bg-holo-teal/20 border-holo-teal/30 text-holo-teal/70 hover:bg-holo-coral hover:border-holo-coral hover:text-holo-white hover:shadow-lg'
               } hover:scale-105`}
             >
-              <Sliders size={64} />
-              <span className="text-base font-inter mt-2">Controls</span>
+              <Sliders size={48} />
+              <span className="text-sm font-inter mt-2">Controls</span>
             </button>
           </div>
         </div>
