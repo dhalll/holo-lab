@@ -53,7 +53,7 @@ const DesignerLocationSelect = () => {
       </h1>
 
       {/* Top Right Logo */}
-      <div className="absolute top-0 right-10 z-10 p-2"> {/* Increased right margin, added padding */}
+      <div className="absolute top-6 right-10 z-5 p-2"> {/* Increased right margin, added padding */}
         <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
       </div>
 
