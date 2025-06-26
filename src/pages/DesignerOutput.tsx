@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -90,16 +91,16 @@ const DesignerOutput = () => {
       </h1>
 
       {/* Top Right Logo */}
-      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
-        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
-      </div>
+      <div className="absolute top-6 right-8 z-10">
+        <HoloLogo variant="top-right" className="w-20 h-20" />
+      </div>
 
       {/* Main Content Container */}
       <div className="pt-24 pb-8 px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex gap-8 items-start">
-            {/* 3D Viewport - Left side, larger */}
-            <div className="flex-1 max-w-3xl">
+            {/* 3D Viewport - Left side, with proper margin to avoid progress bar overlap */}
+            <div className="flex-1 max-w-2xl ml-32">
               <div className="bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden h-[500px]">
                 {isLoading ? (
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -142,35 +143,35 @@ const DesignerOutput = () => {
               </div>
             </div>
 
-            {/* Right Info Panel - Properly positioned below logo */}
-            <div className="w-80 flex flex-col space-y-4 mt-8">
+            {/* Right Info Panel - Positioned below logo with proper spacing */}
+            <div className="w-80 flex flex-col space-y-3 mt-24">
               {/* Design Summary */}
-              <div className="bg-holo-white border border-holo-teal/20 p-4 shadow-sm rounded-lg">
-                <h3 className="font-inter font-semibold text-holo-black mb-3 text-sm">Design Summary</h3>
-                <div className="space-y-2 text-xs">
+              <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-lg">
+                <h3 className="font-inter font-semibold text-holo-black mb-2 text-sm">Design Summary</h3>
+                <div className="space-y-1.5 text-xs">
                   <div className="flex items-center gap-2">
-                    <Package className="text-holo-coral" size={14} />
+                    <Package className="text-holo-coral" size={12} />
                     <div><span className="font-bold">Program:</span> Gym + Bar</div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Wrench className="text-holo-teal mt-0.5" size={14} />
+                    <Wrench className="text-holo-teal mt-0.5" size={12} />
                     <div><span className="font-bold">Total Height Zones:</span> &lt;2m: 60 m²; &lt;3m: 80 m²</div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Package className="text-holo-coral mt-0.5" size={14} />
+                    <Package className="text-holo-coral mt-0.5" size={12} />
                     <div><span className="font-bold">Material Usage:</span> PVC: 85 pipes (120 ft); Steel: 20 pipes (50 ft); Copper: 12 pipes (30 ft)</div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Wrench className="text-holo-teal" size={14} />
+                    <Wrench className="text-holo-teal" size={12} />
                     <div><span className="font-bold">Joints:</span> 45 custom 3D-printed blobs</div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="text-gray-600" size={14} />
+                    <Clock className="text-gray-600" size={12} />
                     <div><span className="font-bold">Build Time:</span> ~120 hrs</div>
                   </div>
                   <div className="flex items-center gap-2 p-2 bg-holo-coral/10 rounded-lg">
-                    <Leaf className="text-holo-coral" size={14} />
-                    <div><span className="font-bold text-holo-coral">CO₂ Saved:</span> <span className="font-bold text-holo-coral text-base">1.35 t</span></div>
+                    <Leaf className="text-holo-coral" size={12} />
+                    <div><span className="font-bold text-holo-coral">CO₂ Saved:</span> <span className="font-bold text-holo-coral text-sm">1.35 t</span></div>
                   </div>
                 </div>
               </div>
@@ -198,7 +199,7 @@ const DesignerOutput = () => {
                   ))}
                 </div>
 
-                <div className="p-3 min-h-[300px]">
+                <div className="p-3 min-h-[200px]">
                   {activeTab === 'materials' && (
                     <div>
                       <div className="overflow-x-auto">
@@ -235,7 +236,7 @@ const DesignerOutput = () => {
 
                   {activeTab === 'joints' && (
                     <div className="h-full">
-                      <div className="grid grid-cols-2 gap-3 max-h-[280px] overflow-y-auto">
+                      <div className="grid grid-cols-2 gap-2 max-h-[180px] overflow-y-auto">
                         {[
                           { id: 1, name: 'Joint #001', type: 'T-Junction', image: '/lovable-uploads/7dffaa5f-35a0-4e14-9f80-61311c383ecb.png' },
                           { id: 2, name: 'Joint #002', type: 'Elbow', image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png' },
@@ -245,11 +246,11 @@ const DesignerOutput = () => {
                           { id: 6, name: 'Joint #006', type: 'Coupling', image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png' }
                         ].map(joint => (
                           <div key={joint.id} className="border border-holo-teal/20 rounded-lg p-2 hover:shadow-md transition-shadow duration-200">
-                            <div className="w-full h-16 bg-white rounded mb-2 flex items-center justify-center overflow-hidden">
+                            <div className="w-full h-12 bg-white rounded mb-1 flex items-center justify-center overflow-hidden">
                               <img src={joint.image} alt={joint.name} className="w-full h-full object-cover rounded" />
                             </div>
                             <p className="text-xs font-inter font-medium text-holo-black mb-1">{joint.name}</p>
-                            <p className="text-xs font-inter text-gray-600 mb-2">{joint.type}</p>
+                            <p className="text-xs font-inter text-gray-600 mb-1">{joint.type}</p>
                             <button className="w-full py-1 bg-holo-coral text-holo-white rounded text-xs font-inter font-medium hover:shadow-md hover:shadow-holo-coral/30 transition-all duration-200">
                               Download STL
                             </button>
@@ -261,7 +262,7 @@ const DesignerOutput = () => {
 
                   {activeTab === 'manual' && (
                     <div className="text-center">
-                      <div className="w-24 h-32 bg-gray-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                      <div className="w-20 h-24 bg-gray-100 rounded-lg mx-auto mb-2 flex items-center justify-center">
                         <div className="text-gray-400 text-xs">PDF Preview</div>
                       </div>
                       <button className="w-full py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium text-xs hover:bg-holo-teal/30 transition-colors duration-200">
@@ -272,7 +273,7 @@ const DesignerOutput = () => {
 
                   {activeTab === 'export' && (
                     <div className="text-center">
-                      <button className="w-full py-2 bg-holo-coral text-holo-white rounded-lg font-inter font-medium text-xs hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 mb-3">
+                      <button className="w-full py-2 bg-holo-coral text-holo-white rounded-lg font-inter font-medium text-xs hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 mb-2">
                         Download JSON
                       </button>
                       <p className="text-xs font-inter text-gray-600">
@@ -286,16 +287,16 @@ const DesignerOutput = () => {
           </div>
 
           {/* Centered buttons below the main content */}
-          <div className="flex justify-center gap-6 mt-8">
+          <div className="flex justify-center gap-8 mt-12 ml-16">
             <button
               onClick={() => window.history.back()}
-              className="px-8 py-3 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-base hover:bg-holo-teal/10 transition-colors duration-200 min-w-[200px]"
+              className="px-12 py-4 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 transition-colors duration-200 min-w-[250px]"
             >
               Go Back to Edit
             </button>
             <button
               onClick={handleFinalize}
-              className="px-8 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-base hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[200px]"
+              className="px-12 py-4 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-lg hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[250px]"
             >
               Finalize & Save
             </button>
