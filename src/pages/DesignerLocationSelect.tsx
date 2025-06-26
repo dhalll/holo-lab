@@ -41,12 +41,12 @@ const DesignerLocationSelect = () => {
       
       <BackButton to="/role-selection" />
 
-      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black py-[6px] px-[39px]">
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black px-[39px] py-[17px]">
         SELECT YOUR BUILDING
       </h1>
 
       {/* Top Right Logo */}
-      <div className="absolute top-0 right-10 z-15 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
+      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
         <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
       </div>
 
