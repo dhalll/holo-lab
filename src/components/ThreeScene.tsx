@@ -47,16 +47,13 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
       const clickedMesh = intersected.object as THREE.Mesh;
       const buildingName = intersected.object.userData.buildingName;
       
-      // Deselect previous mesh if there was one
-      if (selectedMesh && selectedMesh !== clickedMesh) {
-        if (selectedMesh.userData.originalMaterial) {
-          selectedMesh.material = selectedMesh.userData.originalMaterial;
-        }
+      // First, deselect the previous mesh if there was one
+      if (selectedMesh && selectedMesh.userData.originalMaterial) {
+        selectedMesh.material = selectedMesh.userData.originalMaterial;
       }
       
-      // Select the new mesh with orange highlighting but keep it visible
+      // Then select the new mesh with orange highlighting
       if (clickedMesh.userData.originalMaterial) {
-        const originalMaterial = clickedMesh.userData.originalMaterial as THREE.Material;
         clickedMesh.material = new THREE.MeshLambertMaterial({ 
           color: 0xF57B4E,
           transparent: false,
@@ -64,6 +61,7 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
         });
       }
       
+      // Update the selected mesh state
       setSelectedMesh(clickedMesh);
       console.log('Building clicked:', buildingName);
       onBuildingClick(buildingName, clickedMesh);
