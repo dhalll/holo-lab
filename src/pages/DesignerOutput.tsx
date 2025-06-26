@@ -133,9 +133,9 @@ const DesignerOutput = () => {
           </div>
 
           {/* Info Panel - Smaller width, positioned below logo */}
-          <div className="w-50 flex flex-col space-y-3 mt-16 mx-0 py-0 my-[20px]">
+          <div className="w-35 flex flex-col space-y-3 mt-16 mx-0 py-0 my-[20px] px-[82px]">
             {/* Design Summary */}
-            <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-md py-[11px]">
+            <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-md py-[11px] px-[15px]">
               <h3 className="font-inter font-semibold text-holo-black mb-2 text-sm">Design Summary</h3>
               <div className="space-y-2 text-xs">
                 <div className="flex items-center gap-2">
