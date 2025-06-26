@@ -84,13 +84,13 @@ const DesignerOutput = () => {
       </h1>
 
       {/* Top Right Logo */}
-     <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
-        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
-      </div>
+      <div className="absolute top-6 right-6 z-1">
+        <HoloLogo variant="top-right" className="w-16 h-16" />
+      </div>
 
       {/* Added padding-top to create space between header and content */}
-      <div className="pl-32 pr-8 pt-24 pb-8">
-        <div className="flex gap-6 h-[calc(100vh-250px)]">
+      <div className="pl-32 pr-4 pt-24 pb-8">
+        <div className="flex gap-2 h-[calc(100vh-250px)]">
           {/* 3D Viewport - Takes remaining space */}
           <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-[88px]">
             {isLoading ? <div className="absolute inset-0 flex items-center justify-center">
@@ -132,8 +132,8 @@ const DesignerOutput = () => {
               </div>}
           </div>
 
-          {/* Info Panel - Fixed width, hugs the right side */}
-          <div className="w-80 flex flex-col space-y-6">
+          {/* Info Panel - Fixed width, closer to GLTF window */}
+          <div className="w-80 flex flex-col space-y-6 mr-4">
             {/* Design Summary */}
             <div className="bg-holo-white border border-holo-teal/20 p-6 shadow-sm py-[9px] rounded-md px-[16px]">
               <h3 className="font-inter font-semibold text-holo-black mb-4 text-lg py-0 my-[8px]">Design Summary</h3>
