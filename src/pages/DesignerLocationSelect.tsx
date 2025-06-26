@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
-import HoloLogo from '@/components/HoloLogo'; // HoloLogo is imported but not used in this specific component
+import HoloLogo from '@/components/HoloLogo';
 import WorkflowWindow from '@/components/WorkflowWindow';
 import ThreeScene from '@/components/ThreeScene';
 import { Building, Sliders, Search } from 'lucide-react';
@@ -64,23 +64,6 @@ const DesignerLocationSelect = () => {
                   onBuildingClick={handleBuildingClick}
                   modelPath="/lovable-uploads/scene (2).gltf"
                 />
-                
-                {/* REMOVED: Overlay building selection areas for Shoreditch, Camden, Westminster */}
-                {/* The following div blocks are removed to eliminate the text overlays */}
-                {/*
-                <div className="absolute top-1/3 left-1/4 w-16 h-12 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                    onClick={() => setSelectedBuilding('london-building1')}>
-                  <div className="text-xs text-center pt-2 text-gray-600">Shoreditch</div>
-                </div>
-                <div className="absolute top-1/2 right-1/3 w-20 h-16 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                    onClick={() => setSelectedBuilding('london-building2')}>
-                  <div className="text-xs text-center pt-4 text-gray-600">Camden</div>
-                </div>
-                <div className="absolute bottom-1/3 left-1/2 w-14 h-18 bg-holo-teal/30 border-2 border-holo-teal rounded cursor-pointer hover:bg-holo-coral/30 hover:border-holo-coral transition-colors duration-200"
-                    onClick={() => setSelectedBuilding('london-building3')}>
-                  <div className="text-xs text-center pt-6 text-gray-600">Westminster</div>
-                </div>
-                */}
               </WorkflowWindow>
             </div>
             
@@ -113,13 +96,21 @@ const DesignerLocationSelect = () => {
           </div>
         </div>
 
-        {/* Right Panel - Vertical Button Column */}
-        <div className="ml-12 flex flex-col items-center space-y-8">
+        {/* Right Panel - Vertical Button Column - Adjusted Positioning and Styling */}
+        {/* Changed ml-12 to absolute positioning relative to the map window for better alignment */}
+        <div className="absolute right-[calc(50vw-300px-8rem)] top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-8">
+            {/* Explanation of right calculation:
+                - 50vw: Half of the viewport width.
+                - 300px: Half of the map window's width (600px / 2).
+                - 8rem: Approx. horizontal distance you want between the map and the right panel.
+                This centers the map, then places the right panel relative to that center.
+                You might need to adjust the '8rem' or use a fixed px value based on desired spacing.
+            */}
+          
           {/* Selected Building Preview */}
           <div className="text-center">
-            <div className={`w-24 h-24 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
+            <div className={`w-28 h-28 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
               {selectedMesh ? (
-                // This part displays the orange square for mesh_481 etc.
                 <div className="w-full h-full flex items-center justify-center bg-holo-coral/20">
                   <div className="w-8 h-8 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
                 </div>
@@ -141,31 +132,31 @@ const DesignerLocationSelect = () => {
             <button
               onClick={handleAnalysisClick}
               disabled={!selectedBuilding}
-              className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+              className={`w-28 h-28 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                 !selectedBuilding 
                   ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                  : analysisClicked
-                    ? 'bg-holo-coral border-holo-coral text-holo-white hover:scale-105'
-                    : 'bg-holo-teal border-holo-teal text-holo-white hover:scale-105 hover:bg-holo-coral hover:border-holo-coral'
-              }`}
+                  : analysisClicked // If already clicked, keep orange
+                    ? 'bg-holo-coral border-holo-coral text-holo-white'
+                    : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral' // Default blue, hover orange
+              } hover:scale-105`} {/* Added hover:scale-105 for all states on hover */}
             >
-              <Building size={36} />
-              <span className="text-xs font-inter mt-1">Analysis</span>
+              <Building size={48} /> {/* Increased icon size */}
+              <span className="text-sm font-inter mt-1">Analysis</span> {/* Adjusted text size */}
             </button>
 
             <button
               onClick={handleAdvancedClick}
               disabled={!selectedBuilding}
-              className={`w-20 h-20 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+              className={`w-28 h-28 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                 !selectedBuilding 
                   ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                  : advancedClicked
-                    ? 'bg-holo-coral border-holo-coral text-holo-white hover:scale-105'
-                    : 'bg-holo-teal border-holo-teal text-holo-white hover:scale-105 hover:bg-holo-coral hover:border-holo-coral'
-              }`}
+                  : advancedClicked // If already clicked, keep orange
+                    ? 'bg-holo-coral border-holo-coral text-holo-white'
+                    : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral' // Default blue, hover orange
+              } hover:scale-105`} {/* Added hover:scale-105 for all states on hover */}
             >
-              <Sliders size={36} />
-              <span className="text-xs font-inter mt-1">Controls</span>
+              <Sliders size={48} /> {/* Increased icon size */}
+              <span className="text-sm font-inter mt-1">Controls</span> {/* Adjusted text size */}
             </button>
           </div>
         </div>
