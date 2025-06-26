@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
 import ProgressBar from '@/components/ProgressBar';
-import { Camera } from 'lucide-react';
+import { Camera, Lightbulb, Layers, Tag } from 'lucide-react';
 
 const SupplierScan = () => {
   const navigate = useNavigate();
@@ -53,24 +53,35 @@ const SupplierScan = () => {
 
             {/* Instructions - Right Side */}
             <div className="flex-1 max-w-md">
-              <h2 className="text-2xl font-inter font-bold text-holo-black mb-4">Position Your Pipes</h2>
-              <p className="text-gray-600 font-inter mb-8">
-                Place the reclaimed materials within the viewfinder. Make sure they are well-lit and clearly visible. 
-                Holo AI will automatically detect and catalog the materials, noting their quality.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-holo-coral rounded-full flex-shrink-0"></div>
-                  <span className="text-sm font-inter text-gray-700">Ensure good lighting conditions</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-holo-coral rounded-full flex-shrink-0"></div>
-                  <span className="text-sm font-inter text-gray-700">Keep materials separated for better detection</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-holo-coral rounded-full flex-shrink-0"></div>
-                  <span className="text-sm font-inter text-gray-700">Include any visible markings or labels</span>
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200 shadow-lg">
+                <h2 className="text-2xl font-inter font-bold text-holo-black mb-4 flex items-center gap-3">
+                  <Camera className="text-holo-teal" size={28} />
+                  Position Your Materials
+                </h2>
+                <p className="text-gray-700 font-inter mb-8">
+                  Place the reclaimed materials within the viewfinder. Make sure they are well-lit and clearly visible. 
+                  Holo AI will automatically detect and catalog the materials, noting their quality.
+                </p>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Lightbulb size={18} className="text-white" />
+                    </div>
+                    <span className="text-sm font-inter text-gray-700">Ensure good lighting conditions</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Layers size={18} className="text-white" />
+                    </div>
+                    <span className="text-sm font-inter text-gray-700">Keep materials separated for better detection</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Tag size={18} className="text-white" />
+                    </div>
+                    <span className="text-sm font-inter text-gray-700">Include any visible markings or labels</span>
+                  </div>
                 </div>
               </div>
             </div>
