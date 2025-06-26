@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
@@ -62,21 +63,7 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
         const clickedMesh = intersected.object as THREE.Mesh;
         const buildingName = intersected.object.userData.buildingName;
         
-        // First, deselect the previous mesh if there was one
-        if (selectedMesh && selectedMesh.userData.originalMaterial) {
-          selectedMesh.material = selectedMesh.userData.originalMaterial;
-        }
-        
-        // Then select the new mesh with orange highlighting
-        if (clickedMesh.userData.originalMaterial) {
-          clickedMesh.material = new THREE.MeshLambertMaterial({ 
-            color: 0xF57B4E,
-            transparent: false,
-            opacity: 1
-          });
-        }
-        
-        // Update the selected mesh state
+        // Update the selected mesh state without visual highlighting
         setSelectedMesh(clickedMesh);
         console.log('Building clicked:', buildingName);
         onBuildingClick(buildingName, clickedMesh);
@@ -90,18 +77,6 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
         const buildingName = intersected.object.userData.buildingName;
         setHoveredBuilding(buildingName);
         document.body.style.cursor = 'pointer';
-        
-        // Only highlight on hover if it's not the selected mesh
-        if (selectedMesh !== intersected.object) {
-          // Highlight the building with orange color #F57B4E but keep it visible
-          if (intersected.object.material) {
-            intersected.object.material = new THREE.MeshLambertMaterial({ 
-              color: 0xF57B4E,
-              transparent: true,
-              opacity: 0.8
-            });
-          }
-        }
       }
     };
 
@@ -111,14 +86,6 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
       if (intersected && intersected.object.userData.isBuilding) {
         setHoveredBuilding(null);
         document.body.style.cursor = 'default';
-        
-        // Only restore original material if it's not the selected mesh
-        if (selectedMesh !== intersected.object) {
-          // Restore original material
-          if (intersected.object.userData.originalMaterial) {
-            intersected.object.material = intersected.object.userData.originalMaterial;
-          }
-        }
       }
     };
 
