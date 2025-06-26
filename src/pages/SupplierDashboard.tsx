@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BackButton from '@/components/BackButton';
+import BackButton from '@/components/BackButton'; // Assuming this component exists
 import { Search, Filter, Edit, Trash2, ChevronDown } from 'lucide-react';
 
 interface Material {
@@ -14,10 +14,37 @@ interface Material {
   dateAdded: string;
 }
 
+// Function to get a placeholder image based on material type
+const getMaterialImage = (type: string) => {
+  switch (type.toLowerCase()) {
+    case 'pvc':
+      return 'https://via.placeholder.com/150/ADD8E6/000000?text=PVC'; // Light blue
+    case 'steel':
+      return 'https://via.placeholder.com/150/B0C4DE/000000?text=Steel'; // Light steel blue
+    case 'copper':
+      return 'https://via.placeholder.com/150/CD7F32/FFFFFF?text=Copper'; // Bronze
+    case 'hdpe': // Added for your Figma example
+      return 'https://via.placeholder.com/150/A9A9A9/FFFFFF?text=HDPE'; // Dark gray
+    case 'cast iron':
+      return 'https://via.placeholder.com/150/505050/FFFFFF?text=CI'; // Dark gray
+    case 'galvanized':
+      return 'https://via.placeholder.com/150/C0C0C0/000000?text=Galv'; // Silver
+    default:
+      return 'https://via.placeholder.com/150/E0E0E0/000000?text=Material'; // Light gray default
+  }
+};
+
+
 const mockMaterials: Material[] = [
   { id: 1, type: 'PVC', diameter: 50, length: 3000, condition: 'Excellent', quantity: 25, location: 'San Francisco, CA', dateAdded: '2024-01-15' },
   { id: 2, type: 'Steel', diameter: 75, length: 2500, condition: 'Good', quantity: 15, location: 'Oakland, CA', dateAdded: '2024-01-14' },
   { id: 3, type: 'Copper', diameter: 25, length: 1500, condition: 'Fair', quantity: 30, location: 'Berkeley, CA', dateAdded: '2024-01-13' },
+  // Adding more mock data to better resemble your Figma
+  { id: 4, type: 'HDPE', diameter: 26, length: 1000, condition: 'Excellent', quantity: 50, location: 'South London, UK', dateAdded: '2025-09-18' },
+  { id: 5, type: 'Steel', diameter: 50.8, length: 2000, condition: 'Good', quantity: 226, location: 'Manchester, UK', dateAdded: '2025-01-10' },
+  { id: 6, type: 'PVC', diameter: 25, length: 1200, condition: 'Fair', quantity: 62, location: 'Hampstead, UK', dateAdded: '2025-02-06' },
+  { id: 7, type: 'Steel', diameter: 152.4, length: 3500, condition: 'Excellent', quantity: 52, location: 'Leeds, UK', dateAdded: '2024-11-28' },
+  { id: 8, type: 'Copper', diameter: 100, length: 1500, condition: 'Excellent', quantity: 115, location: 'Surrey, UK', dateAdded: '2025-08-12' },
 ];
 
 const SupplierDashboard = () => {
@@ -46,7 +73,7 @@ const SupplierDashboard = () => {
     const material: Material = {
       id: materials.length + 1,
       type: newMaterial.type,
-      diameter: parseInt(newMaterial.diameter),
+      diameter: parseFloat(newMaterial.diameter), // Use parseFloat for decimal diameters
       length: parseInt(newMaterial.length),
       condition: newMaterial.condition,
       quantity: parseInt(newMaterial.quantity),
@@ -75,26 +102,27 @@ const SupplierDashboard = () => {
   const filteredMaterials = materials.filter(material => {
     // Search filter
     const matchesSearch = material.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      material.location.toLowerCase().includes(searchTerm.toLowerCase());
+      material.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      material.diameter.toString().includes(searchTerm); // Search by diameter too
 
     // Condition filter
     const matchesCondition = !selectedCondition || material.condition === selectedCondition;
 
     // Diameter filter
-    const matchesDiameter = (!diameterRange.min || material.diameter >= parseInt(diameterRange.min)) &&
-      (!diameterRange.max || material.diameter <= parseInt(diameterRange.max));
+    const matchesDiameter = (!diameterRange.min || material.diameter >= parseFloat(diameterRange.min)) &&
+      (!diameterRange.max || material.diameter <= parseFloat(diameterRange.max));
 
-    // Date filter
-    const matchesDate = !dateFilter || material.dateAdded >= dateFilter;
+    // Date filter - Format dateAdded for consistent comparison
+    const matchesDate = !dateFilter || new Date(material.dateAdded) >= new Date(dateFilter);
 
     return matchesSearch && matchesCondition && matchesDiameter && matchesDate;
   });
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter">
+    <div className="min-h-screen bg-holo-white font-inter overflow-hidden"> {/* Added overflow-hidden to main div */}
       {/* Header */}
       <div className="sticky top-0 bg-holo-white border-b border-holo-teal/20 z-10">
-        <div className="flex items-center justify-between px-12 py-6">
+        <div className="flex items-center justify-between px-12 py-6"> {/* Reverted to px-12 for better fit with new design */}
           <div className="flex items-center gap-4">
             <BackButton to="/role-selection" />
             <h1 className="text-[20px] font-semibold text-holo-black ml-12 tracking-wide">MATERIAL DASHBOARD</h1>
@@ -109,8 +137,20 @@ const SupplierDashboard = () => {
         </div>
       </div>
 
+      {/* New Header Bar with Pipe Database and Selected Pipes */}
+      <div className="bg-holo-white py-4 px-12 border-b border-gray-200 flex justify-between items-center z-5">
+        <div className="flex items-center gap-4">
+          <div className="bg-gray-100 rounded-full px-5 py-2 font-semibold text-gray-800 text-lg">Pipe Database:</div>
+        </div>
+        <div className="flex items-center gap-2 bg-holo-coral/10 text-holo-coral rounded-full px-5 py-2 cursor-pointer border border-holo-coral">
+          <span className="font-semibold text-lg">Selected Pipes:</span>
+          <span className="text-lg">0/566 needed</span>
+          <ChevronDown size={20} className="ml-2" />
+        </div>
+      </div>
+
       {/* Search and Filter Bar */}
-      <div className="px-12 py-6 bg-gray-50 border-b border-holo-teal/10">
+      <div className="px-12 py-6 bg-gray-50 border-b border-holo-teal/10"> {/* Reverted to px-12 */}
         <div className="flex flex-col md:flex-row gap-4 items-center">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -199,66 +239,58 @@ const SupplierDashboard = () => {
         )}
       </div>
 
-      {/* Materials Table */}
-      <div className="px-12 py-6">
-        <div className="bg-holo-white rounded-lg shadow-sm border border-holo-teal/20 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-holo-teal/10">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-inter font-semibold text-holo-black">Type</th>
-                  <th className="px-6 py-4 text-left text-sm font-inter font-semibold text-holo-black">Diameter (mm)</th>
-                  <th className="px-6 py-4 text-left text-sm font-inter font-semibold text-holo-black">Length (mm)</th>
-                  <th className="px-6 py-4 text-left text-sm font-inter font-semibold text-holo-black">Condition</th>
-                  <th className="px-6 py-4 text-left text-sm font-inter font-semibold text-holo-black">Qty</th>
-                  <th className="px-6 py-4 text-left text-sm font-inter font-semibold text-holo-black">Location</th>
-                  <th className="px-6 py-4 text-left text-sm font-inter font-semibold text-holo-black">Date Added</th>
-                  <th className="px-6 py-4 text-left text-sm font-inter font-semibold text-holo-black">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredMaterials.map((material, index) => (
-                  <tr key={material.id} className={`${index % 2 === 0 ? 'bg-holo-white' : 'bg-holo-coral/5'} hover:bg-holo-coral/10 transition-colors duration-200`}>
-                    <td className="px-6 py-4 text-sm font-inter text-holo-black">{material.type}</td>
-                    <td className="px-6 py-4 text-sm font-inter text-holo-black">{material.diameter}</td>
-                    <td className="px-6 py-4 text-sm font-inter text-holo-black">{material.length}</td>
-                    <td className="px-6 py-4 text-sm font-inter text-holo-black">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        material.condition === 'Excellent' ? 'bg-green-100 text-green-800' :
-                        material.condition === 'Good' ? 'bg-blue-100 text-blue-800' :
-                        material.condition === 'Fair' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {material.condition}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm font-inter text-holo-black">{material.quantity}</td>
-                    <td className="px-6 py-4 text-sm font-inter text-holo-black">{material.location}</td>
-                    <td className="px-6 py-4 text-sm font-inter text-holo-black">{material.dateAdded}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button className="p-2 text-holo-teal hover:text-holo-coral transition-colors duration-200">
-                          <Edit size={16} />
-                        </button>
-                        <button className="p-2 text-red-500 hover:text-red-700 transition-colors duration-200">
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {filteredMaterials.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                No materials found matching your filters.
+      {/* Materials Display as Cards */}
+      {/* This is the main section that changes from table to cards */}
+      <div className="px-12 py-6 overflow-y-auto max-h-[calc(100vh-250px)]"> {/* Adjusted height to account for fixed headers */}
+        <div className="grid gap-4"> {/* Use grid for a clean stacked layout */}
+          {filteredMaterials.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No materials found matching your filters.
+            </div>
+          )}
+          {filteredMaterials.map((material) => (
+            <div
+              key={material.id}
+              className="flex items-center justify-between bg-holo-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-holo-coral transition-colors duration-200 cursor-pointer"
+              // Add a border for selected items if you implement selection later
+              // className={`... ${selectedMaterialId === material.id ? 'border-holo-coral border-2' : ''}`}
+            >
+              <div className="flex items-center flex-grow">
+                {/* Image or Icon - Left side */}
+                <img
+                  src={getMaterialImage(material.type)}
+                  alt={material.type}
+                  className="w-16 h-16 rounded-lg object-cover mr-4"
+                />
+                
+                <div className="flex flex-col flex-grow">
+                  {/* Material Type and Diameter */}
+                  <h3 className="text-lg font-semibold text-holo-black">
+                    Material Type: {material.diameter} cm {material.type} {material.type === 'Steel' ? 'Tubing' : 'Pipes'}
+                  </h3>
+                  {/* Quantity */}
+                  <p className="text-gray-600 text-sm mt-1">Quantity: {material.quantity} pcs</p>
+                </div>
               </div>
-            )}
-          </div>
+
+              {/* Right side - Date and Location */}
+              <div className="flex flex-col items-end text-right ml-4">
+                <span className="text-sm text-gray-500">Date Added: {new Date(material.dateAdded).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                <span className="text-sm text-gray-500 mt-1">Recycled From: {material.location}</span>
+              </div>
+
+              {/* Action/Selection Icon - Your Figma shows a scrollbar, but if these were selectable,
+                  you might place an icon here similar to the "Selected Pipes" chevron.
+                  For now, let's keep it simple or add a placeholder.
+              */}
+              {/* This is where you might add a checkbox or a selection indicator if you're building out selection */}
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Upload Modal */}
+
+      {/* Upload Modal - Remains the same */}
       {showUploadModal && (
         <div className="fixed inset-0 bg-holo-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-holo-white rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -278,6 +310,7 @@ const SupplierDashboard = () => {
                     <option value="Copper">Copper</option>
                     <option value="Cast Iron">Cast Iron</option>
                     <option value="Galvanized">Galvanized</option>
+                    <option value="HDPE">HDPE</option> {/* Added HDPE option */}
                   </select>
                 </div>
 
@@ -297,6 +330,7 @@ const SupplierDashboard = () => {
                     <label className="block text-sm font-inter font-medium text-holo-black mb-2">Diameter (mm)</label>
                     <input
                       type="number"
+                      step="0.01" // Allow decimal for diameter
                       value={newMaterial.diameter}
                       onChange={(e) => setNewMaterial({...newMaterial, diameter: e.target.value})}
                       className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
