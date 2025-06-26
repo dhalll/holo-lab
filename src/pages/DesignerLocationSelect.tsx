@@ -98,20 +98,20 @@ const DesignerLocationSelect = () => {
         </div>
 
         {/* Right Panel - Vertical Button Column - Adjusted Positioning and Styling */}
-        <div className="absolute right-[calc(50vw-300px-8rem)] top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-8">
+        <div className="absolute right-[calc(50vw-300px-12rem)] top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-8">
           
-          {/* Selected Building Preview */}
+          {/* Selected Building Preview - Made same size as buttons */}
           <div className="text-center">
-            <div className={`w-28 h-28 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
+            <div className={`w-40 h-40 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
               {selectedMesh ? (
                 // This part displays the orange square for mesh_481 etc.
                 <div className="w-full h-full flex items-center justify-center bg-holo-coral/20">
-                  <div className="w-8 h-8 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
+                  <div className="w-16 h-16 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
                 </div>
               ) : selectedBuilding ? (
-                <div className="w-12 h-8 bg-holo-teal rounded"></div>
+                <div className="w-24 h-16 bg-holo-teal rounded"></div>
               ) : (
-                <span className="text-gray-400 text-xs font-inter text-center px-2">No Building Selected</span>
+                <span className="text-gray-400 text-sm font-inter text-center px-4">No Building Selected</span>
               )}
             </div>
             {selectedBuilding && (
