@@ -14,26 +14,25 @@ interface Material {
   dateAdded: string;
 }
 
-// Function to get a placeholder image based on material type
+// Function to get the actual images based on material type
 const getMaterialImage = (type: string) => {
   switch (type.toLowerCase()) {
     case 'pvc':
-      return 'https://via.placeholder.com/150/ADD8E6/000000?text=PVC'; // Light blue
+      return '/lovable-uploads/7b775965-3c91-4858-a229-22200248f865.png'; // White PVC pipes
     case 'steel':
-      return 'https://via.placeholder.com/150/B0C4DE/000000?text=Steel'; // Light steel blue
+      return '/lovable-uploads/ec7cfbfd-6402-4896-8b89-d4763dc32534.png'; // Steel tubing
     case 'copper':
-      return 'https://via.placeholder.com/150/CD7F32/FFFFFF?text=Copper'; // Bronze
+      return '/lovable-uploads/5ba08a5c-46f4-46b8-8205-3607d9f75e28.png'; // Copper pipes
     case 'hdpe':
-      return 'https://via.placeholder.com/150/A9A9A9/FFFFFF?text=HDPE'; // Dark gray
+      return '/lovable-uploads/7b775965-3c91-4858-a229-22200248f865.png'; // Use PVC image for HDPE
     case 'cast iron':
-      return 'https://via.placeholder.com/150/505050/FFFFFF?text=CI'; // Dark gray
+      return '/lovable-uploads/ec7cfbfd-6402-4896-8b89-d4763dc32534.png'; // Use steel image for cast iron
     case 'galvanized':
-      return 'https://via.placeholder.com/150/C0C0C0/000000?text=Galv'; // Silver
+      return '/lovable-uploads/ec7cfbfd-6402-4896-8b89-d4763dc32534.png'; // Use steel image for galvanized
     default:
-      return 'https://via.placeholder.com/150/E0E0E0/000000?text=Material'; // Light gray default
+      return '/lovable-uploads/7b775965-3c91-4858-a229-22200248f865.png'; // Default to PVC image
   }
 };
-
 
 const mockMaterials: Material[] = [
   { id: 1, type: 'PVC', diameter: 50, length: 3000, condition: 'Excellent', quantity: 25, location: 'San Francisco, CA', dateAdded: '2024-01-15' },
