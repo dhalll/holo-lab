@@ -92,7 +92,7 @@ const DesignerOutput = () => {
       <div className="pl-32 pr-8 pt-24 pb-8">
         <div className="flex gap-6 h-[calc(100vh-250px)]">
           {/* 3D Viewport - Takes remaining space */}
-          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-[88px]">
+          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-[58px]">
             {isLoading ? <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="w-16 h-16 border-4 border-holo-coral border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
