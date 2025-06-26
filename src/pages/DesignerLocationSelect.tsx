@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -96,10 +97,10 @@ const DesignerLocationSelect = () => {
           </div>
         </div>
 
-        {/* Right Panel - Vertical Button Column - Better aligned and styled */}
-        <div className="absolute right-[calc(50vw-300px-10rem)] top-[calc(50%-80px)] flex flex-col items-center space-y-6">
+        {/* Right Panel - Positioned to be vertically centered with the GLTF map */}
+        <div className="absolute right-[calc(50vw-300px-12rem)] top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-6">
           
-          {/* Selected Building Preview - Slightly smaller and better aligned */}
+          {/* Selected Building Preview */}
           <div className="text-center">
             <div className={`w-32 h-32 mx-auto rounded-full border-2 border-dashed ${selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'} flex items-center justify-center mb-4 overflow-hidden`}>
               {selectedMesh ? (
@@ -120,7 +121,7 @@ const DesignerLocationSelect = () => {
             )}
           </div>
 
-          {/* Control Buttons - Vertical Stack - Subtle by default, prominent on hover */}
+          {/* Control Buttons - Vertically centered with map */}
           <div className="flex flex-col gap-6">
             <button
               onClick={handleAnalysisClick}
