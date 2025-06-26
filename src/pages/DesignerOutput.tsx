@@ -90,9 +90,9 @@ const DesignerOutput = () => {
       </h1>
 
       {/* Top Right Logo */}
-      <div className="absolute top-6 right-6 z-10">
-        <HoloLogo variant="top-right" className="w-16 h-16" />
-      </div>
+      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
+        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
+      </div>
 
       {/* Main Content Container */}
       <div className="pt-24 pb-8 px-8">
