@@ -90,7 +90,7 @@ const DesignerOutput = () => {
         YOUR DESIGN OUTPUT
       </h1>
 
-      {/* Top Right Logo - Current position is maintained as requested */}
+      {/* Top Right Logo - Keeping this section as is from your code */}
      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0">
         <HoloLogo variant="top-right" className="w-24 h-24" />
       </div>
@@ -98,9 +98,11 @@ const DesignerOutput = () => {
       {/* Main content area */}
       <div className="pl-32 pr-8 pt-24 pb-8">
         {/* Flex container for 3D Viewport and Info Panel */}
+        {/* CHANGE: Reduced gap to bring panels closer. Try gap-3 or gap-2 if still too far. */}
         <div className="flex gap-4 h-[calc(100vh-250px)]"> {/* Changed gap from gap-6 to gap-4 */}
           {/* 3D Viewport - Takes remaining space */}
-          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden"> {/* Removed mx-[88px] */}
+          {/* IMPORTANT CHANGE: Restored mx-[88px] to control the 3D viewport's inner margin */}
+          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-[88px]">
             {isLoading ? (
                 <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
