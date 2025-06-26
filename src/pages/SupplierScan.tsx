@@ -43,8 +43,8 @@ const SupplierScan = () => {
             
             <h2 className="text-2xl font-inter font-bold text-holo-black mb-4">Position Your Pipes</h2>
             <p className="text-gray-600 font-inter mb-8 max-w-md">
-              Place the reclaimed pipes within the viewfinder. Make sure they are well-lit and clearly visible. 
-              Our AI will automatically detect and catalog the materials.
+              Place the reclaimed materials within the viewfinder. Make sure they are well-lit and clearly visible. 
+              Holo AI will automatically detect and catalog the materials, noting their quality.
             </p>
             
             <div className="space-y-4 mb-8 text-left">
@@ -54,7 +54,7 @@ const SupplierScan = () => {
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-holo-coral rounded-full"></div>
-                <span className="text-sm font-inter text-gray-700">Keep pipes separated for better detection</span>
+                <span className="text-sm font-inter text-gray-700">Keep materials separated for better detection</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-holo-coral rounded-full"></div>
