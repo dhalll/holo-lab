@@ -34,7 +34,7 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
         if (child instanceof THREE.Mesh) {
           child.userData.originalMaterial = child.material;
           child.userData.isBuilding = true;
-          child.userData.buildingName = child.name || `building-${Math.random().toString(36).substr(2, 9)}`;
+          child.userData.buildingName = child.name || `mesh_${Math.random().toString(36).substr(2, 9)}`;
         }
       });
     }
@@ -58,9 +58,9 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
       setHoveredBuilding(buildingName);
       document.body.style.cursor = 'pointer';
       
-      // Highlight the building
+      // Highlight the building with orange color #F57B4E
       if (intersected.object.material) {
-        intersected.object.material = new THREE.MeshBasicMaterial({ color: 0xff6b6b });
+        intersected.object.material = new THREE.MeshBasicMaterial({ color: 0xF57B4E });
       }
     }
   };
