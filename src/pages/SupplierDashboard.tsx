@@ -23,7 +23,7 @@ const getMaterialImage = (type: string) => {
       return 'https://via.placeholder.com/150/B0C4DE/000000?text=Steel'; // Light steel blue
     case 'copper':
       return 'https://via.placeholder.com/150/CD7F32/FFFFFF?text=Copper'; // Bronze
-    case 'hdpe': // Added for your Figma example
+    case 'hdpe':
       return 'https://via.placeholder.com/150/A9A9A9/FFFFFF?text=HDPE'; // Dark gray
     case 'cast iron':
       return 'https://via.placeholder.com/150/505050/FFFFFF?text=CI'; // Dark gray
@@ -39,7 +39,6 @@ const mockMaterials: Material[] = [
   { id: 1, type: 'PVC', diameter: 50, length: 3000, condition: 'Excellent', quantity: 25, location: 'San Francisco, CA', dateAdded: '2024-01-15' },
   { id: 2, type: 'Steel', diameter: 75, length: 2500, condition: 'Good', quantity: 15, location: 'Oakland, CA', dateAdded: '2024-01-14' },
   { id: 3, type: 'Copper', diameter: 25, length: 1500, condition: 'Fair', quantity: 30, location: 'Berkeley, CA', dateAdded: '2024-01-13' },
-  // Adding more mock data to better resemble your Figma
   { id: 4, type: 'HDPE', diameter: 26, length: 1000, condition: 'Excellent', quantity: 50, location: 'South London, UK', dateAdded: '2025-09-18' },
   { id: 5, type: 'Steel', diameter: 50.8, length: 2000, condition: 'Good', quantity: 226, location: 'Manchester, UK', dateAdded: '2025-01-10' },
   { id: 6, type: 'PVC', diameter: 25, length: 1200, condition: 'Fair', quantity: 62, location: 'Hampstead, UK', dateAdded: '2025-02-06' },
@@ -73,7 +72,7 @@ const SupplierDashboard = () => {
     const material: Material = {
       id: materials.length + 1,
       type: newMaterial.type,
-      diameter: parseFloat(newMaterial.diameter), // Use parseFloat for decimal diameters
+      diameter: parseFloat(newMaterial.diameter),
       length: parseInt(newMaterial.length),
       condition: newMaterial.condition,
       quantity: parseInt(newMaterial.quantity),
@@ -92,6 +91,24 @@ const SupplierDashboard = () => {
       location: ''
     });
   };
+
+  const handleDelete = (id: number) => {
+    // In a real app, you'd send a DELETE request to your backend here
+    if (window.confirm('Are you sure you want to delete this material?')) {
+      setMaterials(materials.filter(material => material.id !== id));
+    }
+  };
+
+  const handleEdit = (material: Material) => {
+    // In a real app, you'd likely open an edit modal pre-filled with this material's data
+    // For now, we'll just log it.
+    alert(`Editing material ID: ${material.id} (${material.type} - ${material.diameter}mm)`);
+    console.log('Edit material:', material);
+    // You would typically set state to show an edit modal here and pass the material data
+    // setShowEditModal(true);
+    // setEditingMaterial(material);
+  };
+
 
   const clearFilters = () => {
     setSelectedCondition('');
@@ -119,10 +136,10 @@ const SupplierDashboard = () => {
   });
 
   return (
-    <div className="min-h-screen bg-holo-white font-inter overflow-hidden"> {/* Added overflow-hidden to main div */}
+    <div className="min-h-screen bg-holo-white font-inter overflow-hidden">
       {/* Header */}
       <div className="sticky top-0 bg-holo-white border-b border-holo-teal/20 z-10">
-        <div className="flex items-center justify-between px-12 py-6"> {/* Reverted to px-12 for better fit with new design */}
+        <div className="flex items-center justify-between px-12 py-6">
           <div className="flex items-center gap-4">
             <BackButton to="/role-selection" />
             <h1 className="text-[20px] font-semibold text-holo-black ml-12 tracking-wide">MATERIAL DASHBOARD</h1>
@@ -137,20 +154,10 @@ const SupplierDashboard = () => {
         </div>
       </div>
 
-      {/* New Header Bar with Pipe Database and Selected Pipes */}
-      <div className="bg-holo-white py-4 px-12 border-b border-gray-200 flex justify-between items-center z-5">
-        <div className="flex items-center gap-4">
-          <div className="bg-gray-100 rounded-full px-5 py-2 font-semibold text-gray-800 text-lg">Pipe Database:</div>
-        </div>
-        <div className="flex items-center gap-2 bg-holo-coral/10 text-holo-coral rounded-full px-5 py-2 cursor-pointer border border-holo-coral">
-          <span className="font-semibold text-lg">Selected Pipes:</span>
-          <span className="text-lg">0/566 needed</span>
-          <ChevronDown size={20} className="ml-2" />
-        </div>
-      </div>
+      {/* Removed the "Pipe Database:" and "Selected Pipes: 0/566 needed" section here */}
 
       {/* Search and Filter Bar */}
-      <div className="px-12 py-6 bg-gray-50 border-b border-holo-teal/10"> {/* Reverted to px-12 */}
+      <div className="px-12 py-6 bg-gray-50 border-b border-holo-teal/10">
         <div className="flex flex-col md:flex-row gap-4 items-center">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -240,9 +247,8 @@ const SupplierDashboard = () => {
       </div>
 
       {/* Materials Display as Cards */}
-      {/* This is the main section that changes from table to cards */}
-      <div className="px-12 py-6 overflow-y-auto max-h-[calc(100vh-250px)]"> {/* Adjusted height to account for fixed headers */}
-        <div className="grid gap-4"> {/* Use grid for a clean stacked layout */}
+      <div className="px-12 py-6 overflow-y-auto max-h-[calc(100vh-200px)]"> {/* Adjusted height calculation for removed header */}
+        <div className="grid gap-4">
           {filteredMaterials.length === 0 && (
             <div className="text-center py-8 text-gray-500">
               No materials found matching your filters.
@@ -251,9 +257,7 @@ const SupplierDashboard = () => {
           {filteredMaterials.map((material) => (
             <div
               key={material.id}
-              className="flex items-center justify-between bg-holo-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-holo-coral transition-colors duration-200 cursor-pointer"
-              // Add a border for selected items if you implement selection later
-              // className={`... ${selectedMaterialId === material.id ? 'border-holo-coral border-2' : ''}`}
+              className="flex items-center justify-between bg-holo-white p-4 rounded-xl shadow-sm border border-gray-200 hover:border-holo-coral transition-colors duration-200"
             >
               <div className="flex items-center flex-grow">
                 {/* Image or Icon - Left side */}
@@ -273,17 +277,29 @@ const SupplierDashboard = () => {
                 </div>
               </div>
 
-              {/* Right side - Date and Location */}
-              <div className="flex flex-col items-end text-right ml-4">
+              {/* Middle section - Date and Location */}
+              <div className="flex flex-col items-end text-right mr-4"> {/* Added mr-4 for spacing */}
                 <span className="text-sm text-gray-500">Date Added: {new Date(material.dateAdded).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
                 <span className="text-sm text-gray-500 mt-1">Recycled From: {material.location}</span>
               </div>
 
-              {/* Action/Selection Icon - Your Figma shows a scrollbar, but if these were selectable,
-                  you might place an icon here similar to the "Selected Pipes" chevron.
-                  For now, let's keep it simple or add a placeholder.
-              */}
-              {/* This is where you might add a checkbox or a selection indicator if you're building out selection */}
+              {/* Actions - Edit and Delete Buttons */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEdit(material)} // Pass the whole material object for editing
+                  className="p-2 text-holo-teal hover:text-holo-coral transition-colors duration-200"
+                  title="Edit Material"
+                >
+                  <Edit size={16} />
+                </button>
+                <button
+                  onClick={() => handleDelete(material.id)}
+                  className="p-2 text-red-500 hover:text-red-700 transition-colors duration-200"
+                  title="Delete Material"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -310,7 +326,7 @@ const SupplierDashboard = () => {
                     <option value="Copper">Copper</option>
                     <option value="Cast Iron">Cast Iron</option>
                     <option value="Galvanized">Galvanized</option>
-                    <option value="HDPE">HDPE</option> {/* Added HDPE option */}
+                    <option value="HDPE">HDPE</option>
                   </select>
                 </div>
 
@@ -330,7 +346,7 @@ const SupplierDashboard = () => {
                     <label className="block text-sm font-inter font-medium text-holo-black mb-2">Diameter (mm)</label>
                     <input
                       type="number"
-                      step="0.01" // Allow decimal for diameter
+                      step="0.01"
                       value={newMaterial.diameter}
                       onChange={(e) => setNewMaterial({...newMaterial, diameter: e.target.value})}
                       className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
