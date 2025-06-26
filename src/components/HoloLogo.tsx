@@ -13,7 +13,7 @@ const HoloLogo: React.FC<HoloLogoProps> = ({
   variant = 'full',
   isLanding = false
 }) => {
-  // Top-right corner logo variant - increased size
+  // Top-right corner logo variant - standardized size and positioning
   if (variant === 'top-right') {
     return (
       <img 

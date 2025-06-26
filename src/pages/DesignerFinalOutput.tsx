@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -42,6 +41,11 @@ const DesignerFinalOutput = () => {
       <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black z-10">
         YOUR DESIGN OUTPUT
       </h1>
+
+      {/* Top Right Logo - Updated positioning to match location selection */}
+      <div className="absolute top-6 right-6 z-10">
+        <HoloLogo variant="top-right" />
+      </div>
 
       {/* Added padding-top to create space between header and content */}
       <div className="px-8 pt-24 pb-8">

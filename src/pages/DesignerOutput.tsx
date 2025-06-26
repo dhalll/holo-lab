@@ -48,7 +48,7 @@ const DesignerOutput = () => {
         YOUR DESIGN OUTPUT
       </h1>
 
-      {/* Top Right Logo */}
+      {/* Top Right Logo - Updated positioning to match location selection */}
       <div className="absolute top-6 right-6 z-10">
         <HoloLogo variant="top-right" />
       </div>
