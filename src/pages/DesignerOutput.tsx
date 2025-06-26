@@ -135,7 +135,7 @@ const DesignerOutput = () => {
           {/* Info Panel - Fixed width, hugs the right side */}
           <div className="w-80 flex flex-col space-y-6">
             {/* Design Summary */}
-            <div className="bg-holo-white border border-holo-teal/20 p-6 shadow-sm py-[9px] rounded-md px-[16px]">
+            <div className="bg-holo-white border border-holo-teal/20 p-6 shadow-sm rounded-md px-[18px] py-0">
               <h3 className="font-inter font-semibold text-holo-black mb-4 text-lg py-0 my-[8px]">Design Summary</h3>
               <div className="space-y-4 text-sm my-0 py-0">
                 <div className="flex items-center gap-3">
@@ -185,7 +185,7 @@ const DesignerOutput = () => {
                   </button>)}
               </div>
 
-              <div className="p-4 overflow-y-auto flex-1">
+              <div className="-space-y-6 ">
                 {activeTab === 'materials' && <div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
