@@ -4,12 +4,10 @@ import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import { Download, Package, Wrench, Clock, Leaf } from 'lucide-react';
-
 const DesignerOutput = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('materials');
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     // Simulate loading 3D model
     const timer = setTimeout(() => {
@@ -17,7 +15,6 @@ const DesignerOutput = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
   const materials = [{
     type: 'PVC',
     qty: 85,
@@ -74,13 +71,10 @@ const DesignerOutput = () => {
     type: 'Coupling',
     image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png'
   }];
-
   const handleFinalize = () => {
     navigate('/designer/final-rendering');
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
+  return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={4} stepLabels={['Experience', 'Location', 'Customize', 'Finalize']} />
       
       <BackButton to="/designer/customization" />
@@ -139,10 +133,10 @@ const DesignerOutput = () => {
           </div>
 
           {/* Info Panel - Smaller width, positioned below logo */}
-          <div className="w-64 flex flex-col space-y-4 mt-20">
+          <div className="w-64 flex flex-col space-y-4 mt-20 py-[9px] my-[20px]">
             {/* Design Summary */}
-            <div className="bg-holo-white border border-holo-teal/20 p-4 shadow-sm rounded-md">
-              <h3 className="font-inter font-semibold text-holo-black mb-3 text-base">Design Summary</h3>
+            <div className="bg-holo-white border border-holo-teal/20 p-4 shadow-sm rounded-md py-0">
+              <h3 className="font-inter font-semibold text-holo-black mb-3 text-base py-[8px]">Design Summary</h3>
               <div className="space-y-3 text-xs">
                 <div className="flex items-center gap-2">
                   <Package className="text-holo-coral" size={14} />
@@ -164,7 +158,7 @@ const DesignerOutput = () => {
                   <Clock className="text-gray-600" size={14} />
                   <div><span className="font-bold">Build Time:</span> ~120 hrs</div>
                 </div>
-                <div className="flex items-center gap-2 p-2 bg-holo-coral/10 rounded-lg">
+                <div className="flex items-center gap-2 p-2 bg-holo-coral/10 rounded-lg py-[7px] my-[12px]">
                   <Leaf className="text-holo-coral" size={14} />
                   <div><span className="font-bold text-holo-coral">CO₂ Saved:</span> <span className="font-bold text-holo-coral text-base">1.35 t</span></div>
                 </div>
@@ -174,29 +168,25 @@ const DesignerOutput = () => {
             {/* Tabs */}
             <div className="bg-holo-white border border-holo-teal/20 rounded-2xl shadow-sm overflow-hidden flex-1">
               <div className="flex border-b border-holo-teal/10">
-                {[
-                  { id: 'materials', label: 'Materials' },
-                  { id: 'joints', label: 'Joints' },
-                  { id: 'manual', label: 'Manual' },
-                  { id: 'export', label: 'Export' }
-                ].map(tab => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex-1 px-2 py-2 text-xs font-inter font-medium transition-colors duration-200 ${
-                      activeTab === tab.id
-                        ? 'text-holo-coral border-b-2 border-holo-coral bg-holo-coral/5'
-                        : 'text-gray-600 hover:text-holo-black hover:bg-gray-50'
-                    }`}
-                  >
+                {[{
+                id: 'materials',
+                label: 'Materials'
+              }, {
+                id: 'joints',
+                label: 'Joints'
+              }, {
+                id: 'manual',
+                label: 'Manual'
+              }, {
+                id: 'export',
+                label: 'Export'
+              }].map(tab => <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex-1 px-2 py-2 text-xs font-inter font-medium transition-colors duration-200 ${activeTab === tab.id ? 'text-holo-coral border-b-2 border-holo-coral bg-holo-coral/5' : 'text-gray-600 hover:text-holo-black hover:bg-gray-50'}`}>
                     {tab.label}
-                  </button>
-                ))}
+                  </button>)}
               </div>
 
               <div className="p-3">
-                {activeTab === 'materials' && (
-                  <div>
+                {activeTab === 'materials' && <div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
                         <thead>
@@ -208,28 +198,23 @@ const DesignerOutput = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {materials.map((material, index) => (
-                            <tr key={index} className={`${index % 2 === 0 ? 'bg-holo-white' : 'bg-holo-coral/5'} hover:bg-holo-coral/10 transition-colors duration-200`}>
+                          {materials.map((material, index) => <tr key={index} className={`${index % 2 === 0 ? 'bg-holo-white' : 'bg-holo-coral/5'} hover:bg-holo-coral/10 transition-colors duration-200`}>
                               <td className="py-2 font-inter">{material.type}</td>
                               <td className="py-2 font-inter">{material.qty}</td>
                               <td className="py-2 font-inter">{material.diameter}</td>
                               <td className="py-2 font-inter font-semibold text-holo-coral">{material.reuse}%</td>
-                            </tr>
-                          ))}
+                            </tr>)}
                         </tbody>
                       </table>
                     </div>
                     <button className="w-full mt-3 py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium text-xs hover:bg-holo-teal/30 transition-colors duration-200">
                       Download CSV
                     </button>
-                  </div>
-                )}
+                  </div>}
 
-                {activeTab === 'joints' && (
-                  <div className="h-full">
+                {activeTab === 'joints' && <div className="h-full">
                     <div className="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-auto">
-                      {joints.map(joint => (
-                        <div key={joint.id} className="border border-holo-teal/20 rounded-lg p-2 hover:shadow-md transition-shadow duration-200">
+                      {joints.map(joint => <div key={joint.id} className="border border-holo-teal/20 rounded-lg p-2 hover:shadow-md transition-shadow duration-200">
                           <div className="w-full h-12 bg-white rounded mb-1 flex items-center justify-center overflow-hidden">
                             <img src={joint.image} alt={joint.name} className="w-full h-full object-cover rounded" />
                           </div>
@@ -238,56 +223,42 @@ const DesignerOutput = () => {
                           <button className="w-full py-1 bg-holo-coral text-holo-white rounded text-xs font-inter font-medium hover:shadow-md hover:shadow-holo-coral/30 transition-all duration-200">
                             Download STL
                           </button>
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
-                  </div>
-                )}
+                  </div>}
 
-                {activeTab === 'manual' && (
-                  <div className="text-center">
+                {activeTab === 'manual' && <div className="text-center">
                     <div className="w-24 h-32 bg-gray-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
                       <div className="text-gray-400 text-xs">PDF Preview</div>
                     </div>
                     <button className="w-full py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium text-xs hover:bg-holo-teal/30 transition-colors duration-200">
                       Download PDF
                     </button>
-                  </div>
-                )}
+                  </div>}
 
-                {activeTab === 'export' && (
-                  <div className="text-center">
+                {activeTab === 'export' && <div className="text-center">
                     <button className="w-full py-2 bg-holo-coral text-holo-white rounded-lg font-inter font-medium text-xs hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 mb-3">
                       Download JSON
                     </button>
                     <p className="text-xs font-inter text-gray-600">
                       Use this file to train custom ML models for future designs.
                     </p>
-                  </div>
-                )}
+                  </div>}
               </div>
             </div>
 
             {/* Bottom Actions */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => window.history.back()}
-                className="flex-1 py-2 bg-holo-white border border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-xs hover:bg-holo-teal/10 transition-colors duration-200"
-              >
+            <div className="flex gap-2 gap-0.5 py-0">
+              <button onClick={() => window.history.back()} className="flex-1 py-2 bg-holo-white border border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-xs hover:bg-holo-teal/10 transition-colors duration-200">
                 Go Back to Edit
               </button>
-              <button
-                onClick={handleFinalize}
-                className="flex-1 py-2 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-xs hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300"
-              >
+              <button onClick={handleFinalize} className="flex-1 py-2 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-xs hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300">
                 Finalize & Save
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default DesignerOutput;
