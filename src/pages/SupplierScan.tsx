@@ -30,9 +30,9 @@ const SupplierScan = () => {
 
       <div className="flex items-center justify-center min-h-screen px-8 pt-16">
         {!isScanning ? (
-          <div className="flex items-center justify-center gap-16 max-w-7xl mx-auto w-full">
-            {/* Camera View - Centered */}
-            <div className="flex flex-col items-center justify-center ml-24">
+          <div className="flex items-start justify-center gap-12 max-w-6xl mx-auto w-full">
+            {/* Camera View - Left Side */}
+            <div className="flex flex-col items-center justify-center">
               <div className="w-96 h-96 bg-gradient-to-br from-gray-100 to-gray-300 rounded-2xl mb-8 flex items-center justify-center border-4 border-dashed border-holo-teal/50 relative overflow-hidden">
                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
                   <Camera size={80} className="text-holo-teal opacity-60" />
@@ -52,8 +52,8 @@ const SupplierScan = () => {
             </div>
 
             {/* Instructions - Right Side */}
-            <div className="flex-1 max-w-md">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200 shadow-lg">
+            <div className="w-96">
+              <div className="bg-gradient-to-br from-holo-teal/10 to-holo-teal/20 rounded-2xl p-8 border border-holo-teal/30 shadow-lg h-96 flex flex-col">
                 <h2 className="text-2xl font-inter font-bold text-holo-black mb-4 flex items-center gap-3">
                   <Camera className="text-holo-teal" size={28} />
                   Position Your Materials
@@ -63,21 +63,21 @@ const SupplierScan = () => {
                   Holo AI will automatically detect and catalog the materials, noting their quality.
                 </p>
                 
-                <div className="space-y-4">
+                <div className="space-y-4 flex-1">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-holo-teal/80 rounded-full flex items-center justify-center flex-shrink-0">
                       <Lightbulb size={18} className="text-white" />
                     </div>
                     <span className="text-sm font-inter text-gray-700">Ensure good lighting conditions</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-holo-teal/80 rounded-full flex items-center justify-center flex-shrink-0">
                       <Layers size={18} className="text-white" />
                     </div>
                     <span className="text-sm font-inter text-gray-700">Keep materials separated for better detection</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-gradient-to-br from-holo-teal to-holo-teal/80 rounded-full flex items-center justify-center flex-shrink-0">
                       <Tag size={18} className="text-white" />
                     </div>
                     <span className="text-sm font-inter text-gray-700">Include any visible markings or labels</span>
