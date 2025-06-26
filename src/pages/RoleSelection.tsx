@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import HoloLogo from '@/components/HoloLogo';
@@ -24,9 +23,12 @@ const RoleSelection = () => {
       {/* Back Button aligned with progress bar */}
       <BackButton to="/" />
 
-      {/* Title positioned after back button */}
+      {/* Title with underline style matching the design */}
       <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black tracking-wide">
-        SELECT YOUR EXPERIENCE
+        <span className="relative inline-block">
+          SELECT YOUR EXPERIENCE
+          <div className="absolute bottom-0 left-0 w-full h-0.5 bg-holo-black"></div>
+        </span>
       </h1>
 
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import HoloLogo from '@/components/HoloLogo';
@@ -28,9 +27,12 @@ const SupplierStart = () => {
       
       <BackButton to="/role-selection" />
 
-      {/* Title positioned same as designer pages */}
+      {/* Title with underline style matching the design */}
       <h1 className="absolute top-6 left-32 text-[20px] font-semibold text-holo-black tracking-wide">
-        HOW WOULD YOU LIKE TO PROCEED?
+        <span className="relative inline-block">
+          HOW WOULD YOU LIKE TO PROCEED?
+          <div className="absolute bottom-0 left-0 w-full h-0.5 bg-holo-black"></div>
+        </span>
       </h1>
 
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
