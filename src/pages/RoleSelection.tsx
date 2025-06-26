@@ -29,6 +29,11 @@ const RoleSelection = () => {
         SELECT YOUR EXPERIENCE
       </h1>
 
+      {/* Top Right Logo */}
+      <div className="absolute top-6 right-6 z-10">
+        <HoloLogo variant="top-right" />
+      </div>
+
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
         {/* Role Options */}
         <div className="flex flex-col md:flex-row items-center gap-16 mb-16">

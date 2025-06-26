@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -49,15 +50,15 @@ const DesignerOutput = () => {
       </h1>
 
       {/* Top Right Logo */}
-      <div className="absolute top-0 right-10 z-15 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
-        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
-      </div>
+      <div className="absolute top-6 right-6 z-15">
+        <HoloLogo variant="top-right" />
+      </div>
 
       {/* Added padding-top to create space between header and content */}
       <div className="pl-32 pr-8 pt-24 pb-8">
-        <div className="flex gap-8 h-[calc(100vh-250px)]">
-          {/* 3D Viewport - Centered and properly spaced */}
-          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-auto max-w-4xl">
+        <div className="flex gap-4 h-[calc(100vh-250px)]">
+          {/* 3D Viewport - Takes remaining space */}
+          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden">
             {isLoading ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
@@ -101,8 +102,8 @@ const DesignerOutput = () => {
             )}
           </div>
 
-          {/* Info Panel */}
-          <div className="w-96 flex flex-col space-y-6">
+          {/* Info Panel - Fixed width, hugs the right side */}
+          <div className="w-80 flex flex-col space-y-6">
             {/* Design Summary */}
             <div className="bg-holo-white border border-holo-teal/20 rounded-2xl p-6 shadow-sm">
               <h3 className="font-inter font-semibold text-holo-black mb-4 text-lg">Design Summary</h3>
