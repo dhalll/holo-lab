@@ -4,10 +4,12 @@ import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import { Download, Package, Wrench, Clock, Leaf } from 'lucide-react';
+
 const DesignerOutput = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('materials');
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     // Simulate loading 3D model
     const timer = setTimeout(() => {
@@ -15,6 +17,7 @@ const DesignerOutput = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
   const materials = [{
     type: 'PVC',
     qty: 85,
@@ -71,10 +74,13 @@ const DesignerOutput = () => {
     type: 'Coupling',
     image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png'
   }];
+
   const handleFinalize = () => {
     navigate('/designer/final-rendering');
   };
-  return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={4} stepLabels={['Experience', 'Location', 'Customize', 'Finalize']} />
       
       <BackButton to="/designer/customization" />
@@ -84,13 +90,13 @@ const DesignerOutput = () => {
       </h1>
 
       {/* Top Right Logo */}
-     <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
-        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
-      </div>
+      <div className="absolute top-0 right-10 z-10 p-0 py-0 px-0">
+        <HoloLogo variant="top-right" className="w-24 h-24" />
+      </div>
 
       {/* Added padding-top to create space between header and content */}
       <div className="pl-32 pr-8 pt-24 pb-8">
-        <div className="flex gap-6 h-[calc(100vh-250px)]">
+        <div className="flex gap-4 h-[calc(100vh-250px)]">
           {/* 3D Viewport - Takes remaining space */}
           <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-[58px]">
             {isLoading ? <div className="absolute inset-0 flex items-center justify-center">
@@ -132,35 +138,35 @@ const DesignerOutput = () => {
               </div>}
           </div>
 
-          {/* Info Panel - Fixed width, hugs the right side */}
-          <div className="w-80 flex flex-col space-y-6">
+          {/* Info Panel - Smaller width, positioned below logo */}
+          <div className="w-64 flex flex-col space-y-4 mt-20">
             {/* Design Summary */}
-            <div className="bg-holo-white border border-holo-teal/20 p-6 shadow-sm rounded-md px-[18px] py-0">
-              <h3 className="font-inter font-semibold text-holo-black mb-4 text-lg py-0 my-[8px]">Design Summary</h3>
-              <div className="space-y-4 text-sm my-0 py-0">
-                <div className="flex items-center gap-3">
-                  <Package className="text-holo-coral" size={16} />
+            <div className="bg-holo-white border border-holo-teal/20 p-4 shadow-sm rounded-md">
+              <h3 className="font-inter font-semibold text-holo-black mb-3 text-base">Design Summary</h3>
+              <div className="space-y-3 text-xs">
+                <div className="flex items-center gap-2">
+                  <Package className="text-holo-coral" size={14} />
                   <div><span className="font-bold">Program:</span> Gym + Bar</div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Wrench className="text-holo-teal mt-0.5" size={16} />
+                <div className="flex items-start gap-2">
+                  <Wrench className="text-holo-teal mt-0.5" size={14} />
                   <div><span className="font-bold">Total Height Zones:</span> &lt;2m: 60 m²; &lt;3m: 80 m²</div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Package className="text-holo-coral mt-0.5" size={16} />
+                <div className="flex items-start gap-2">
+                  <Package className="text-holo-coral mt-0.5" size={14} />
                   <div><span className="font-bold">Material Usage:</span> PVC: 85 pipes (120 ft); Steel: 20 pipes (50 ft); Copper: 12 pipes (30 ft)</div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Wrench className="text-holo-teal" size={16} />
+                <div className="flex items-center gap-2">
+                  <Wrench className="text-holo-teal" size={14} />
                   <div><span className="font-bold">Joints:</span> 45 custom 3D-printed blobs</div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Clock className="text-gray-600" size={16} />
+                <div className="flex items-center gap-2">
+                  <Clock className="text-gray-600" size={14} />
                   <div><span className="font-bold">Build Time:</span> ~120 hrs</div>
                 </div>
-                <div className="flex items-center gap-3 p-3 bg-holo-coral/10 rounded-lg">
-                  <Leaf className="text-holo-coral" size={16} />
-                  <div><span className="font-bold text-holo-coral">CO₂ Saved:</span> <span className="font-bold text-holo-coral text-lg">1.35 t</span></div>
+                <div className="flex items-center gap-2 p-2 bg-holo-coral/10 rounded-lg">
+                  <Leaf className="text-holo-coral" size={14} />
+                  <div><span className="font-bold text-holo-coral">CO₂ Saved:</span> <span className="font-bold text-holo-coral text-base">1.35 t</span></div>
                 </div>
               </div>
             </div>
@@ -168,97 +174,120 @@ const DesignerOutput = () => {
             {/* Tabs */}
             <div className="bg-holo-white border border-holo-teal/20 rounded-2xl shadow-sm overflow-hidden flex-1">
               <div className="flex border-b border-holo-teal/10">
-                {[{
-                id: 'materials',
-                label: 'Materials List'
-              }, {
-                id: 'joints',
-                label: 'Joints & Connectors'
-              }, {
-                id: 'manual',
-                label: 'Assembly Manual'
-              }, {
-                id: 'export',
-                label: 'Export Data'
-              }].map(tab => <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex-1 px-3 py-3 text-xs font-inter font-medium transition-colors duration-200 ${activeTab === tab.id ? 'text-holo-coral border-b-2 border-holo-coral bg-holo-coral/5' : 'text-gray-600 hover:text-holo-black hover:bg-gray-50'}`}>
+                {[
+                  { id: 'materials', label: 'Materials' },
+                  { id: 'joints', label: 'Joints' },
+                  { id: 'manual', label: 'Manual' },
+                  { id: 'export', label: 'Export' }
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex-1 px-2 py-2 text-xs font-inter font-medium transition-colors duration-200 ${
+                      activeTab === tab.id
+                        ? 'text-holo-coral border-b-2 border-holo-coral bg-holo-coral/5'
+                        : 'text-gray-600 hover:text-holo-black hover:bg-gray-50'
+                    }`}
+                  >
                     {tab.label}
-                  </button>)}
+                  </button>
+                ))}
               </div>
 
-              <div className="-space-y-6 ">
-                {activeTab === 'materials' && <div>
+              <div className="p-3">
+                {activeTab === 'materials' && (
+                  <div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
                         <thead>
                           <tr className="border-b border-holo-teal/10">
                             <th className="text-left py-2 font-inter font-semibold">Type</th>
                             <th className="text-left py-2 font-inter font-semibold">Qty</th>
-                            <th className="text-left py-2 font-inter font-semibold">Ø (mm)</th>
-                            <th className="text-left py-2 font-inter font-semibold">Reuse %</th>
+                            <th className="text-left py-2 font-inter font-semibold">Ø</th>
+                            <th className="text-left py-2 font-inter font-semibold">%</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {materials.map((material, index) => <tr key={index} className={`${index % 2 === 0 ? 'bg-holo-white' : 'bg-holo-coral/5'} hover:bg-holo-coral/10 transition-colors duration-200`}>
-                              <td className="py-3 font-inter">{material.type}</td>
-                              <td className="py-3 font-inter">{material.qty}</td>
-                              <td className="py-3 font-inter">{material.diameter}</td>
-                              <td className="py-3 font-inter font-semibold text-holo-coral">{material.reuse}%</td>
-                            </tr>)}
+                          {materials.map((material, index) => (
+                            <tr key={index} className={`${index % 2 === 0 ? 'bg-holo-white' : 'bg-holo-coral/5'} hover:bg-holo-coral/10 transition-colors duration-200`}>
+                              <td className="py-2 font-inter">{material.type}</td>
+                              <td className="py-2 font-inter">{material.qty}</td>
+                              <td className="py-2 font-inter">{material.diameter}</td>
+                              <td className="py-2 font-inter font-semibold text-holo-coral">{material.reuse}%</td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
-                    <button className="w-full mt-4 py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium hover:bg-holo-teal/30 transition-colors duration-200">
+                    <button className="w-full mt-3 py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium text-xs hover:bg-holo-teal/30 transition-colors duration-200">
                       Download CSV
                     </button>
-                  </div>}
+                  </div>
+                )}
 
-                {activeTab === 'joints' && <div className="h-full">
-                    <div className="grid grid-cols-2 gap-3 max-h-full overflow-y-auto">
-                      {joints.map(joint => <div key={joint.id} className="border border-holo-teal/20 rounded-lg p-3 hover:shadow-md transition-shadow duration-200">
-                          <div className="w-full h-16 bg-white rounded mb-2 flex items-center justify-center overflow-hidden">
+                {activeTab === 'joints' && (
+                  <div className="h-full">
+                    <div className="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-auto">
+                      {joints.map(joint => (
+                        <div key={joint.id} className="border border-holo-teal/20 rounded-lg p-2 hover:shadow-md transition-shadow duration-200">
+                          <div className="w-full h-12 bg-white rounded mb-1 flex items-center justify-center overflow-hidden">
                             <img src={joint.image} alt={joint.name} className="w-full h-full object-cover rounded" />
                           </div>
                           <p className="text-xs font-inter font-medium text-holo-black">{joint.name}</p>
-                          <p className="text-xs font-inter text-gray-600 mb-2">{joint.type}</p>
+                          <p className="text-xs font-inter text-gray-600 mb-1">{joint.type}</p>
                           <button className="w-full py-1 bg-holo-coral text-holo-white rounded text-xs font-inter font-medium hover:shadow-md hover:shadow-holo-coral/30 transition-all duration-200">
                             Download STL
                           </button>
-                        </div>)}
+                        </div>
+                      ))}
                     </div>
-                  </div>}
+                  </div>
+                )}
 
-                {activeTab === 'manual' && <div className="text-center">
-                    <div className="w-32 h-40 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                {activeTab === 'manual' && (
+                  <div className="text-center">
+                    <div className="w-24 h-32 bg-gray-100 rounded-lg mx-auto mb-3 flex items-center justify-center">
                       <div className="text-gray-400 text-xs">PDF Preview</div>
                     </div>
-                    <button className="w-full py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium hover:bg-holo-teal/30 transition-colors duration-200">
+                    <button className="w-full py-2 bg-holo-teal/20 text-holo-black rounded-lg font-inter font-medium text-xs hover:bg-holo-teal/30 transition-colors duration-200">
                       Download PDF
                     </button>
-                  </div>}
+                  </div>
+                )}
 
-                {activeTab === 'export' && <div className="text-center">
-                    <button className="w-full py-3 bg-holo-coral text-holo-white rounded-lg font-inter font-medium hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 mb-4">
+                {activeTab === 'export' && (
+                  <div className="text-center">
+                    <button className="w-full py-2 bg-holo-coral text-holo-white rounded-lg font-inter font-medium text-xs hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 mb-3">
                       Download JSON
                     </button>
                     <p className="text-xs font-inter text-gray-600">
                       Use this file to train custom ML models for future designs.
                     </p>
-                  </div>}
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Bottom Actions */}
-            <div className="flex gap-3 my-0 py-0">
-              <button onClick={() => window.history.back()} className="flex-1 py-3 bg-holo-white border border-holo-teal text-holo-black rounded-[32px] font-inter font-medium hover:bg-holo-teal/10 transition-colors duration-200">
+            <div className="flex gap-2">
+              <button
+                onClick={() => window.history.back()}
+                className="flex-1 py-2 bg-holo-white border border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-xs hover:bg-holo-teal/10 transition-colors duration-200"
+              >
                 Go Back to Edit
               </button>
-              <button onClick={handleFinalize} className="flex-1 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300">
+              <button
+                onClick={handleFinalize}
+                className="flex-1 py-2 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-xs hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300"
+              >
                 Finalize & Save
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default DesignerOutput;
