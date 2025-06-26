@@ -45,8 +45,8 @@ const DesignerLocationSelect = () => {
         <BackButton to="/role-selection" />
       </div>
 
-      {/* Title - aligned with logo center */}
-      <h1 className="absolute top-8 left-20 text-[20px] font-semibold text-holo-black px-[26px] py-[8px] flex items-center h-12">
+      {/* Title - aligned with back arrow center */}
+      <h1 className="absolute top-8 left-20 text-[20px] font-semibold text-holo-black px-[26px] py-[8px] flex items-center h-10">
         SELECT YOUR BUILDING
       </h1>
 
