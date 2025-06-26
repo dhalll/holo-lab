@@ -30,9 +30,9 @@ const RoleSelection = () => {
       </h1>
 
       {/* Top Right Logo */}
-      <div className="absolute top-6 right-6 z-10">
-        <HoloLogo variant="top-right" />
-      </div>
+      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
+        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
+      </div>
 
       <div className="flex flex-col items-center justify-center min-h-screen px-4 pt-16 md:pt-0">
         {/* Role Options */}
