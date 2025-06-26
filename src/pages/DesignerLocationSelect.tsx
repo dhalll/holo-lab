@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -225,31 +226,16 @@ const DesignerLocationSelect = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-inter font-medium text-holo-black mb-2">
-                      Latitude
-                    </label>
-                    <input
-                      type="number"
-                      step="any"
-                      className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
-                      placeholder="51.5074"
-                      defaultValue="51.5074"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-inter font-medium text-holo-black mb-2">
-                      Longitude
-                    </label>
-                    <input
-                      type="number"
-                      step="any"
-                      className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral"
-                      placeholder="-0.1278"
-                      defaultValue="-0.1278"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-inter font-medium text-holo-black mb-2">
+                    Position
+                  </label>
+                  <select className="w-full p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral">
+                    <option value="roof">Roof</option>
+                    <option value="facade">Facade</option>
+                    <option value="ground">Ground</option>
+                    <option value="anywhere">Anywhere</option>
+                  </select>
                 </div>
 
                 <div>
@@ -287,3 +273,4 @@ const DesignerLocationSelect = () => {
 };
 
 export default DesignerLocationSelect;
+
