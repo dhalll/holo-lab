@@ -48,10 +48,11 @@ const DesignerOutput = () => {
         YOUR DESIGN OUTPUT
       </h1>
 
-      <div className="pl-20 pr-8 pt-16 pb-8">
-        <div className="flex gap-8 h-[calc(100vh-200px)]">
-          {/* 3D Viewport */}
-          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden">
+      {/* Added padding-top to create space between header and content */}
+      <div className="pl-32 pr-8 pt-24 pb-8">
+        <div className="flex gap-8 h-[calc(100vh-250px)]">
+          {/* 3D Viewport - Centered and properly spaced */}
+          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-auto max-w-4xl">
             {isLoading ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
@@ -61,7 +62,7 @@ const DesignerOutput = () => {
               </div>
             ) : (
               <div className="absolute inset-0">
-                {/* Mock 3D Scene - Centered and Square */}
+                {/* Mock 3D Scene - Perfectly centered */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white">
                     <div className="w-64 h-64 bg-gradient-to-r from-holo-coral/30 to-holo-teal/30 rounded-lg mx-auto mb-4 flex items-center justify-center border border-holo-coral/50 relative">

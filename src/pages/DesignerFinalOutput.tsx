@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -42,7 +43,8 @@ const DesignerFinalOutput = () => {
         YOUR DESIGN OUTPUT
       </h1>
 
-      <div className="px-8 pt-16 pb-8">
+      {/* Added padding-top to create space between header and content */}
+      <div className="px-8 pt-24 pb-8">
         <div className="flex flex-col lg:flex-row min-h-[500px]">
           {/* Center Column: Final Rendering Window */}
           <div className="flex-1 flex flex-col items-center px-6 py-8">
