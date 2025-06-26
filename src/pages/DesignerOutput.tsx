@@ -4,12 +4,10 @@ import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import { Download, Package, Wrench, Clock, Leaf } from 'lucide-react';
-
 const DesignerOutput = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('materials');
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     // Simulate loading 3D model
     const timer = setTimeout(() => {
@@ -17,7 +15,6 @@ const DesignerOutput = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
   const materials = [{
     type: 'PVC',
     qty: 85,
@@ -74,13 +71,10 @@ const DesignerOutput = () => {
     type: 'Coupling',
     image: '/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png'
   }];
-
   const handleFinalize = () => {
     navigate('/designer/final-rendering');
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
+  return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={4} stepLabels={['Experience', 'Location', 'Customize', 'Finalize']} />
       
       <BackButton to="/designer/customization" />
@@ -256,23 +250,15 @@ const DesignerOutput = () => {
         </div>
 
         {/* Moved buttons to be centered below the GLTF model */}
-        <div className="flex justify-center gap-4 mt-8">
-          <button 
-            onClick={() => window.history.back()} 
-            className="px-8 py-3 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-base hover:bg-holo-teal/10 transition-colors duration-200 min-w-[180px]"
-          >
+        <div className="flex-auto justify-left gap-2mt-8 my-[18px] px-0 mx-[200px]">
+          <button onClick={() => window.history.back()} className="py-3 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-base hover:bg-holo-teal/10 transition-colors duration-200 min-w-[180px] px-[25px]">
             Go Back to Edit
           </button>
-          <button 
-            onClick={handleFinalize} 
-            className="px-8 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-base hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[180px]"
-          >
+          <button onClick={handleFinalize} className="px-8 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-base hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[180px]">
             Finalize & Save
           </button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default DesignerOutput;
