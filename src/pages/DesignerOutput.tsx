@@ -133,9 +133,9 @@ const DesignerOutput = () => {
           </div>
 
           {/* Info Panel - Smaller width, positioned below logo */}
-          <div className="w-56 flex flex-col space-y-3 mt-16 py-[6px] my-[15px]">
+          <div className="w-75 flex flex-col space-y-3 mt-16 my-[35px] mx-0 py-0">
             {/* Design Summary */}
-            <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-md">
+            <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-md py-[11px]">
               <h3 className="font-inter font-semibold text-holo-black mb-2 text-sm">Design Summary</h3>
               <div className="space-y-2 text-xs">
                 <div className="flex items-center gap-2">
@@ -250,11 +250,11 @@ const DesignerOutput = () => {
         </div>
 
         {/* Moved buttons to be centered below the GLTF model */}
-        <div className="flex-auto justify-left gap-2mt-8 my-[18px] px-0 mx-[200px]">
-          <button onClick={() => window.history.back()} className="py-3 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-base hover:bg-holo-teal/10 transition-colors duration-200 min-w-[180px] px-[25px]">
+        <div className="flex-auto justify-left gap-52 mt-8 px-0 my-[15px] mx-[240px]">
+          <button onClick={() => window.history.back()} className="py-3 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-base hover:bg-holo-teal/10 transition-colors duration-200 min-w-[180px] mx-[36px] px-[66px]">
             Go Back to Edit
           </button>
-          <button onClick={handleFinalize} className="px-8 py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-base hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[180px]">
+          <button onClick={handleFinalize} className="py-3 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-base hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[180px] mx-[30px] px-[69px]">
             Finalize & Save
           </button>
         </div>
