@@ -7,6 +7,7 @@ import WorkflowWindow from '@/components/WorkflowWindow';
 import ThreeScene from '@/components/ThreeScene';
 import { Building, Sliders, Search } from 'lucide-react';
 import * as THREE from 'three';
+
 const DesignerLocationSelect = () => {
   const navigate = useNavigate();
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
@@ -39,16 +40,20 @@ const DesignerLocationSelect = () => {
   return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={2} />
       
-      <BackButton to="/role-selection" />
+      {/* Back Button - aligned with logo center */}
+      <div className="absolute top-8 left-6 z-10">
+        <BackButton to="/role-selection" />
+      </div>
 
-      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black px-[26px] py-[8px]">
+      {/* Title - aligned with logo center */}
+      <h1 className="absolute top-8 left-20 text-[20px] font-semibold text-holo-black px-[26px] py-[8px] flex items-center h-12">
         SELECT YOUR BUILDING
       </h1>
 
-      {/* Top Right Logo */}
-      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
-        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
-      </div>
+      {/* Top Right Logo */}
+      <div className="absolute top-6 right-10 z-1">
+        <HoloLogo variant="top-right" className="w-24 h-24" />
+      </div>
 
       <div className="px-8 pt-16 pb-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
         {/* Centered Map */}
@@ -199,4 +204,5 @@ const DesignerLocationSelect = () => {
         </div>}
     </div>;
 };
+
 export default DesignerLocationSelect;
