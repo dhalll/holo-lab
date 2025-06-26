@@ -1,10 +1,9 @@
-
 import React from 'react';
 
 interface HoloLogoProps {
   size?: 'small' | 'medium' | 'large';
   className?: string;
-  variant?: 'full' | 'dots';
+  variant?: 'full' | 'dots' | 'top-right';
   isLanding?: boolean;
 }
 
@@ -14,6 +13,17 @@ const HoloLogo: React.FC<HoloLogoProps> = ({
   variant = 'full',
   isLanding = false
 }) => {
+  // Top-right corner logo variant
+  if (variant === 'top-right') {
+    return (
+      <img 
+        src="/lovable-uploads/cbd5629b-35d4-4351-8070-3528ec5cec35.png" 
+        alt="HoloLab Logo" 
+        className={`w-12 h-12 object-contain ${className}`}
+      />
+    );
+  }
+
   if (variant === 'dots') {
     // Six-dot logo for bottom-right corner
     const sizeClasses = {

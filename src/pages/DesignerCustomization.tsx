@@ -13,6 +13,8 @@ interface ChatMessage {
   content: string;
   showOptions?: boolean;
   showConstraints?: boolean;
+  showFurnitureQuestion?: boolean;
+  showFurnitureOptions?: boolean;
   showVariants?: boolean;
   showProceedButton?: boolean;
 }
@@ -32,6 +34,8 @@ const DesignerCustomization = () => {
   const [selectedVolumeHeight, setSelectedVolumeHeight] = useState<string>('');
   const [selectedSpacePreference, setSelectedSpacePreference] = useState<string>('');
   const [selectedShading, setSelectedShading] = useState<string>('');
+  const [wantsFurniture, setWantsFurniture] = useState<boolean | null>(null);
+  const [selectedFurnitureType, setSelectedFurnitureType] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [canProceed, setCanProceed] = useState(false);
 
@@ -114,6 +118,47 @@ const DesignerCustomization = () => {
   };
 
   const handleConstraintsComplete = () => {
+    setMessages(prev => [
+      ...prev,
+      { 
+        type: 'bot', 
+        content: 'Would you like furniture included with your program?',
+        showFurnitureQuestion: true
+      }
+    ]);
+  };
+
+  const handleFurnitureResponse = (wantsFurniture: boolean) => {
+    setWantsFurniture(wantsFurniture);
+    if (wantsFurniture) {
+      setMessages(prev => [
+        ...prev,
+        { type: 'user', content: 'Yes, include furniture', showOptions: false },
+        { 
+          type: 'bot', 
+          content: 'Great! What type of furniture would you prefer?',
+          showFurnitureOptions: true
+        }
+      ]);
+    } else {
+      setMessages(prev => [
+        ...prev,
+        { type: 'user', content: 'No furniture needed', showOptions: false }
+      ]);
+      startGeneration();
+    }
+  };
+
+  const handleFurnitureTypeSelect = (furnitureType: string) => {
+    setSelectedFurnitureType(furnitureType);
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Selected: ${furnitureType}`, showOptions: false }
+    ]);
+    startGeneration();
+  };
+
+  const startGeneration = () => {
     setIsGenerating(true);
     setTimeout(() => {
       setMessages(prev => [
@@ -168,6 +213,15 @@ const DesignerCustomization = () => {
         CUSTOMIZE
       </h1>
 
+      {/* Top Right Logo */}
+      <div className="absolute top-6 right-6 z-10">
+        <img 
+          src="/lovable-uploads/cbd5629b-35d4-4351-8070-3528ec5cec35.png" 
+          alt="HoloLab Logo" 
+          className="w-12 h-12 object-contain"
+        />
+      </div>
+
       <div className="px-8 pt-16 pb-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
         {/* Centered Map */}
         <div className="flex items-center justify-center">
@@ -177,7 +231,7 @@ const DesignerCustomization = () => {
               <WorkflowWindow className="w-[600px] h-[600px]">
                 <ThreeScene 
                   className="w-full h-full" 
-                  modelPath="/lovable-uploads/structure example.gltf"
+                  modelPath="/lovable-uploads/scene (2).gltf"
                 />
               </WorkflowWindow>
             </div>
@@ -316,6 +370,43 @@ const DesignerCustomization = () => {
                             Generate Design Options
                           </button>
                         )}
+                      </div>
+                    )}
+
+                    {/* Furniture Question */}
+                    {message.showFurnitureQuestion && (
+                      <div className="mt-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleFurnitureResponse(true)}
+                            className="px-4 py-2 bg-holo-teal text-white rounded-lg font-medium hover:bg-holo-teal/80 transition-colors duration-200"
+                          >
+                            Yes
+                          </button>
+                          <button
+                            onClick={() => handleFurnitureResponse(false)}
+                            className="px-4 py-2 bg-holo-coral text-white rounded-lg font-medium hover:bg-holo-coral/80 transition-colors duration-200"
+                          >
+                            No
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Furniture Type Options */}
+                    {message.showFurnitureOptions && (
+                      <div className="mt-4">
+                        <div className="flex flex-wrap gap-2">
+                          {['Large Pipe Furniture', 'Small Pipe Furniture', 'Whatever is in Stock'].map((option) => (
+                            <button
+                              key={option}
+                              onClick={() => handleFurnitureTypeSelect(option)}
+                              className="px-3 py-2 rounded-full text-xs font-medium bg-white border border-holo-teal text-holo-black hover:bg-holo-teal hover:text-white transition-colors duration-200"
+                            >
+                              {option}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     )}
 
