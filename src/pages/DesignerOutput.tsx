@@ -90,15 +90,15 @@ const DesignerOutput = () => {
 
       {/* Added padding-top to create space between header and content */}
       <div className="pl-32 pr-8 pt-24 pb-8">
-        <div className="flex gap-4 h-[calc(100vh-250px)]">
+        <div className="flex gap-6 h-[calc(100vh-250px)]">
           {/* 3D Viewport - Takes remaining space */}
-          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden">
+          <div className="flex-1 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden mx-[88px]">
             {isLoading ? <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="w-16 h-16 border-4 border-holo-coral border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                   <p className="font-inter text-lg">Loading 3D Model...</p>
                 </div>
-              </div> : <div className="absolute inset-0">
+              </div> : <div className="absolute inset-0 mx-[16px] my-[13px]">
                 {/* Mock 3D Scene - Perfectly centered */}
                 <div className="absolute inset-0 flex items-center justify-center mx-[115px]">
                   <div className="text-center text-white">
@@ -135,9 +135,9 @@ const DesignerOutput = () => {
           {/* Info Panel - Fixed width, hugs the right side */}
           <div className="w-80 flex flex-col space-y-6">
             {/* Design Summary */}
-            <div className="bg-holo-white border border-holo-teal/20 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-inter font-semibold text-holo-black mb-4 text-lg">Design Summary</h3>
-              <div className="space-y-4 text-sm">
+            <div className="bg-holo-white border border-holo-teal/20 p-6 shadow-sm py-[9px] rounded-md px-[16px]">
+              <h3 className="font-inter font-semibold text-holo-black mb-4 text-lg py-0 my-[8px]">Design Summary</h3>
+              <div className="space-y-4 text-sm my-0 py-0">
                 <div className="flex items-center gap-3">
                   <Package className="text-holo-coral" size={16} />
                   <div><span className="font-bold">Program:</span> Gym + Bar</div>
@@ -248,7 +248,7 @@ const DesignerOutput = () => {
             </div>
 
             {/* Bottom Actions */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 my-0 py-0">
               <button onClick={() => window.history.back()} className="flex-1 py-3 bg-holo-white border border-holo-teal text-holo-black rounded-[32px] font-inter font-medium hover:bg-holo-teal/10 transition-colors duration-200">
                 Go Back to Edit
               </button>
