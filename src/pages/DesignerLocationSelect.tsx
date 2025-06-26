@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -120,36 +121,36 @@ const DesignerLocationSelect = () => {
             )}
           </div>
 
-          {/* Control Buttons - Vertical Stack */}
-          <div className="flex flex-col gap-6">
+          {/* Control Buttons - Vertical Stack - Made larger to match map height */}
+          <div className="flex flex-col gap-8">
             <button
               onClick={handleAnalysisClick}
               disabled={!selectedBuilding}
-              className={`w-28 h-28 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+              className={`w-40 h-40 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                 !selectedBuilding 
                   ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                  : analysisClicked // If already clicked, keep orange
+                  : analysisClicked
                     ? 'bg-holo-coral border-holo-coral text-holo-white'
-                    : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral' // Default blue, hover orange
-              } hover:scale-105`} {/* Corrected position of hover:scale-105 */}
+                    : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral'
+              } hover:scale-105`}
             >
-              <Building size={48} />
-              <span className="text-sm font-inter mt-1">Analysis</span>
+              <Building size={64} />
+              <span className="text-base font-inter mt-2">Analysis</span>
             </button>
 
             <button
               onClick={handleAdvancedClick}
               disabled={!selectedBuilding}
-              className={`w-28 h-28 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
+              className={`w-40 h-40 flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 ${
                 !selectedBuilding 
                   ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed'
-                  : advancedClicked // If already clicked, keep orange
+                  : advancedClicked
                     ? 'bg-holo-coral border-holo-coral text-holo-white'
-                    : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral' // Default blue, hover orange
-              } hover:scale-105`} {/* Corrected position of hover:scale-105 */}
+                    : 'bg-holo-teal border-holo-teal text-holo-white hover:bg-holo-coral hover:border-holo-coral'
+              } hover:scale-105`}
             >
-              <Sliders size={48} />
-              <span className="text-sm font-inter mt-1">Controls</span>
+              <Sliders size={64} />
+              <span className="text-base font-inter mt-2">Controls</span>
             </button>
           </div>
         </div>
