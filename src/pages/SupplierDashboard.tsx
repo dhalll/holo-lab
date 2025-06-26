@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
@@ -95,10 +94,10 @@ const SupplierDashboard = () => {
     <div className="min-h-screen bg-holo-white font-inter">
       {/* Header */}
       <div className="sticky top-0 bg-holo-white border-b border-holo-teal/20 z-10">
-        <div className="flex items-center justify-between p-6">
+        <div className="flex items-center justify-between px-12 py-6">
           <div className="flex items-center gap-4">
             <BackButton to="/role-selection" />
-            <h1 className="text-xl font-inter font-bold text-holo-black ml-12">Material Dashboard</h1>
+            <h1 className="text-[20px] font-semibold text-holo-black ml-12 tracking-wide">MATERIAL DASHBOARD</h1>
           </div>
           
           <button
@@ -111,7 +110,7 @@ const SupplierDashboard = () => {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="p-6 bg-gray-50 border-b border-holo-teal/10">
+      <div className="px-12 py-6 bg-gray-50 border-b border-holo-teal/10">
         <div className="flex flex-col md:flex-row gap-4 items-center">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -201,7 +200,7 @@ const SupplierDashboard = () => {
       </div>
 
       {/* Materials Table */}
-      <div className="p-6">
+      <div className="px-12 py-6">
         <div className="bg-holo-white rounded-lg shadow-sm border border-holo-teal/20 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
