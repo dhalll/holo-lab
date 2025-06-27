@@ -22,9 +22,9 @@ const DesignerVRView = () => {
       </div>
 
       <div className="flex items-center justify-center min-h-screen px-8 pt-16">
-        <div className="flex flex-col items-center max-w-4xl mx-auto w-full">
-          {/* VR Viewport - Centered and same size as scan materials viewport */}
-          <div className="w-96 h-96 bg-gradient-to-br from-gray-900 to-gray-700 rounded-2xl mb-8 flex items-center justify-center border-4 border-holo-coral/50 relative overflow-hidden">
+        <div className="flex items-start gap-8 max-w-6xl mx-auto w-full">
+          {/* VR Viewport - Left Side */}
+          <div className="w-96 h-96 bg-gradient-to-br from-gray-900 to-gray-700 rounded-2xl flex items-center justify-center border-4 border-holo-coral/50 relative overflow-hidden">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center text-white">
                 <div className="w-64 h-64 bg-gradient-to-r from-holo-coral/30 to-holo-teal/30 rounded-lg mx-auto mb-4 flex items-center justify-center border border-holo-coral/50 relative">
@@ -59,10 +59,10 @@ const DesignerVRView = () => {
             <div className="absolute bottom-4 right-4 w-4 h-4 border-r-2 border-b-2 border-holo-coral animate-pulse"></div>
           </div>
 
-          {/* VR Controls Panel */}
+          {/* VR Controls Panel - Right Side */}
           <div className="bg-holo-white border border-holo-teal/20 rounded-lg p-6 shadow-lg w-96">
             <h2 className="text-xl font-inter font-bold text-holo-black mb-4 flex items-center gap-3">
-              <img src="public/lovable-uploads/Vector2.png" alt="VR Goggles" className="w-6 h-6" />
+              <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-6 h-6" />
               VR Controls
             </h2>
             
