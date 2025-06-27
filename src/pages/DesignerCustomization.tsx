@@ -214,9 +214,9 @@ const DesignerCustomization = () => {
       </h1>
 
       {/* Top Right Logo */}
-      <div className="absolute top-0 right-10 z-15 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
-        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
-      </div>
+      <div className="absolute top-0 right-10 z-15 p-0 py-0 px-0">
+        <HoloLogo variant="top-right" className="w-24 h-24" />
+      </div>
 
       <div className="px-8 pt-16 pb-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
         {/* Centered Map */}
@@ -389,19 +389,53 @@ const DesignerCustomization = () => {
                       </div>
                     )}
 
-                    {/* Furniture Type Options */}
+                    {/* Furniture Type Options with Images */}
                     {message.showFurnitureOptions && (
                       <div className="mt-4">
-                        <div className="flex flex-wrap gap-2">
-                          {['Large Pipe Furniture', 'Small Pipe Furniture', 'Any Stock'].map((option) => (
-                            <button
-                              key={option}
-                              onClick={() => handleFurnitureTypeSelect(option)}
-                              className="px-3 py-2 rounded-full text-xs font-medium bg-white border border-holo-teal text-holo-black hover:bg-holo-teal hover:text-white transition-colors duration-200"
-                            >
-                              {option}
-                            </button>
-                          ))}
+                        <div className="space-y-3">
+                          {/* Large Pipe Furniture Option */}
+                          <div 
+                            className="cursor-pointer border-2 border-holo-teal rounded-lg p-3 hover:border-holo-coral transition-colors duration-200"
+                            onClick={() => handleFurnitureTypeSelect('Large Pipe Furniture')}
+                          >
+                            <div className="flex items-center gap-3">
+                              <img 
+                                src="/lovable-uploads/9314f380-b21c-4c51-a78a-f6dbb787aec5.png" 
+                                alt="Large Pipe Furniture" 
+                                className="w-12 h-12 object-cover rounded"
+                              />
+                              <div>
+                                <p className="text-sm font-medium text-holo-black">Large Pipe Furniture</p>
+                                <p className="text-xs text-gray-600">Structural elements with furniture integration</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Small Pipe Furniture Option */}
+                          <div 
+                            className="cursor-pointer border-2 border-holo-teal rounded-lg p-3 hover:border-holo-coral transition-colors duration-200"
+                            onClick={() => handleFurnitureTypeSelect('Small Pipe Furniture')}
+                          >
+                            <div className="flex items-center gap-3">
+                              <img 
+                                src="/lovable-uploads/4b661a27-70df-483a-8ff3-cb00c4b8fc18.png" 
+                                alt="Small Pipe Furniture" 
+                                className="w-12 h-12 object-cover rounded"
+                              />
+                              <div>
+                                <p className="text-sm font-medium text-holo-black">Small Pipe Furniture</p>
+                                <p className="text-xs text-gray-600">Compact modular furniture pieces</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Any Stock Option */}
+                          <button
+                            onClick={() => handleFurnitureTypeSelect('Any Stock')}
+                            className="w-full px-3 py-2 rounded-lg text-xs font-medium bg-white border border-holo-teal text-holo-black hover:bg-holo-teal hover:text-white transition-colors duration-200"
+                          >
+                            Any Stock
+                          </button>
                         </div>
                       </div>
                     )}
