@@ -393,7 +393,7 @@ const DesignerCustomization = () => {
                     {message.showFurnitureOptions && (
                       <div className="mt-4">
                         <div className="flex flex-wrap gap-2">
-                          {['Large Pipe Furniture', 'Small Pipe Furniture', 'Whatever is in Stock'].map((option) => (
+                          {['Large Pipe Furniture', 'Small Pipe Furniture', 'Any Stock'].map((option) => (
                             <button
                               key={option}
                               onClick={() => handleFurnitureTypeSelect(option)}
