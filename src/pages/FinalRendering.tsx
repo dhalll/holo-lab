@@ -1,22 +1,27 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Download, Share, RotateCcw } from 'lucide-react';
 import BackButton from '@/components/BackButton';
+
 const FinalRendering = () => {
   const navigate = useNavigate();
+
   const handleStartOver = () => {
     navigate('/role-selection');
   };
-  return <div className="min-h-screen bg-holo-black flex flex-col font-inter">
+
+  return (
+    <div className="min-h-screen bg-holo-black flex flex-col font-inter">
       {/* Header with controls */}
       <div className="flex items-center justify-between p-6 bg-holo-black/90 backdrop-blur-sm z-10 bg-white">
         <BackButton to="/designer/output" />
         
-        <h1 className="absolute top-6 items-center text-[20px] font-semibold text-holo-black z-10 text-center mx-[240px] px-[226px]">
+        <h1 className="absolute left-1/2 transform -translate-x-1/2 top-6 text-[20px] font-semibold text-holo-black z-10">
           FINAL DESIGN RENDERING
         </h1>
         
-        <div className="flex items-right gap-4">
+        <div className="flex items-center gap-4 ml-auto">
           <button className="flex items-center gap-2 px-4 py-2 bg-holo-teal text-holo-white rounded-lg hover:bg-holo-teal/80 transition-all duration-200">
             <Share size={16} />
             <span className="font-inter text-sm">Share</span>
@@ -25,7 +30,7 @@ const FinalRendering = () => {
             <Download size={16} />
             <span className="font-inter text-sm">Download</span>
           </button>
-          <button onClick={handleStartOver} className="flex items-center gap-2 px-4 py-2 bg-holo-white/20 text-holo-white rounded-lg hover:bg-holo-white/30 transition-all duration-200 bg-zinc-950 hover:bg-zinc-800">
+          <button onClick={handleStartOver} className="flex items-center gap-2 px-4 py-2 bg-zinc-950 text-holo-white rounded-lg hover:bg-zinc-800 transition-all duration-200">
             <RotateCcw size={16} />
             <span className="font-inter text-sm">Start Over</span>
           </button>
@@ -45,6 +50,8 @@ const FinalRendering = () => {
           <span>Gym + Bar Configuration • 1.35t CO₂ Saved • Build Time: ~120 hrs</span>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default FinalRendering;
