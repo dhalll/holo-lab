@@ -62,7 +62,7 @@ const DesignerVRView = () => {
           {/* VR Controls Panel */}
           <div className="bg-holo-white border border-holo-teal/20 rounded-lg p-6 shadow-lg w-96">
             <h2 className="text-xl font-inter font-bold text-holo-black mb-4 flex items-center gap-3">
-              <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-6 h-6" />
+              <img src="public/lovable-uploads/Vector2.png" alt="VR Goggles" className="w-6 h-6" />
               VR Controls
             </h2>
             
