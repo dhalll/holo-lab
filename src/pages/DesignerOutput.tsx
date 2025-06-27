@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
-import { Download, Package, Wrench, Clock, Leaf, Eye, Edit, Save } from 'lucide-react';
+import { Download, Package, Wrench, Clock, Leaf, Eye, Save, Headphones } from 'lucide-react';
 const DesignerOutput = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('materials');
@@ -80,7 +80,7 @@ const DesignerOutput = () => {
   };
   const handleViewInVR = () => {
     // Navigate to VR view functionality
-    console.log('View in VR clicked');
+    navigate('/designer/vr-view');
   };
   return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={4} stepLabels={['Experience', 'Location', 'Customize', 'Finalize']} />
@@ -99,7 +99,7 @@ const DesignerOutput = () => {
       {/* Main Content Container */}
       <div className="pt-24 pb-8 px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex gap-8 items-center">
+          <div className="flex gap-8 items-start">
             {/* 3D Viewport - Left side, with proper margin to avoid progress bar overlap */}
             <div className="flex-1 max-w-2xl ml-32">
               <div className="bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden h-[500px]">
@@ -140,7 +140,7 @@ const DesignerOutput = () => {
               </div>
             </div>
 
-            {/* Right Info Panel - Centered vertically with 3D viewport */}
+            {/* Right Info Panel */}
             <div className="w-80 flex flex-col space-y-3">
               {/* Design Summary */}
               <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-lg">
@@ -300,14 +300,26 @@ const DesignerOutput = () => {
           </div>
 
           {/* Centered buttons below the main content */}
-          <div className="flex justify-center gap-8 mt-12 ml-16 my-[15px] mx-0">
-            <button onClick={() => window.history.back()} className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center">
-              <Edit size={24} />
+          <div className="flex justify-center gap-4 mt-4">
+            <button 
+              onClick={handleViewInVR} 
+              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
+              title="View in VR"
+            >
+              <Headphones size={24} />
             </button>
-            <button onClick={handleFinalize} className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 flex items-center justify-center">
+            <button 
+              onClick={handleFinalize} 
+              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 flex items-center justify-center"
+              title="Save"
+            >
               <Save size={24} />
             </button>
-            <button onClick={handleDownloadRendering} className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center">
+            <button 
+              onClick={handleDownloadRendering} 
+              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
+              title="Download"
+            >
               <Download size={24} />
             </button>
           </div>
