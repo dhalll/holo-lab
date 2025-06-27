@@ -11,7 +11,7 @@ const FinalRendering = () => {
   };
 
   return (
-    <div className="min-h-screen bg-holo-black flex flex-col">
+    <div className="min-h-screen bg-holo-black flex flex-col font-inter">
       {/* Header with controls */}
       <div className="flex items-center justify-between p-6 bg-holo-black/90 backdrop-blur-sm z-10">
         <button
