@@ -84,14 +84,14 @@ const DesignerOutput = () => {
       </h1>
 
       {/* Top Right Logo */}
-      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0"> {/* Increased right margin, added padding */}
-        <HoloLogo variant="top-right" className="w-24 h-24" /> {/* Added custom width/height */}
-      </div>
+      <div className="absolute top-0 right-10 z-1 p-0 py-0 px-0">
+        <HoloLogo variant="top-right" className="w-24 h-24" />
+      </div>
 
       {/* Main Content Container */}
       <div className="pt-24 pb-8 px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex gap-8 items-start">
+          <div className="flex gap-8 items-center">
             {/* 3D Viewport - Left side, with proper margin to avoid progress bar overlap */}
             <div className="flex-1 max-w-2xl ml-32">
               <div className="bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg relative overflow-hidden h-[500px]">
@@ -132,8 +132,8 @@ const DesignerOutput = () => {
               </div>
             </div>
 
-            {/* Right Info Panel - Positioned below logo with proper spacing */}
-            <div className="w-80 flex flex-col space-y-3 mt-24 my-[20px]">
+            {/* Right Info Panel - Centered vertically with 3D viewport */}
+            <div className="w-80 flex flex-col space-y-3">
               {/* Design Summary */}
               <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-lg">
                 <h3 className="font-inter font-semibold text-holo-black mb-2 text-sm">Design Summary</h3>
