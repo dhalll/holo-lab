@@ -1,11 +1,15 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import { RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
+
 const DesignerVRView = () => {
   const navigate = useNavigate();
-  return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <BackButton to="/designer/output" />
       
       <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
@@ -71,13 +75,11 @@ const DesignerVRView = () => {
               </div>
               
               <div className="flex justify-center gap-4">
-                <button className="p-3 bg-holo-coral/20 text-holo-black rounded-lg hover:bg-holo-coral/30 transition-colors duration-200 flex items-center gap-2">
+                <button className="w-12 h-12 bg-holo-coral/20 text-holo-black rounded-full hover:bg-holo-coral/30 transition-colors duration-200 flex items-center justify-center">
                   <ZoomIn size={18} />
-                  <span className="text-sm font-inter">Zoom In</span>
                 </button>
-                <button className="p-3 bg-holo-coral/20 text-holo-black rounded-lg hover:bg-holo-coral/30 transition-colors duration-200 flex items-center gap-2">
+                <button className="w-12 h-12 bg-holo-coral/20 text-holo-black rounded-full hover:bg-holo-coral/30 transition-colors duration-200 flex items-center justify-center">
                   <ZoomOut size={18} />
-                  <span className="text-sm font-inter">Zoom Out</span>
                 </button>
               </div>
             </div>
@@ -90,6 +92,8 @@ const DesignerVRView = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default DesignerVRView;
