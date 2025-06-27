@@ -1,18 +1,13 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Download, Share, RotateCcw } from 'lucide-react';
 import BackButton from '@/components/BackButton';
-
 const FinalRendering = () => {
   const navigate = useNavigate();
-
   const handleStartOver = () => {
     navigate('/role-selection');
   };
-
-  return (
-    <div className="min-h-screen bg-holo-black flex flex-col font-inter">
+  return <div className="min-h-screen bg-holo-black flex flex-col font-inter">
       {/* Header with controls */}
       <div className="flex items-center justify-between p-6 bg-holo-black/90 backdrop-blur-sm z-10 bg-white">
         <BackButton to="/designer/output" />
@@ -21,7 +16,7 @@ const FinalRendering = () => {
           FINAL DESIGN RENDERING
         </h1>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-right gap-4">
           <button className="flex items-center gap-2 px-4 py-2 bg-holo-teal text-holo-white rounded-lg hover:bg-holo-teal/80 transition-all duration-200">
             <Share size={16} />
             <span className="font-inter text-sm">Share</span>
@@ -40,11 +35,7 @@ const FinalRendering = () => {
       {/* Full-screen rendering */}
       <div className="flex-1 flex items-center justify-center p-6 bg-white">
         <div className="w-full h-full max-w-7xl max-h-full flex items-center justify-center">
-          <img 
-            alt="Final Design Rendering" 
-            src="/lovable-uploads/07498333-9bd4-4584-8fdd-16dd7d976a90.jpg" 
-            className="min-h-full rounded-lg shadow-2xl object-scale-down" 
-          />
+          <img alt="Final Design Rendering" src="/lovable-uploads/07498333-9bd4-4584-8fdd-16dd7d976a90.jpg" className="min-h-full rounded-lg shadow-2xl object-scale-down" />
         </div>
       </div>
 
@@ -54,8 +45,6 @@ const FinalRendering = () => {
           <span>Gym + Bar Configuration • 1.35t CO₂ Saved • Build Time: ~120 hrs</span>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default FinalRendering;
