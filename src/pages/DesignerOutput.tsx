@@ -296,32 +296,32 @@ const DesignerOutput = () => {
                     </div>}
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Centered buttons below the main content */}
-          <div className="flex justify-center gap-4 mt-4">
-            <button 
-              onClick={handleViewInVR} 
-              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
-              title="View in VR"
-            >
-              <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-6 h-6" />
-            </button>
-            <button 
-              onClick={handleFinalize} 
-              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 flex items-center justify-center"
-              title="Save"
-            >
-              <Save size={24} />
-            </button>
-            <button 
-              onClick={handleDownloadRendering} 
-              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
-              title="Download"
-            >
-              <Download size={24} />
-            </button>
+              {/* Action buttons aligned below right panel */}
+              <div className="flex justify-center gap-4 mt-4">
+                <button 
+                  onClick={handleViewInVR} 
+                  className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
+                  title="View in VR"
+                >
+                  <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-6 h-6" />
+                </button>
+                <button 
+                  onClick={handleFinalize} 
+                  className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 flex items-center justify-center"
+                  title="Save"
+                >
+                  <Save size={24} />
+                </button>
+                <button 
+                  onClick={handleDownloadRendering} 
+                  className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
+                  title="Download"
+                >
+                  <Download size={24} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
