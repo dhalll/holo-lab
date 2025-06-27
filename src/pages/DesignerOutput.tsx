@@ -184,9 +184,6 @@ const DesignerOutput = () => {
                   id: 'joints',
                   label: 'Joints'
                 }, {
-                  id: 'manual',
-                  label: 'Manual'
-                }, {
                   id: 'export',
                   label: 'Export'
                 }].map(tab => <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex-1 px-2 py-2 text-xs font-inter font-medium transition-colors duration-200 ${activeTab === tab.id ? 'text-holo-coral border-b-2 border-holo-coral bg-holo-coral/5' : 'text-gray-600 hover:text-holo-black hover:bg-gray-50'}`}>
@@ -301,25 +298,6 @@ const DesignerOutput = () => {
                 </div>
               </div>
 
-              {/* Analysis and Controls Buttons - Below tabs */}
-              <div className="flex justify-center gap-4 py-2">
-                <button
-                  onClick={handleDownloadRendering}
-                  className="flex-1 px-6 py-4 bg-holo-white border-2 border-holo-teal/30 text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <Download className="text-holo-teal" size={20} />
-                  <span>Analysis</span>
-                </button>
-                <button
-                  onClick={handleViewInVR}
-                  className="flex-1 px-6 py-4 bg-holo-white border-2 border-holo-teal/30 text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 flex items-center justify-center gap-2"
-                >
-                  <Eye className="text-holo-teal" size={20} />
-                  <span>Controls</span>
-                </button>
-              </div>
-            </div>
-          </div>
 
           {/* Centered buttons below the main content */}
           <div className="flex justify-center gap-8 mt-12 ml-16 mx-[400px] my-[15px]">
@@ -335,6 +313,20 @@ const DesignerOutput = () => {
             >
               Finalize & Save
             </button>
+            <button
+                  onClick={handleDownloadRendering}
+                  className="flex-1 px-6 py-4 bg-holo-white border-2 border-holo-teal/30 text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <Download className="text-holo-teal" size={20} />
+                  <span>RENDERING</span>
+                </button>
+                <button
+                  onClick={handleViewInVR}
+                  className="flex-1 px-6 py-4 bg-holo-white border-2 border-holo-teal/30 text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <Eye className="text-holo-teal" size={20} />
+                  <span>VR VIEW</span>
+                </button>
           </div>
         </div>
       </div>
