@@ -133,7 +133,7 @@ const DesignerOutput = () => {
             </div>
 
             {/* Right Info Panel - Positioned below logo with proper spacing */}
-            <div className="w-80 flex flex-col space-y-3 mt-24 my-[14px]">
+            <div className="w-80 flex flex-col space-y-3 mt-24 my-[20px]">
               {/* Design Summary */}
               <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-lg">
                 <h3 className="font-inter font-semibold text-holo-black mb-2 text-sm">Design Summary</h3>
@@ -295,7 +295,7 @@ const DesignerOutput = () => {
           </div>
 
           {/* Centered buttons below the main content */}
-          <div className="flex justify-center gap-8 mt-12 ml-16 mx-[400px]">
+          <div className="flex justify-center gap-8 mt-12 ml-16 mx-[400px] my-[15px]">
             <button onClick={() => window.history.back()} className="px-12 py-4 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 transition-colors duration-200 min-w-[250px]">
               Go Back to Edit
             </button>
