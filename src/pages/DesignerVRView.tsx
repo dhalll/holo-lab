@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
-import { Headphones, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
+import { RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
 
 const DesignerVRView = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const DesignerVRView = () => {
             {/* VR Controls */}
             <div className="absolute top-4 right-4 space-y-2">
               <button className="p-2 bg-holo-white/20 text-white rounded-lg hover:bg-holo-white/30 transition-colors duration-200 flex items-center gap-2">
-                <Headphones size={16} />
+                <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-4 h-4" />
                 <span className="text-xs font-inter">VR Mode</span>
               </button>
             </div>
@@ -62,7 +62,7 @@ const DesignerVRView = () => {
           {/* VR Controls Panel */}
           <div className="bg-holo-white border border-holo-teal/20 rounded-lg p-6 shadow-lg w-96">
             <h2 className="text-xl font-inter font-bold text-holo-black mb-4 flex items-center gap-3">
-              <Headphones className="text-holo-teal" size={24} />
+              <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-6 h-6" />
               VR Controls
             </h2>
             
