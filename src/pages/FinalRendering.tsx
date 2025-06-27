@@ -35,9 +35,9 @@ const FinalRendering = () => {
       </div>
 
       {/* Full-screen rendering */}
-      <div className="flex-1 flex items-center justify-center p-6 bg-neutral-50">
+      <div className="flex-1 flex items-center justify-center p-6 bg-white">
         <div className="w-full h-full max-w-7xl max-h-full flex items-center justify-center">
-          <img src="/lovable-uploads/309fccb1-7beb-4ac3-ac02-5f3aefd631be.png" alt="Final Design Rendering" className="w-full h-full object-contain rounded-lg shadow-2xl" />
+          <img alt="Final Design Rendering" src="/lovable-uploads/07498333-9bd4-4584-8fdd-16dd7d976a90.jpg" className="min-h-full rounded-lg shadow-2xl object-scale-down" />
         </div>
       </div>
 
