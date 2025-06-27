@@ -82,7 +82,7 @@ const DesignerVRView = () => {
               </div>
             </div>
 
-            <div className="mt-6 p-4 bg-holo-teal/10 rounded-lg">
+            <div className="mt-6 p-4 bg-holo-teal/10 rounded-lg py-[14px]">
               <p className="text-sm font-inter text-gray-700 text-center">
                 Use VR headset for immersive 3D viewing experience of your parametric structure design.
               </p>
