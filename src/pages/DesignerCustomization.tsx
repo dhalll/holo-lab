@@ -39,7 +39,7 @@ const DesignerCustomization = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [canProceed, setCanProceed] = useState(false);
 
-  const programs = ['Gym', 'Meeting Space', 'Bar', 'Greenhouse', 'Workspace'];
+  const programs = ['Gym', 'Meeting Space', 'Bar', 'Greenhouse', 'Terrace'];
 
   const handleProgramSelect = (program: string) => {
     if (selectedPrograms.includes(program)) {
