@@ -400,7 +400,7 @@ const DesignerCustomization = () => {
                           >
                             <div className="flex items-center gap-3">
                               <img 
-                                src="/lovable-uploads/9314f380-b21c-4c51-a78a-f6dbb787aec5.png" 
+                                src="/lovable-uploads/4b661a27-70df-483a-8ff3-cb00c4b8fc18.png" 
                                 alt="Large Pipe Furniture" 
                                 className="w-12 h-12 object-cover rounded"
                               />
@@ -418,7 +418,7 @@ const DesignerCustomization = () => {
                           >
                             <div className="flex items-center gap-3">
                               <img 
-                                src="/lovable-uploads/4b661a27-70df-483a-8ff3-cb00c4b8fc18.png" 
+                                src="/lovable-uploads/9314f380-b21c-4c51-a78a-f6dbb787aec5.png" 
                                 alt="Small Pipe Furniture" 
                                 className="w-12 h-12 object-cover rounded"
                               />
