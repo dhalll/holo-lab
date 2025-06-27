@@ -1,15 +1,11 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import { RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
-
 const DesignerVRView = () => {
   const navigate = useNavigate();
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
+  return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <BackButton to="/designer/output" />
       
       <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
@@ -22,16 +18,16 @@ const DesignerVRView = () => {
       </div>
 
       <div className="flex items-center justify-center min-h-screen px-8 pt-16">
-        <div className="flex items-start gap-8 max-w-6xl mx-auto w-full">
+        <div className="flex items-start gap-8 max-w-6xl w-full mx-0 px-[175px]">
           {/* VR Viewport - Left Side */}
           <div className="w-96 h-96 bg-gradient-to-br from-gray-900 to-gray-700 rounded-2xl flex items-center justify-center border-4 border-holo-coral/50 relative overflow-hidden">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center text-white">
                 <div className="w-64 h-64 bg-gradient-to-r from-holo-coral/30 to-holo-teal/30 rounded-lg mx-auto mb-4 flex items-center justify-center border border-holo-coral/50 relative">
                   <div className="grid grid-cols-4 gap-3">
-                    {Array.from({ length: 16 }, (_, i) => (
-                      <div key={i} className="w-3 h-12 bg-holo-coral/60 rounded-full animate-pulse"></div>
-                    ))}
+                    {Array.from({
+                    length: 16
+                  }, (_, i) => <div key={i} className="w-3 h-12 bg-holo-coral/60 rounded-full animate-pulse"></div>)}
                   </div>
                   {/* Corner connectors */}
                   <div className="absolute top-2 left-2 w-4 h-4 bg-holo-teal rounded-full animate-pulse"></div>
@@ -60,7 +56,7 @@ const DesignerVRView = () => {
           </div>
 
           {/* VR Controls Panel - Right Side */}
-          <div className="bg-holo-white border border-holo-teal/20 rounded-lg p-6 shadow-lg w-96">
+          <div className="bg-holo-white border border-holo-teal/20 rounded-lg p-6 shadow-lg w-96 py-[61px]">
             <h2 className="text-xl font-inter font-bold text-holo-black mb-4 flex items-center gap-3">
               <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-6 h-6" />
               VR Controls
@@ -94,8 +90,6 @@ const DesignerVRView = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default DesignerVRView;
