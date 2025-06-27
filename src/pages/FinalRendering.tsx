@@ -22,8 +22,8 @@ const FinalRendering = () => {
           <span className="font-inter text-sm">Back to Project</span>
         </button>
         
-        <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-white z-10">
-          Final Design Rendering
+        <h1 className="absolute top-6 left-200 text-[20px] font-semibold text-holo-white z-10">
+          FINAL DESIGN RENDERING
         </h1>
         
         <div className="flex items-center gap-4">
