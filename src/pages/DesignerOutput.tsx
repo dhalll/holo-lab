@@ -133,7 +133,7 @@ const DesignerOutput = () => {
             </div>
 
             {/* Right Info Panel - Positioned below logo with proper spacing */}
-            <div className="w-80 flex flex-col space-y-3 mt-24 my-[21px]">
+            <div className="w-80 flex flex-col space-y-3 mt-24 my-[14px]">
               {/* Design Summary */}
               <div className="bg-holo-white border border-holo-teal/20 p-3 shadow-sm rounded-lg">
                 <h3 className="font-inter font-semibold text-holo-black mb-2 text-sm">Design Summary</h3>
