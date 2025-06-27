@@ -166,7 +166,7 @@ const DesignerCustomization = () => {
         { type: 'bot', content: 'Analyzing your requirements and available materials...', showOptions: false },
         { 
           type: 'bot', 
-          content: 'I\'ve generated 3 design options for you. Option 1 uses 85 PVC pipes + 20 steel pipes, with 45 3D-printable joints. Estimated CO₂ savings: 1.2 tonnes.',
+          content: 'I\'ve generated 3 design options for you. Option 1 uses 285 PVC pipes + 20 steel pipes, with 45 3D-printable joints. Estimated CO₂ savings: 1.2 tonnes.',
           showVariants: true
         }
       ]);
