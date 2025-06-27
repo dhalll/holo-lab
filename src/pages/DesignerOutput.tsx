@@ -75,14 +75,15 @@ const DesignerOutput = () => {
     navigate('/designer/final-rendering');
   };
   const handleDownloadRendering = () => {
-    // Navigate to download rendering functionality
-    console.log('Download rendering clicked');
+    // Navigate to final design rendering page
+    navigate('/designer/final-rendering');
   };
   const handleViewInVR = () => {
     // Navigate to VR view functionality
     console.log('View in VR clicked');
   };
-  return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={4} stepLabels={['Experience', 'Location', 'Customize', 'Finalize']} />
       
       <BackButton to="/designer/customization" />
@@ -170,28 +171,6 @@ const DesignerOutput = () => {
                     <Leaf className="text-holo-coral" size={12} />
                     <div><span className="font-bold text-holo-coral">CO₂ Saved:</span> <span className="font-bold text-holo-coral text-sm">1.35 t</span></div>
                   </div>
-                </div>
-              </div>
-
-              {/* Circular Action Buttons */}
-              <div className="flex justify-center gap-4 py-4">
-                <div className="flex flex-col items-center">
-                  <button
-                    onClick={handleDownloadRendering}
-                    className="w-16 h-16 bg-holo-white border-2 border-holo-teal/30 rounded-full flex items-center justify-center hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 shadow-sm"
-                  >
-                    <Download className="text-holo-teal" size={20} />
-                  </button>
-                  <span className="text-xs font-inter text-gray-600 mt-2">Analysis</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <button
-                    onClick={handleViewInVR}
-                    className="w-16 h-16 bg-holo-white border-2 border-holo-teal/30 rounded-full flex items-center justify-center hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 shadow-sm"
-                  >
-                    <Eye className="text-holo-teal" size={20} />
-                  </button>
-                  <span className="text-xs font-inter text-gray-600 mt-2">Controls</span>
                 </div>
               </div>
 
@@ -321,20 +300,46 @@ const DesignerOutput = () => {
                     </div>}
                 </div>
               </div>
+
+              {/* Analysis and Controls Buttons - Below tabs */}
+              <div className="flex justify-center gap-4 py-2">
+                <button
+                  onClick={handleDownloadRendering}
+                  className="flex-1 px-6 py-4 bg-holo-white border-2 border-holo-teal/30 text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <Download className="text-holo-teal" size={20} />
+                  <span>Analysis</span>
+                </button>
+                <button
+                  onClick={handleViewInVR}
+                  className="flex-1 px-6 py-4 bg-holo-white border-2 border-holo-teal/30 text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <Eye className="text-holo-teal" size={20} />
+                  <span>Controls</span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Centered buttons below the main content */}
           <div className="flex justify-center gap-8 mt-12 ml-16 mx-[400px] my-[15px]">
-            <button onClick={() => window.history.back()} className="px-12 py-4 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 transition-colors duration-200 min-w-[250px]">
+            <button
+              onClick={() => window.history.back()}
+              className="px-12 py-4 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 transition-colors duration-200 min-w-[250px]"
+            >
               Go Back to Edit
             </button>
-            <button onClick={handleFinalize} className="px-12 py-4 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-lg hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[250px]">
+            <button
+              onClick={handleFinalize}
+              className="px-12 py-4 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-lg hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[250px]"
+            >
               Finalize & Save
             </button>
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default DesignerOutput;
