@@ -1,18 +1,21 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Download, Share, RotateCcw } from 'lucide-react';
+import { Download, Share, RotateCcw } from 'lucide-react';
+import BackButton from '@/components/BackButton';
+
 const FinalRendering = () => {
   const navigate = useNavigate();
+
   const handleStartOver = () => {
     navigate('/role-selection');
   };
-  return <div className="min-h-screen bg-holo-black flex flex-col font-inter">
+
+  return (
+    <div className="min-h-screen bg-holo-black flex flex-col font-inter">
       {/* Header with controls */}
       <div className="flex items-center justify-between p-6 bg-holo-black/90 backdrop-blur-sm z-10 bg-white">
-        <button onClick={() => navigate('/designer/output')} className="flex items-center gap-2 text-holo-white hover:text-holo-coral transition-colors duration-200">
-          <ArrowLeft size={20} className="bg-zinc-950 rounded-bl-lg " />
-          <span className="font-inter text-sm">Back to Project</span>
-        </button>
+        <BackButton to="/designer/output" />
         
         <h1 className="absolute top-6 items-center text-[20px] font-semibold text-holo-black z-10 text-center mx-[240px] px-[226px]">
           FINAL DESIGN RENDERING
@@ -37,7 +40,11 @@ const FinalRendering = () => {
       {/* Full-screen rendering */}
       <div className="flex-1 flex items-center justify-center p-6 bg-white">
         <div className="w-full h-full max-w-7xl max-h-full flex items-center justify-center">
-          <img alt="Final Design Rendering" src="/lovable-uploads/07498333-9bd4-4584-8fdd-16dd7d976a90.jpg" className="min-h-full rounded-lg shadow-2xl object-scale-down" />
+          <img 
+            alt="Final Design Rendering" 
+            src="/lovable-uploads/07498333-9bd4-4584-8fdd-16dd7d976a90.jpg" 
+            className="min-h-full rounded-lg shadow-2xl object-scale-down" 
+          />
         </div>
       </div>
 
@@ -47,6 +54,8 @@ const FinalRendering = () => {
           <span>Gym + Bar Configuration • 1.35t CO₂ Saved • Build Time: ~120 hrs</span>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default FinalRendering;
