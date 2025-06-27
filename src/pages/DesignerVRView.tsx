@@ -1,15 +1,11 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
 import { RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
-
 const DesignerVRView = () => {
   const navigate = useNavigate();
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
+  return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <BackButton to="/designer/output" />
       
       <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black">
@@ -60,7 +56,7 @@ const DesignerVRView = () => {
           </div>
 
           {/* VR Controls Panel - Right Side */}
-          <div className="bg-holo-white border border-holo-teal/20 rounded-lg p-6 shadow-lg w-96 py-[61px]">
+          <div className="bg-holo-white border border-holo-teal/20 rounded-lg p-6 shadow-lg w-96 py-[61px] bg-transparent my-[15px]">
             <h2 className="text-xl font-inter font-bold text-holo-black mb-4 flex items-center gap-3">
               <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-6 h-6" />
               VR Controls
@@ -84,16 +80,14 @@ const DesignerVRView = () => {
               </div>
             </div>
 
-            <div className="mt-6 p-4 bg-holo-teal/10 rounded-lg py-[14px]">
-              <p className="text-sm font-inter text-gray-700 text-center">
+            <div className="mt-6 p-4 bg-holo-teal/10 rounded-lg bg-slate-50 px-[26px] py-[17px] my-[7px]">
+              <p className="text-xs font-inter text-gray-700 text-center">
                 Use VR headset for immersive 3D viewing experience of your parametric structure design.
               </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default DesignerVRView;
