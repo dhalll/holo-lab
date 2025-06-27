@@ -27,7 +27,7 @@ const FinalRendering = () => {
             <Download size={16} />
             <span className="font-inter text-sm">Download</span>
           </button>
-          <button onClick={handleStartOver} className="flex items-center gap-2 px-4 py-2 bg-holo-white/20 text-holo-white rounded-lg hover:bg-holo-white/30 transition-all duration-200">
+          <button onClick={handleStartOver} className="flex items-center gap-2 px-4 py-2 bg-holo-white/20 text-holo-white rounded-lg hover:bg-holo-white/30 transition-all duration-200 bg-zinc-950 hover:bg-zinc-800">
             <RotateCcw size={16} />
             <span className="font-inter text-sm">Start Over</span>
           </button>
