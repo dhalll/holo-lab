@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
-import { Download, Package, Wrench, Clock, Leaf, Eye } from 'lucide-react';
+import { Download, Package, Wrench, Clock, Leaf, Eye, Edit, Save } from 'lucide-react';
 
 const DesignerOutput = () => {
   const navigate = useNavigate();
@@ -331,29 +330,21 @@ const DesignerOutput = () => {
           <div className="flex justify-center gap-8 mt-12 ml-16 mx-[400px] my-[15px]">
             <button
               onClick={() => window.history.back()}
-              className="px-12 py-4 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 transition-colors duration-200 min-w-[250px]"
+              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
             >
-              Go Back to Edit
+              <Edit size={24} />
             </button>
             <button
               onClick={handleFinalize}
-              className="px-12 py-4 bg-holo-coral text-holo-white rounded-[32px] font-inter font-semibold text-lg hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 min-w-[250px]"
+              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-semibold hover:shadow-lg hover:shadow-holo-coral/30 transition-all duration-300 flex items-center justify-center"
             >
-              Finalize & Save
+              <Save size={24} />
             </button>
             <button
               onClick={handleDownloadRendering}
-              className="px-8 py-4 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 transition-colors duration-200 flex items-center justify-center gap-2"
+              className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
             >
-              <Download className="text-holo-teal" size={20} />
-              <span>Analysis</span>
-            </button>
-            <button
-              onClick={handleViewInVR}
-              className="px-8 py-4 bg-holo-white border-2 border-holo-teal text-holo-black rounded-[32px] font-inter font-medium text-lg hover:bg-holo-teal/10 transition-colors duration-200 flex items-center justify-center gap-2"
-            >
-              <Eye className="text-holo-teal" size={20} />
-              <span>Controls</span>
+              <Download size={24} />
             </button>
           </div>
         </div>
