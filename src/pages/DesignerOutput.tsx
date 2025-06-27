@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
-import { Download, Package, Wrench, Clock, Leaf, Eye, Save, Headphones } from 'lucide-react';
+import { Download, Package, Wrench, Clock, Leaf, Eye, Save } from 'lucide-react';
 const DesignerOutput = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('materials');
@@ -306,7 +306,7 @@ const DesignerOutput = () => {
               className="w-16 h-16 bg-holo-coral text-holo-white rounded-full font-inter font-medium hover:bg-holo-coral/80 transition-colors duration-200 flex items-center justify-center"
               title="View in VR"
             >
-              <Headphones size={24} />
+              <img src="/lovable-uploads/d0f60bab-a377-402c-8b80-2ee218ce6789.png" alt="VR Goggles" className="w-6 h-6" />
             </button>
             <button 
               onClick={handleFinalize} 
