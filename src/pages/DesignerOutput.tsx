@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
-import { Download, Package, Wrench, Clock, Leaf } from 'lucide-react';
+import { Download, Package, Wrench, Clock, Leaf, Vr } from 'lucide-react';
 const DesignerOutput = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('materials');
@@ -73,6 +73,14 @@ const DesignerOutput = () => {
   }];
   const handleFinalize = () => {
     navigate('/designer/final-rendering');
+  };
+  const handleDownloadRendering = () => {
+    // Navigate to download rendering functionality
+    console.log('Download rendering clicked');
+  };
+  const handleViewInVR = () => {
+    // Navigate to VR view functionality
+    console.log('View in VR clicked');
   };
   return <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative">
       <ProgressBar currentStep={4} stepLabels={['Experience', 'Location', 'Customize', 'Finalize']} />
@@ -162,6 +170,28 @@ const DesignerOutput = () => {
                     <Leaf className="text-holo-coral" size={12} />
                     <div><span className="font-bold text-holo-coral">CO₂ Saved:</span> <span className="font-bold text-holo-coral text-sm">1.35 t</span></div>
                   </div>
+                </div>
+              </div>
+
+              {/* Circular Action Buttons */}
+              <div className="flex justify-center gap-4 py-4">
+                <div className="flex flex-col items-center">
+                  <button
+                    onClick={handleDownloadRendering}
+                    className="w-16 h-16 bg-holo-white border-2 border-holo-teal/30 rounded-full flex items-center justify-center hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 shadow-sm"
+                  >
+                    <Download className="text-holo-teal" size={20} />
+                  </button>
+                  <span className="text-xs font-inter text-gray-600 mt-2">Analysis</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <button
+                    onClick={handleViewInVR}
+                    className="w-16 h-16 bg-holo-white border-2 border-holo-teal/30 rounded-full flex items-center justify-center hover:bg-holo-teal/10 hover:border-holo-teal transition-all duration-200 shadow-sm"
+                  >
+                    <Vr className="text-holo-teal" size={20} />
+                  </button>
+                  <span className="text-xs font-inter text-gray-600 mt-2">Controls</span>
                 </div>
               </div>
 
