@@ -4,7 +4,7 @@ import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface BuildingMeshProps {
-  onBuildingClick?: (buildingName: string, mesh?: THREE.Mesh) => void;
+  onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
   modelPath?: string;
 }
 
@@ -14,8 +14,13 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
   try {
     const { scene } = useGLTF(modelPath);
     const meshRef = useRef<THREE.Group>(null);
-    const [hoveredBuilding, setHoveredBuilding] = useState<string | null>(null);
+    const [hoveredMesh, setHoveredMesh] = useState<THREE.Mesh | null>(null);
     const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
+
+    // Color constants
+    const DEFAULT_COLOR = new THREE.Color(0xcccccc); // Light grey
+    const SELECTED_COLOR = new THREE.Color(0xF57B4E); // Orange
+    const HOVER_EMISSIVE = new THREE.Color(0xF57B4E); // Orange emissive for hover
 
     useEffect(() => {
       if (scene && meshRef.current) {
@@ -25,30 +30,19 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
         // Clone the scene and add to our mesh
         const clonedScene = scene.clone();
         
-        // Filter out green planes and black blocks
+        // Set up all meshes with default properties
         clonedScene.traverse((child) => {
           if (child instanceof THREE.Mesh) {
-            const material = child.material as THREE.Material;
-            
-            // Check if it's a green plane or black block and remove it
-            if (material instanceof THREE.MeshLambertMaterial || material instanceof THREE.MeshBasicMaterial) {
-              const color = material.color;
-              // Remove green planes (green color check)
-              if (color.r < 0.2 && color.g > 0.4 && color.b < 0.2) {
-                child.visible = false;
-                return;
-              }
-              // Remove black blocks (very dark colors)
-              if (color.r < 0.1 && color.g < 0.1 && color.b < 0.1) {
-                child.visible = false;
-                return;
-              }
-            }
-            
-            // Set up building interactions for visible meshes
+            // Store original material for reference
             child.userData.originalMaterial = child.material;
             child.userData.isBuilding = true;
             child.userData.buildingName = child.name || `mesh_${Math.random().toString(36).substr(2, 9)}`;
+            
+            // Create new material with default color
+            const newMaterial = child.material.clone();
+            newMaterial.color = DEFAULT_COLOR.clone();
+            newMaterial.emissive = new THREE.Color(0x000000); // No emissive initially
+            child.material = newMaterial;
           }
         });
         
@@ -56,26 +50,79 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
       }
     }, [scene]);
 
+    // Helper function to reset mesh to default state
+    const resetMeshToDefault = (mesh: THREE.Mesh) => {
+      if (mesh && mesh.material) {
+        mesh.material.color = DEFAULT_COLOR.clone();
+        mesh.material.emissive = new THREE.Color(0x000000);
+      }
+    };
+
+    // Helper function to set mesh to selected state
+    const setMeshToSelected = (mesh: THREE.Mesh) => {
+      if (mesh && mesh.material) {
+        mesh.material.color = SELECTED_COLOR.clone();
+        mesh.material.emissive = new THREE.Color(0x000000); // Remove any emissive
+      }
+    };
+
+    // Helper function to set mesh to hover state
+    const setMeshToHover = (mesh: THREE.Mesh) => {
+      if (mesh && mesh.material && mesh !== selectedMesh) {
+        mesh.material.emissive = HOVER_EMISSIVE.clone();
+      }
+    };
+
     const handleClick = (event: any) => {
       event.stopPropagation();
       const intersected = event.intersections[0];
-      if (intersected && intersected.object.userData.isBuilding && onBuildingClick) {
+      
+      if (intersected && intersected.object.userData.isBuilding) {
         const clickedMesh = intersected.object as THREE.Mesh;
         const buildingName = intersected.object.userData.buildingName;
         
-        // Update the selected mesh state without visual highlighting
-        setSelectedMesh(clickedMesh);
-        console.log('Building clicked:', buildingName);
-        onBuildingClick(buildingName, clickedMesh);
+        if (selectedMesh === clickedMesh) {
+          // Clicking the same mesh - deselect it
+          resetMeshToDefault(clickedMesh);
+          setSelectedMesh(null);
+          console.log('Building deselected:', buildingName);
+          onBuildingClick?.(null, null);
+        } else {
+          // Clicking a different mesh - select it
+          // First reset the previously selected mesh
+          if (selectedMesh) {
+            resetMeshToDefault(selectedMesh);
+          }
+          
+          // Set the new mesh as selected
+          setMeshToSelected(clickedMesh);
+          setSelectedMesh(clickedMesh);
+          console.log('Building selected:', buildingName);
+          onBuildingClick?.(buildingName, clickedMesh);
+        }
+      } else {
+        // Clicked on background - deselect any selected mesh
+        if (selectedMesh) {
+          resetMeshToDefault(selectedMesh);
+          setSelectedMesh(null);
+          console.log('Background clicked - deselecting');
+          onBuildingClick?.(null, null);
+        }
       }
     };
 
     const handlePointerOver = (event: any) => {
       event.stopPropagation();
       const intersected = event.intersections[0];
+      
       if (intersected && intersected.object.userData.isBuilding) {
-        const buildingName = intersected.object.userData.buildingName;
-        setHoveredBuilding(buildingName);
+        const hoveredMeshObj = intersected.object as THREE.Mesh;
+        
+        if (hoveredMeshObj !== selectedMesh) {
+          setMeshToHover(hoveredMeshObj);
+          setHoveredMesh(hoveredMeshObj);
+        }
+        
         document.body.style.cursor = 'pointer';
       }
     };
@@ -83,8 +130,16 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
     const handlePointerOut = (event: any) => {
       event.stopPropagation();
       const intersected = event.intersections[0];
+      
       if (intersected && intersected.object.userData.isBuilding) {
-        setHoveredBuilding(null);
+        const mesh = intersected.object as THREE.Mesh;
+        
+        // Only reset to default if it's not the selected mesh
+        if (mesh !== selectedMesh) {
+          resetMeshToDefault(mesh);
+        }
+        
+        setHoveredMesh(null);
         document.body.style.cursor = 'default';
       }
     };
@@ -100,7 +155,7 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({ onBuildingClick, modelPath 
       />
     );
   } catch (error) {
-    console.warn('Failed to load GLTF model, using fallback buildings:', error);
+    console.warn('Failed to load GLTF model:', error);
     return null;
   }
 };

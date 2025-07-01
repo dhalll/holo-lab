@@ -34,7 +34,7 @@ const DesignerLocationSelect = () => {
     setShowAdvanced(true);
   };
 
-  const handleBuildingClick = (buildingName: string, mesh?: THREE.Mesh) => {
+  const handleBuildingClick = (buildingName: string | null, mesh?: THREE.Mesh | null) => {
     console.log('3D Building selected:', buildingName);
     setSelectedBuilding(buildingName);
     setSelectedMesh(mesh || null);
