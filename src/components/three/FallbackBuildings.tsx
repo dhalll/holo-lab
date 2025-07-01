@@ -63,17 +63,6 @@ const FallbackBuildings: React.FC<FallbackBuildingsProps> = ({ onBuildingClick }
   };
 
   useEffect(() => {
-    // Create fallback buildings when component mounts
-    const buildings = [
-      { name: 'building_1', position: [-2, 0, -2], size: [1, 2, 1] },
-      { name: 'building_2', position: [0, 0, -2], size: [1.5, 3, 1] },
-      { name: 'building_3', position: [2, 0, -2], size: [1, 1.5, 1] },
-      { name: 'building_4', position: [-2, 0, 0], size: [1, 2.5, 1] },
-      { name: 'building_5', position: [2, 0, 0], size: [1.2, 1.8, 1] },
-      { name: 'building_6', position: [-1, 0, 2], size: [1, 3.5, 1] },
-      { name: 'building_7', position: [1, 0, 2], size: [1.3, 2.2, 1] },
-    ];
-
     return () => {
       document.body.style.cursor = 'default';
     };
@@ -106,13 +95,7 @@ const FallbackBuildings: React.FC<FallbackBuildingsProps> = ({ onBuildingClick }
 
   return (
     <group position={[0, -2, 0]}>
-      {/* Ground plane */}
-      <mesh position={[0, -0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[20, 20]} />
-        <meshLambertMaterial color={0x90EE90} />
-      </mesh>
-      
-      {/* Buildings */}
+      {/* Buildings only - removed ground plane */}
       <Building name="building_1" position={[-2, 0, -2]} size={[1, 2, 1]} />
       <Building name="building_2" position={[0, 0, -2]} size={[1.5, 3, 1]} />
       <Building name="building_3" position={[2, 0, -2]} size={[1, 1.5, 1]} />

@@ -1,7 +1,6 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import BuildingMesh from './BuildingMesh';
-import FallbackBuildings from './FallbackBuildings';
 import * as THREE from 'three';
 
 interface SceneWithFallbackProps {
@@ -10,21 +9,8 @@ interface SceneWithFallbackProps {
 }
 
 const SceneWithFallback: React.FC<SceneWithFallbackProps> = ({ onBuildingClick, modelPath }) => {
-  const [useFallback, setUseFallback] = useState(false);
-
-  const handleModelError = () => {
-    setUseFallback(true);
-  };
-
-  if (useFallback) {
-    return <FallbackBuildings onBuildingClick={onBuildingClick} />;
-  }
-
   return (
-    <>
-      <BuildingMesh onBuildingClick={onBuildingClick} modelPath={modelPath} />
-      <FallbackBuildings onBuildingClick={onBuildingClick} />
-    </>
+    <BuildingMesh onBuildingClick={onBuildingClick} modelPath={modelPath} />
   );
 };
 
