@@ -22,21 +22,24 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
   const [isolatedMesh, setIsolatedMesh] = useState<THREE.Mesh | null>(null);
   const meshRef = useRef<THREE.Group>(null);
-  const { camera, controls } = useThree();
+  const { camera, controls, scene } = useThree();
   
   try {
-    const { scene } = useGLTF(modelPath);
+    const { scene: gltfScene } = useGLTF(modelPath);
 
     useEffect(() => {
-      if (scene && meshRef.current) {
+      if (gltfScene && meshRef.current) {
         // Clear existing children
         meshRef.current.clear();
         
         // Clone the scene and add to our mesh
-        const clonedScene = scene.clone();
+        const clonedScene = gltfScene.clone();
         
         // Handle mesh isolation logic
         if (isolatedMeshId) {
+          // Set subtle holo blue background
+          scene.background = new THREE.Color('#A5C1C8');
+          
           let targetMesh: THREE.Mesh | null = null;
           
           // Traverse all meshes to find the target and hide others
@@ -122,7 +125,8 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
             }, 100);
           }
         } else {
-          // Normal behavior - set up all meshes with default properties
+          // Normal behavior - reset background and set up all meshes with default properties
+          scene.background = null;
           clonedScene.traverse((child) => {
             if (child instanceof THREE.Mesh) {
               MaterialManager.initializeMesh(child);
@@ -132,7 +136,7 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
         
         meshRef.current.add(clonedScene);
       }
-    }, [scene, isolatedMeshId, camera, controls]);
+    }, [gltfScene, isolatedMeshId, camera, controls, scene]);
 
     const handleMeshSelected = (mesh: THREE.Mesh | null) => {
       if (!isolatedMeshId) { // Only update selection if not in isolation mode
