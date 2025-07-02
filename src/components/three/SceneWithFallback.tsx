@@ -8,12 +8,12 @@ import FallbackBuildings from './FallbackBuildings';
 interface SceneWithFallbackProps {
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
   modelPath?: string;
-  isolatedMeshId?: string | null;
+  isolatedMeshId?: string | null; // New prop for mesh isolation
 }
 
 const SceneWithFallback: React.FC<SceneWithFallbackProps> = ({ 
   onBuildingClick, 
-  modelPath = "/lovable-uploads/scene.gltf", // Use the file without spaces
+  modelPath = "/lovable-uploads/scene (2).gltf",
   isolatedMeshId = null
 }) => {
   return (
