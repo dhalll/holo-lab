@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
@@ -21,7 +21,12 @@ interface ChatMessage {
 
 const DesignerCustomization = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showMaterialsDatabase, setShowMaterialsDatabase] = useState(false);
+  
+  // Get the selected building ID from navigation state
+  const selectedBuildingId = location.state?.selectedBuildingId || null;
+  
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       type: 'bot',
@@ -228,6 +233,7 @@ const DesignerCustomization = () => {
                 <ThreeScene 
                   className="w-full h-full" 
                   modelPath="/lovable-uploads/scene (2).gltf"
+                  isolatedMeshId={selectedBuildingId}
                 />
               </WorkflowWindow>
             </div>

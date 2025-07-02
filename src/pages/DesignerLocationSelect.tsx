@@ -21,7 +21,12 @@ const DesignerLocationSelect = () => {
   const [advancedClicked, setAdvancedClicked] = useState(false);
 
   const handleProceed = () => {
-    navigate('/designer/customization');
+    // Pass the selectedBuilding ID via navigation state
+    navigate('/designer/customization', { 
+      state: { 
+        selectedBuildingId: selectedBuilding 
+      } 
+    });
   };
 
   const handleAnalysisClick = () => {
@@ -78,7 +83,11 @@ const DesignerLocationSelect = () => {
             {/* 3D Map Window */}
             <div className="mb-6">
               <WorkflowWindow className="w-[600px] h-[600px]">
-                <ThreeScene className="w-full h-full" onBuildingClick={handleBuildingClick} modelPath="/lovable-uploads/scene (2).gltf" />
+                <ThreeScene 
+                  className="w-full h-full" 
+                  onBuildingClick={handleBuildingClick} 
+                  modelPath="/lovable-uploads/scene (2).gltf" 
+                />
               </WorkflowWindow>
             </div>
             
