@@ -10,14 +10,14 @@ interface ThreeSceneProps {
   className?: string;
   onBuildingClick?: (buildingName: string, mesh?: THREE.Mesh) => void;
   modelPath?: string;
-  isolatedMeshId?: string | null; // New prop for mesh isolation
+  isolatedMeshId?: string | null;
 }
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({ 
   className = "", 
   onBuildingClick, 
-  modelPath = "/lovable-uploads/scene (2).gltf",
-  isolatedMeshId = null // Default to null for normal behavior
+  modelPath = "/lovable-uploads/scene.gltf", // Use the file without spaces
+  isolatedMeshId = null
 }) => {
   console.log('ThreeScene rendering with props:', { 
     className, 

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -86,7 +85,7 @@ const DesignerLocationSelect = () => {
                 <ThreeScene 
                   className="w-full h-full" 
                   onBuildingClick={handleBuildingClick} 
-                  modelPath="/lovable-uploads/scene (2).gltf" 
+                  modelPath="/lovable-uploads/scene.gltf"
                 />
               </WorkflowWindow>
             </div>
