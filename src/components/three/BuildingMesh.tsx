@@ -52,7 +52,7 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
           onBuildingClick={onBuildingClick}
           onMeshSelected={handleMeshSelected}
         >
-          {/* The cloned scene will be added here via useEffect */}
+          <group ref={meshRef} />
         </MeshInteractionHandler>
         <CameraZoomController selectedMesh={selectedMesh} />
       </>

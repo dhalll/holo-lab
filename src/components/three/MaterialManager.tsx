@@ -4,7 +4,7 @@ import * as THREE from 'three';
 export class MaterialManager {
   private static DEFAULT_COLOR = new THREE.Color(0xcccccc); // Light grey
   private static SELECTED_COLOR = new THREE.Color(0xF57B4E); // Orange
-  private static HOVER_EMISSIVE = new THREE.Color(0xF57B4E); // Orange emissive for hover
+  private static HOVER_EMISSIVE = new THREE.Color(0x111111); // Subtle dark glow for hover
 
   static resetMeshToDefault(mesh: THREE.Mesh) {
     if (mesh && this.isMeshMaterial(mesh.material)) {

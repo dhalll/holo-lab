@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import * as THREE from 'three';
 import { MaterialManager } from './MaterialManager';
 
@@ -18,6 +18,25 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
 }) => {
   const [hoveredMesh, setHoveredMesh] = useState<THREE.Mesh | null>(null);
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
+
+  // Clear hover state when mouse leaves the canvas entirely
+  useEffect(() => {
+    const handleMouseLeave = () => {
+      if (hoveredMesh && hoveredMesh !== selectedMesh) {
+        MaterialManager.resetMeshToDefault(hoveredMesh);
+        setHoveredMesh(null);
+      }
+      document.body.style.cursor = 'default';
+    };
+
+    const canvas = document.querySelector('canvas');
+    if (canvas) {
+      canvas.addEventListener('mouseleave', handleMouseLeave);
+      return () => {
+        canvas.removeEventListener('mouseleave', handleMouseLeave);
+      };
+    }
+  }, [hoveredMesh, selectedMesh]);
 
   const handleClick = useCallback((event: any) => {
     event.stopPropagation();
@@ -65,14 +84,27 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
     const intersected = event.intersections[0];
     
     if (intersected && intersected.object.userData.isBuilding) {
-      const hoveredMeshObj = intersected.object as THREE.Mesh;
+      const newHoveredMesh = intersected.object as THREE.Mesh;
       
-      if (hoveredMeshObj !== selectedMesh && hoveredMeshObj !== hoveredMesh) {
-        MaterialManager.setMeshToHover(hoveredMeshObj);
-        setHoveredMesh(hoveredMeshObj);
+      // Clear previous hover state if different mesh
+      if (hoveredMesh && hoveredMesh !== newHoveredMesh && hoveredMesh !== selectedMesh) {
+        MaterialManager.resetMeshToDefault(hoveredMesh);
+      }
+      
+      // Set hover state only if not selected
+      if (newHoveredMesh !== selectedMesh) {
+        MaterialManager.setMeshToHover(newHoveredMesh);
+        setHoveredMesh(newHoveredMesh);
       }
       
       document.body.style.cursor = 'pointer';
+    } else {
+      // Mouse is over background - clear any hover state
+      if (hoveredMesh && hoveredMesh !== selectedMesh) {
+        MaterialManager.resetMeshToDefault(hoveredMesh);
+        setHoveredMesh(null);
+      }
+      document.body.style.cursor = 'default';
     }
   }, [selectedMesh, hoveredMesh]);
 
@@ -83,14 +115,15 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
     if (intersected && intersected.object.userData.isBuilding) {
       const mesh = intersected.object as THREE.Mesh;
       
-      // Only reset to default if it's not the selected mesh
+      // Only reset to default if it's not the selected mesh and it's the currently hovered mesh
       if (mesh !== selectedMesh && mesh === hoveredMesh) {
         MaterialManager.resetMeshToDefault(mesh);
         setHoveredMesh(null);
       }
-      
-      document.body.style.cursor = 'default';
     }
+    
+    // Always reset cursor when pointer leaves any mesh
+    document.body.style.cursor = 'default';
   }, [selectedMesh, hoveredMesh]);
 
   return (
