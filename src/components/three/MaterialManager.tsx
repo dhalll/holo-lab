@@ -41,7 +41,7 @@ export class MaterialManager {
     }
   }
 
-  private static isMeshMaterial(material: THREE.Material | THREE.Material[]): material is THREE.MeshStandardMaterial | THREE.MeshBasicMaterial | THREE.MeshLambertMaterial {
+  private static isMeshMaterial(material: THREE.Material | THREE.Material[]): material is THREE.MeshStandardMaterial | THREE.MeshLambertMaterial {
     if (Array.isArray(material)) return false;
     return 'color' in material && 'emissive' in material;
   }

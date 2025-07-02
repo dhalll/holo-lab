@@ -19,7 +19,7 @@ const CameraZoomController: React.FC<CameraZoomControllerProps> = ({ selectedMes
       
       // Calculate the distance needed to fit the object in view
       const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = camera.fov * (Math.PI / 180);
+      const fov = (camera as THREE.PerspectiveCamera).fov * (Math.PI / 180);
       let cameraDistance = Math.abs(maxDim / Math.sin(fov / 2)) * 1.5; // Add some padding
       
       // Ensure minimum distance
