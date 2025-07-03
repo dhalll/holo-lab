@@ -24,7 +24,7 @@ const LoadingFallback = () => (
 
 const SceneWithFallback: React.FC<SceneWithFallbackProps> = ({ 
   onBuildingClick, 
-  modelPath = "/lovable-uploads/scene (2).gltf",
+  modelPath = "/lovable-uploads/scene(2).gltf",
   isolatedMeshId = null
 }) => {
   console.log('SceneWithFallback rendering with modelPath:', modelPath);
