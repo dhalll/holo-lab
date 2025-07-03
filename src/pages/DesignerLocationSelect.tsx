@@ -86,7 +86,7 @@ const DesignerLocationSelect = () => {
                 <ThreeScene 
                   className="w-full h-full" 
                   onBuildingClick={handleBuildingClick} 
-                  modelPath="/lovable-uploads/scene (2).gltf" 
+                  modelPath="/public/lovable-uploads/scene (2).gltf" 
                 />
               </WorkflowWindow>
             </div>
