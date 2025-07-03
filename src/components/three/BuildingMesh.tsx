@@ -15,7 +15,7 @@ interface BuildingMeshProps {
 
 const BuildingMesh: React.FC<BuildingMeshProps> = ({ 
   onBuildingClick, 
-  modelPath = "/lovable-uploads/scene (2).gltf",
+  modelPath = "/lovable-uploads/scene(2).gltf",
   isolatedMeshId = null
 }) => {
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
