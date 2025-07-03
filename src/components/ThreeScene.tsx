@@ -16,7 +16,7 @@ interface ThreeSceneProps {
 const ThreeScene: React.FC<ThreeSceneProps> = ({ 
   className = "", 
   onBuildingClick, 
-  modelPath = "/lovable-uploads/scene (2).gltf",
+  modelPath = "/lovable-uploads/scene(2).gltf",
   isolatedMeshId = null
 }) => {
   console.log('ThreeScene rendering with props:', { 
