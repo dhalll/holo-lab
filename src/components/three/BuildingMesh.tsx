@@ -6,7 +6,6 @@ import * as THREE from 'three';
 import { MaterialManager } from './MaterialManager';
 import MeshInteractionHandler from './MeshInteractionHandler';
 import CameraZoomController from './CameraZoomController';
-import FallbackBuildings from './FallbackBuildings';
 
 interface BuildingMeshProps {
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
@@ -19,31 +18,18 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
   modelPath = "/lovable-uploads/scene (2).gltf",
   isolatedMeshId = null
 }) => {
-  const [modelError, setModelError] = useState(false);
-  const [modelLoaded, setModelLoaded] = useState(false);
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
   const [isolatedMesh, setIsolatedMesh] = useState<THREE.Mesh | null>(null);
   const meshRef = useRef<THREE.Group>(null);
   const { camera, controls, scene } = useThree();
   
-  // Try to load GLTF with error handling
-  let gltfScene = null;
-  let gltfError = null;
+  console.log('BuildingMesh loading model:', modelPath);
   
-  try {
-    const gltfResult = useGLTF(modelPath);
-    gltfScene = gltfResult.scene;
-    console.log('GLTF loaded successfully:', modelPath);
-  } catch (error) {
-    console.warn('Failed to load GLTF model:', error);
-    gltfError = error;
-    setModelError(true);
-  }
+  const { scene: gltfScene } = useGLTF(modelPath);
 
   useEffect(() => {
-    if (gltfScene && meshRef.current && !modelError) {
+    if (gltfScene && meshRef.current) {
       console.log('Setting up GLTF scene');
-      setModelLoaded(true);
       
       // Clear existing children
       meshRef.current.clear();
@@ -151,29 +137,14 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
       }
       
       meshRef.current.add(clonedScene);
-    } else if (gltfError || modelError) {
-      console.log('Using fallback buildings due to GLTF load error');
-      setModelError(true);
-      setModelLoaded(false);
     }
-  }, [gltfScene, isolatedMeshId, camera, controls, scene, modelError]);
+  }, [gltfScene, isolatedMeshId, camera, controls, scene]);
 
   const handleMeshSelected = (mesh: THREE.Mesh | null) => {
     if (!isolatedMeshId) {
       setSelectedMesh(mesh);
     }
   };
-
-  // If model failed to load, use fallback buildings
-  if (modelError || (!modelLoaded && !gltfScene)) {
-    console.log('Rendering fallback buildings');
-    return (
-      <>
-        <FallbackBuildings onBuildingClick={onBuildingClick} />
-        <CameraZoomController selectedMesh={selectedMesh} />
-      </>
-    );
-  }
 
   // If we're in isolation mode, don't render interactive components
   if (isolatedMeshId) {

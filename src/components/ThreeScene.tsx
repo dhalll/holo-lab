@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -26,32 +26,22 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
     isolatedMeshId 
   });
 
+  // Memoize the canvas configuration to prevent unnecessary re-renders
+  const canvasConfig = useMemo(() => ({
+    camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
+    onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
+      console.log('Canvas created successfully');
+      gl.setClearColor(0x000000, 0); // Transparent background
+    }
+  }), []);
+
   useEffect(() => {
     console.log('ThreeScene mounted with modelPath:', modelPath);
-    
-    // Test if the model file exists
-    fetch(modelPath)
-      .then(response => {
-        if (!response.ok) {
-          console.warn(`Model file not found at ${modelPath}, status: ${response.status}`);
-        } else {
-          console.log(`Model file found at ${modelPath}`);
-        }
-      })
-      .catch(error => {
-        console.error(`Error checking model file at ${modelPath}:`, error);
-      });
   }, [modelPath]);
 
   return (
     <div className={className}>
-      <Canvas 
-        camera={{ position: [5, 5, 5], fov: 75 }}
-        onCreated={({ gl }) => {
-          console.log('Canvas created successfully');
-          gl.setClearColor(0x000000, 0); // Transparent background
-        }}
-      >
+      <Canvas {...canvasConfig}>
         <CameraController />
         <ambientLight intensity={0.6} />
         <directionalLight position={[10, 10, 5]} intensity={1} />

@@ -1,9 +1,8 @@
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 import BuildingMesh from './BuildingMesh';
-import FallbackBuildings from './FallbackBuildings';
 
 interface SceneWithFallbackProps {
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
@@ -23,23 +22,12 @@ const LoadingFallback = () => (
   </Text>
 );
 
-const ErrorFallback: React.FC<SceneWithFallbackProps> = ({ 
-  onBuildingClick 
-}) => {
-  console.log('Rendering error fallback with simple buildings');
-  return <FallbackBuildings onBuildingClick={onBuildingClick} />;
-};
-
 const SceneWithFallback: React.FC<SceneWithFallbackProps> = ({ 
   onBuildingClick, 
   modelPath = "/lovable-uploads/scene (2).gltf",
   isolatedMeshId = null
 }) => {
-  const [hasError, setHasError] = useState(false);
-
-  if (hasError) {
-    return <ErrorFallback onBuildingClick={onBuildingClick} />;
-  }
+  console.log('SceneWithFallback rendering with modelPath:', modelPath);
 
   return (
     <Suspense fallback={<LoadingFallback />}>
