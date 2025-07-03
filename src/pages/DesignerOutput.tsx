@@ -62,21 +62,16 @@ const DesignerOutput = () => {
                   </div>
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <div className="w-64 h-64 bg-gradient-to-r from-holo-coral/30 to-holo-teal/30 rounded-lg mx-auto mb-4 flex items-center justify-center border border-holo-coral/50 relative">
-                        <div className="grid grid-cols-4 gap-3">
-                          {Array.from({ length: 16 }, (_, i) => (
-                            <div key={i} className="w-3 h-12 bg-holo-coral/60 rounded-full"></div>
-                          ))}
-                        </div>
-                        <div className="absolute top-2 left-2 w-4 h-4 bg-holo-teal rounded-full"></div>
-                        <div className="absolute top-2 right-2 w-4 h-4 bg-holo-teal rounded-full"></div>
-                        <div className="absolute bottom-2 left-2 w-4 h-4 bg-holo-teal rounded-full"></div>
-                        <div className="absolute bottom-2 right-2 w-4 h-4 bg-holo-teal rounded-full"></div>
-                      </div>
-                      <p className="font-inter text-lg">Parametric Structure Model</p>
-                      <p className="font-inter text-sm text-gray-300 mt-1">Gym + Bar Configuration</p>
-                    </div>
+                    <video 
+                      className="w-full h-full object-cover rounded-lg"
+                      controls
+                      autoPlay
+                      muted
+                      loop
+                    >
+                      <source src="/lovable-uploads/structure flythrough.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
 
                     <div className="absolute top-4 right-4 space-y-2">
                       <button className="p-2 bg-holo-white/20 text-white rounded-lg hover:bg-holo-white/30 transition-colors duration-200">
