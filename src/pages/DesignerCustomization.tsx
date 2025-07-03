@@ -232,7 +232,7 @@ const DesignerCustomization = () => {
               <WorkflowWindow className="w-[600px] h-[600px]">
                 <ThreeScene 
                   className="w-full h-full" 
-                  modelPath="/lovable-uploads/scene (2).gltf"
+                  modelPath="/lovable-uploads/scene(2).gltf"
                   isolatedMeshId={selectedBuildingId}
                 />
               </WorkflowWindow>
