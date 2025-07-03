@@ -69,7 +69,7 @@ const DesignerOutput = () => {
                       muted
                       loop
                     >
-                      <source src="/lovable-uploads/structure flythrough.mp4" type="video/mp4" />
+                      <source src="/lovable-uploads/structureflythrough.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
 
