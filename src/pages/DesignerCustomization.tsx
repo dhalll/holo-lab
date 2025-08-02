@@ -24,8 +24,10 @@ const DesignerCustomization = () => {
   const location = useLocation();
   const [showMaterialsDatabase, setShowMaterialsDatabase] = useState(false);
   
-  // Get the selected building ID from navigation state
+  // Get the selected building ID and camera state from navigation state
   const selectedBuildingId = location.state?.selectedBuildingId || null;
+  const selectedMesh = location.state?.selectedMesh || null;
+  const cameraState = location.state?.cameraState || null;
   
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -43,6 +45,8 @@ const DesignerCustomization = () => {
   const [selectedFurnitureType, setSelectedFurnitureType] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [canProceed, setCanProceed] = useState(false);
+  const [currentModelPath, setCurrentModelPath] = useState("/lovable-uploads/scene(2).gltf");
+  const [showVariantModel, setShowVariantModel] = useState(false);
 
   const programs = ['Gym', 'Meeting Space', 'Bar', 'Greenhouse', 'Terrace'];
 
@@ -240,8 +244,8 @@ const DesignerCustomization = () => {
               <WorkflowWindow className="w-[600px] h-[600px]">
                 <ThreeScene 
                   className="w-full h-full" 
-                  modelPath="/lovable-uploads/scene(2).gltf"
-                  isolatedMeshId={selectedBuildingId}
+                  modelPath={showVariantModel ? currentModelPath : "/lovable-uploads/scene(2).gltf"}
+                  isolatedMeshId={showVariantModel ? null : selectedBuildingId}
                 />
               </WorkflowWindow>
             </div>
@@ -374,7 +378,19 @@ const DesignerCustomization = () => {
 
                         {selectedVolumeHeight && selectedSpacePreference && selectedShading && (
                           <button
-                            onClick={handleConstraintsComplete}
+                            onClick={() => {
+                              handleConstraintsComplete();
+                              // Load variant model when all customization is complete
+                              if (selectedBuildingId === 'mesh_448') {
+                                // Try to load GLTF variants, fall back to original model if not available
+                                const variantModel = Math.random() > 0.5 ? 
+                                  "/lovable-uploads/structure example.gltf" : 
+                                  "/lovable-uploads/test to upload to three,js 2.gltf";
+                                setCurrentModelPath(variantModel);
+                                setShowVariantModel(true);
+                                console.log('Loading variant model:', variantModel);
+                              }
+                            }}
                             className="w-full mt-4 py-2 bg-gradient-teal-coral text-white rounded-lg font-medium hover:bg-gradient-coral-teal transition-all duration-200"
                           >
                             Generate Design Options

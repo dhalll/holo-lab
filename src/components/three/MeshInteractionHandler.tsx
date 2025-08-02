@@ -52,9 +52,8 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
       const isAllowedMesh = allowedMeshes.length === 0 || allowedMeshes.includes(buildingName);
       
       if (!isAllowedMesh) {
-        // Don't allow selection of non-allowed meshes - just call the callback without visual changes
+        // Don't allow selection of non-allowed meshes - don't turn orange and don't call callback
         console.log('Mesh not allowed for selection:', buildingName);
-        onBuildingClick?.(buildingName, clickedMesh);
         return;
       }
       
@@ -97,6 +96,16 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
     
     if (intersected && intersected.object.userData.isBuilding) {
       const newHoveredMesh = intersected.object as THREE.Mesh;
+      const buildingName = intersected.object.userData.buildingName;
+      
+      // Check if this mesh is allowed to have hover effects
+      const isAllowedMesh = allowedMeshes.length === 0 || allowedMeshes.includes(buildingName);
+      
+      if (!isAllowedMesh) {
+        // Don't show hover effects for non-allowed meshes
+        document.body.style.cursor = 'default';
+        return;
+      }
       
       // Clear previous hover state if different mesh
       if (hoveredMesh && hoveredMesh !== newHoveredMesh && hoveredMesh !== selectedMesh) {
@@ -118,7 +127,7 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
       }
       document.body.style.cursor = 'default';
     }
-  }, [selectedMesh, hoveredMesh]);
+  }, [selectedMesh, hoveredMesh, allowedMeshes]);
 
   const handlePointerOut = useCallback((event: any) => {
     event.stopPropagation();
