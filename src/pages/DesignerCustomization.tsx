@@ -46,6 +46,14 @@ const DesignerCustomization = () => {
 
   const programs = ['Gym', 'Meeting Space', 'Bar', 'Greenhouse', 'Terrace'];
 
+  // Camera auto-adjustment effect when component mounts with selectedBuildingId
+  useEffect(() => {
+    if (selectedBuildingId) {
+      console.log('DesignerCustomization loaded with building:', selectedBuildingId);
+      // The ThreeScene will automatically handle camera positioning through isolatedMeshId prop
+    }
+  }, [selectedBuildingId]);
+
   const handleProgramSelect = (program: string) => {
     if (selectedPrograms.includes(program)) {
       setSelectedPrograms(selectedPrograms.filter(p => p !== program));
@@ -227,7 +235,7 @@ const DesignerCustomization = () => {
         {/* Centered Map */}
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center">
-            {/* 3D Map Window */}
+            {/* 3D Map Window - Isolated view with camera auto-adjustment */}
             <div className="mb-6">
               <WorkflowWindow className="w-[600px] h-[600px]">
                 <ThreeScene 
@@ -424,112 +432,123 @@ const DesignerCustomization = () => {
                           >
                             <div className="flex items-center gap-3">
                               <img 
-                                src="/lovable-uploads/9314f380-b21c-4c51-a78a-f6dbb787aec5.png" 
+                                src="/lovable-uploads/5ba08a5c-46f4-46b8-8205-3607d9f75e28.png" 
                                 alt="Small Pipe Furniture" 
                                 className="w-12 h-12 object-cover rounded"
                               />
                               <div>
                                 <p className="text-sm font-medium text-holo-black">Small Pipe Furniture</p>
-                                <p className="text-xs text-gray-600">Compact modular furniture pieces</p>
+                                <p className="text-xs text-gray-600">Compact and modular furniture pieces</p>
                               </div>
                             </div>
                           </div>
 
-                          {/* Any Stock Option */}
-                          <button
-                            onClick={() => handleFurnitureTypeSelect('Any Stock')}
-                            className="w-full px-3 py-2 rounded-lg text-xs font-medium bg-white border border-holo-teal text-holo-black hover:bg-holo-teal hover:text-white transition-colors duration-200"
+                          {/* Fabric Furniture Option */}
+                          <div 
+                            className="cursor-pointer border-2 border-holo-teal rounded-lg p-3 hover:border-holo-coral transition-colors duration-200"
+                            onClick={() => handleFurnitureTypeSelect('Fabric Furniture')}
                           >
-                            Any Stock
-                          </button>
+                            <div className="flex items-center gap-3">
+                              <img 
+                                src="/lovable-uploads/74d4b984-a513-478e-bc0e-3490532fd4ce.png" 
+                                alt="Fabric Furniture" 
+                                className="w-12 h-12 object-cover rounded"
+                              />
+                              <div>
+                                <p className="text-sm font-medium text-holo-black">Fabric Furniture</p>
+                                <p className="text-xs text-gray-600">Soft furnishings and textile elements</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}
 
-                    {/* Design Variants */}
+                    {/* Design Variants Options */}
                     {message.showVariants && (
-                      <div className="mt-4">
-                        <div className="grid grid-cols-3 gap-2 mb-4">
-                          {[1, 2, 3].map((variant) => (
-                            <button
-                              key={variant}
-                              onClick={() => handleVariantSelect(variant)}
-                              className="aspect-square bg-gray-100 rounded-lg border-2 border-holo-teal cursor-pointer hover:border-holo-coral transition-colors duration-200 flex items-center justify-center"
-                            >
-                              <span className="text-xs text-gray-600">Option {variant}</span>
-                            </button>
-                          ))}
-                        </div>
+                      <div className="mt-4 space-y-3">
+                        {[1, 2, 3].map((variant) => (
+                          <div 
+                            key={variant}
+                            className="cursor-pointer border-2 border-holo-teal rounded-lg p-3 hover:border-holo-coral transition-colors duration-200"
+                            onClick={() => handleVariantSelect(variant)}
+                          >
+                            <div className="flex items-center gap-3">
+                              <img 
+                                src={variant === 1 
+                                  ? "/lovable-uploads/9314f380-b21c-4c51-a78a-f6dbb787aec5.png"
+                                  : variant === 2 
+                                  ? "/lovable-uploads/7b775965-3c91-4858-a229-22200248f865.png"
+                                  : "/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png"
+                                } 
+                                alt={`Design Option ${variant}`} 
+                                className="w-12 h-12 object-cover rounded"
+                              />
+                              <div>
+                                <p className="text-sm font-medium text-holo-black">Option {variant}</p>
+                                <p className="text-xs text-gray-600">
+                                  {variant === 1 && "285 PVC + 20 steel pipes, 45 joints"}
+                                  {variant === 2 && "310 PVC + 15 steel pipes, 52 joints"}
+                                  {variant === 3 && "270 PVC + 25 steel pipes, 38 joints"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Loading Animation */}
+                    {isGenerating && (
+                      <div className="mt-4 flex items-center gap-2">
+                        <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse"></div>
+                        <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse delay-100"></div>
+                        <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse delay-200"></div>
                       </div>
                     )}
                   </div>
                 </div>
               ))}
-
-              {/* Thinking Animation */}
-              {isGenerating && (
-                <div className="flex justify-start">
-                  <div className="bg-white border border-holo-teal/20 p-4 rounded-2xl">
-                    <div className="flex space-x-2">
-                      <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse"></div>
-                      <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
-            {/* Chat Input with proper positioning and smaller font */}
-            <div className="mt-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Enter goals, or select options..."
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  className="w-full h-14 bg-white rounded-full px-4 pr-16 border-2 border-holo-teal focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-teal text-[#333333] text-xs"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-holo-coral text-white rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-150"
-                >
-                  <Send size={20} className="text-white" />
-                </button>
-              </div>
+            {/* Chat Input */}
+            <div className="mt-4 flex gap-2">
+              <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Type additional requirements..."
+                className="flex-1 p-3 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral text-sm"
+              />
+              <button
+                onClick={handleSendMessage}
+                className="p-3 bg-holo-coral text-white rounded-lg hover:bg-holo-coral/80 transition-colors duration-200"
+              >
+                <Send size={16} />
+              </button>
             </div>
-          </div>
 
-          {/* Proceed Button - Right below the chat panel */}
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={handleProceed}
-              disabled={!canProceed}
-              className={`w-[240px] h-[48px] rounded-xl font-inter font-semibold text-[16px] transition-all duration-300 shadow-md ${
-                canProceed
-                  ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105'
-                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              Proceed with Selection
-            </button>
+            {/* Proceed Button */}
+            {canProceed && (
+              <button
+                onClick={handleProceed}
+                className="w-full mt-4 py-3 bg-gradient-teal-coral hover:bg-gradient-coral-teal text-white rounded-lg font-semibold transition-all duration-300"
+              >
+                Proceed to Design Output
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       {/* Materials Database Modal */}
-      <MaterialsDatabase 
-        isOpen={showMaterialsDatabase}
-        onClose={() => setShowMaterialsDatabase(false)}
-      />
-
-      {/* Footer Logo */}
-      <div className="fixed bottom-4 right-4">
-        <div className="w-12 h-12 flex items-center justify-center">
-          <HoloLogo size="small" variant="dots" />
-        </div>
-      </div>
+      {showMaterialsDatabase && (
+        <MaterialsDatabase 
+          isOpen={showMaterialsDatabase}
+          onClose={() => setShowMaterialsDatabase(false)} 
+        />
+      )}
     </div>
   );
 };
