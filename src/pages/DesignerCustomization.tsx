@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
@@ -23,9 +23,11 @@ const DesignerCustomization = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showMaterialsDatabase, setShowMaterialsDatabase] = useState(false);
+  const chatMessagesRef = useRef<HTMLDivElement>(null);
   
   // Get the selected building ID from navigation state
   const selectedBuildingId = location.state?.selectedBuildingId || null;
+  const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
   
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -53,6 +55,13 @@ const DesignerCustomization = () => {
       // The ThreeScene will automatically handle camera positioning through isolatedMeshId prop
     }
   }, [selectedBuildingId]);
+
+  // Auto-scroll chat to bottom when messages update and when programs are selected
+  useEffect(() => {
+    if (chatMessagesRef.current && selectedPrograms.length === 2) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
+  }, [messages, selectedPrograms]);
 
   const handleProgramSelect = (program: string) => {
     if (selectedPrograms.includes(program)) {
@@ -189,6 +198,7 @@ const DesignerCustomization = () => {
   };
 
   const handleVariantSelect = (variant: number) => {
+    setSelectedVariant(variant);
     setMessages(prev => [
       ...prev,
       { type: 'user', content: `Selected Option ${variant}`, showOptions: false },
@@ -209,7 +219,23 @@ const DesignerCustomization = () => {
   };
 
   const handleProceed = () => {
-    navigate('/designer/output');
+    // Choose between mesh448_1 and mesh448_2 based on selected variant
+    // Since we only have .3dm files available, we'll continue with the current model
+    // but pass the selected variant information to the next page
+    navigate('/designer/output', { 
+      state: { 
+        selectedBuildingId, 
+        selectedVariant: selectedVariant || 1,
+        customizationData: {
+          programs: selectedPrograms,
+          volumeHeight: selectedVolumeHeight,
+          spacePreference: selectedSpacePreference,
+          shading: selectedShading,
+          furniture: wantsFurniture,
+          furnitureType: selectedFurnitureType
+        }
+      } 
+    });
   };
 
   const handleMaterialsDatabaseClick = () => {
@@ -267,8 +293,8 @@ const DesignerCustomization = () => {
               </button>
             </div>
 
-            {/* Chat Messages with proper spacing */}
-            <div className="flex-1 overflow-y-auto space-y-4">
+            {/* Chat Messages with proper spacing and auto-scroll */}
+            <div ref={chatMessagesRef} className="flex-1 overflow-y-auto space-y-4">
               {messages.map((message, index) => (
                 <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[80%] p-4 rounded-2xl ${

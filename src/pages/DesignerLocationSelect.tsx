@@ -41,7 +41,7 @@ const DesignerLocationSelect = () => {
   const handleBuildingClick = (buildingName: string | null, mesh?: THREE.Mesh | null) => {
     console.log('3D Building selected:', buildingName);
     
-    // Only allow selection of specific meshes
+    // Only allow selection of specific meshes: mesh_448, mesh_447, mesh_449, and mesh_446
     const allowedMeshes = ['mesh_448', 'mesh_447', 'mesh_449', 'mesh_446'];
     
     if (buildingName && !allowedMeshes.includes(buildingName)) {
