@@ -94,7 +94,8 @@ const DesignerLocationSelect = () => {
                 <ThreeScene 
                   className="w-full h-full" 
                   onBuildingClick={handleBuildingClick} 
-                  modelPath="/lovable-uploads/scene(2).gltf" 
+                  modelPath="/lovable-uploads/scene(2).gltf"
+                  allowedMeshes={['mesh_448', 'mesh_447', 'mesh_449', 'mesh_446']}
                 />
               </WorkflowWindow>
             </div>
