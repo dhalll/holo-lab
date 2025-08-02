@@ -24,8 +24,9 @@ const DesignerCustomization = () => {
   const location = useLocation();
   const [showMaterialsDatabase, setShowMaterialsDatabase] = useState(false);
   
-  // Get the selected building ID from navigation state
+  // Get the selected building ID and mesh from navigation state
   const selectedBuildingId = location.state?.selectedBuildingId || null;
+  const selectedMesh = location.state?.selectedMesh || null;
   
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -43,6 +44,8 @@ const DesignerCustomization = () => {
   const [selectedFurnitureType, setSelectedFurnitureType] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [canProceed, setCanProceed] = useState(false);
+  const [useVariantModel, setUseVariantModel] = useState(false);
+  const [variantModelPath, setVariantModelPath] = useState<string>('');
 
   const programs = ['Gym', 'Meeting Space', 'Bar', 'Greenhouse', 'Terrace'];
 
@@ -240,8 +243,8 @@ const DesignerCustomization = () => {
               <WorkflowWindow className="w-[600px] h-[600px]">
                 <ThreeScene 
                   className="w-full h-full" 
-                  modelPath="/lovable-uploads/scene(2).gltf"
-                  isolatedMeshId={selectedBuildingId}
+                  modelPath={useVariantModel && variantModelPath ? variantModelPath : "/lovable-uploads/scene(2).gltf"}
+                  isolatedMeshId={useVariantModel ? null : selectedBuildingId}
                 />
               </WorkflowWindow>
             </div>
@@ -372,14 +375,27 @@ const DesignerCustomization = () => {
                           </div>
                         </div>
 
-                        {selectedVolumeHeight && selectedSpacePreference && selectedShading && (
-                          <button
-                            onClick={handleConstraintsComplete}
-                            className="w-full mt-4 py-2 bg-gradient-teal-coral text-white rounded-lg font-medium hover:bg-gradient-coral-teal transition-all duration-200"
-                          >
-                            Generate Design Options
-                          </button>
-                        )}
+                         {selectedVolumeHeight && selectedSpacePreference && selectedShading && (
+                           <button
+                             onClick={() => {
+                               // When generating design options, switch to variant model for mesh_448
+                               if (selectedBuildingId === 'mesh_448') {
+                                 // Randomly choose between mesh448_1 and mesh448_2 models
+                                 const variantPaths = [
+                                   '/lovable-uploads/structure example.gltf',
+                                   '/lovable-uploads/test to upload to three,js 2.gltf'
+                                 ];
+                                 const randomVariant = variantPaths[Math.floor(Math.random() * variantPaths.length)];
+                                 setVariantModelPath(randomVariant);
+                                 setUseVariantModel(true);
+                               }
+                               handleConstraintsComplete();
+                             }}
+                             className="w-full mt-4 py-2 bg-gradient-teal-coral text-white rounded-lg font-medium hover:bg-gradient-coral-teal transition-all duration-200"
+                           >
+                             Generate Design Options
+                           </button>
+                         )}
                       </div>
                     )}
 
