@@ -20,11 +20,10 @@ const DesignerLocationSelect = () => {
   const [advancedClicked, setAdvancedClicked] = useState(false);
 
   const handleProceed = () => {
-    // Pass only serializable data via navigation state
+    // Pass the selectedBuilding ID via navigation state
     navigate('/designer/customization', { 
       state: { 
-        selectedBuildingId: selectedBuilding,
-        selectedMeshName: selectedBuilding // Just pass the mesh name, not the object
+        selectedBuildingId: selectedBuilding 
       } 
     });
   };
