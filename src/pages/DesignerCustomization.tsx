@@ -1,7 +1,5 @@
-// ✅ Full integration for DesignerCustomization page to support mesh_448 variant models with camera sync
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
 import HoloLogo from '@/components/HoloLogo';
@@ -24,8 +22,8 @@ const DesignerCustomization = () => {
   useEffect(() => {
     if (selectedMeshName === "mesh_448") {
       const variants = [
-        "/lovable-uploads/mesh448_1.gltf",
-        "/lovable-uploads/mesh448_2.gltf"
+        "/lovable-uploads/structure example.gltf",
+        "/lovable-uploads/test to upload to three,js 2.gltf"
       ];
       const chosen = variants[Math.floor(Math.random() * variants.length)];
       setVariantModelPath(chosen);
@@ -37,8 +35,6 @@ const DesignerCustomization = () => {
     <ThreeScene
       modelPath={useVariantModel ? variantModelPath : "/lovable-uploads/scene(2).gltf"}
       isolatedMeshId={useVariantModel ? null : selectedMeshName}
-      initialCameraPosition={cameraPosition}
-      initialCameraTarget={cameraTarget}
     />
   );
 };
