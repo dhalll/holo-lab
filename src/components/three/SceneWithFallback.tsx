@@ -8,6 +8,7 @@ interface SceneWithFallbackProps {
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
   modelPath?: string;
   isolatedMeshId?: string | null;
+  selectableMeshes?: string[];
 }
 
 const LoadingFallback = () => (
@@ -25,7 +26,8 @@ const LoadingFallback = () => (
 const SceneWithFallback: React.FC<SceneWithFallbackProps> = ({ 
   onBuildingClick, 
   modelPath = "/lovable-uploads/scene(2).gltf",
-  isolatedMeshId = null
+  isolatedMeshId = null,
+  selectableMeshes = []
 }) => {
   console.log('SceneWithFallback rendering with modelPath:', modelPath);
 
@@ -35,6 +37,7 @@ const SceneWithFallback: React.FC<SceneWithFallbackProps> = ({
         onBuildingClick={onBuildingClick} 
         modelPath={modelPath}
         isolatedMeshId={isolatedMeshId}
+        selectableMeshes={selectableMeshes}
       />
     </Suspense>
   );

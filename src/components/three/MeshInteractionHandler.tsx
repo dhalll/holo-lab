@@ -8,16 +8,23 @@ interface MeshInteractionHandlerProps {
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
   onMeshSelected?: (mesh: THREE.Mesh | null) => void;
   children: React.ReactNode;
+  selectableMeshes?: string[];
 }
 
 const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
   meshRef,
   onBuildingClick,
   onMeshSelected,
-  children
+  children,
+  selectableMeshes = []
 }) => {
   const [hoveredMesh, setHoveredMesh] = useState<THREE.Mesh | null>(null);
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
+
+  // Helper function to check if a mesh is selectable
+  const isMeshSelectable = useCallback((buildingName: string) => {
+    return selectableMeshes.length === 0 || selectableMeshes.includes(buildingName);
+  }, [selectableMeshes]);
 
   // Clear hover state when mouse leaves the canvas entirely
   useEffect(() => {
@@ -45,6 +52,11 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
     if (intersected && intersected.object.userData.isBuilding) {
       const clickedMesh = intersected.object as THREE.Mesh;
       const buildingName = intersected.object.userData.buildingName;
+      
+      // Only allow interaction with selectable meshes
+      if (!isMeshSelectable(buildingName)) {
+        return;
+      }
       
       if (selectedMesh === clickedMesh) {
         // Clicking the same mesh - deselect it
@@ -77,7 +89,7 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
         onMeshSelected?.(null);
       }
     }
-  }, [selectedMesh, onBuildingClick, onMeshSelected]);
+  }, [selectedMesh, onBuildingClick, onMeshSelected, isMeshSelectable]);
 
   const handlePointerOver = useCallback((event: any) => {
     event.stopPropagation();
@@ -85,6 +97,13 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
     
     if (intersected && intersected.object.userData.isBuilding) {
       const newHoveredMesh = intersected.object as THREE.Mesh;
+      const buildingName = intersected.object.userData.buildingName;
+      
+      // Only allow hover for selectable meshes
+      if (!isMeshSelectable(buildingName)) {
+        document.body.style.cursor = 'default';
+        return;
+      }
       
       // Clear previous hover state if different mesh
       if (hoveredMesh && hoveredMesh !== newHoveredMesh && hoveredMesh !== selectedMesh) {
@@ -124,7 +143,7 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
     
     // Always reset cursor when pointer leaves any mesh
     document.body.style.cursor = 'default';
-  }, [selectedMesh, hoveredMesh]);
+  }, [selectedMesh, hoveredMesh, isMeshSelectable]);
 
   return (
     <group

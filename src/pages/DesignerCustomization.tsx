@@ -417,31 +417,23 @@ const DesignerCustomization = () => {
                             </div>
                           </div>
 
-                          {/* Small Pipe Furniture Option */}
+                          {/* Small Elements Option */}
                           <div 
                             className="cursor-pointer border-2 border-holo-teal rounded-lg p-3 hover:border-holo-coral transition-colors duration-200"
-                            onClick={() => handleFurnitureTypeSelect('Small Pipe Furniture')}
+                            onClick={() => handleFurnitureTypeSelect('Small Elements')}
                           >
                             <div className="flex items-center gap-3">
                               <img 
-                                src="/lovable-uploads/9314f380-b21c-4c51-a78a-f6dbb787aec5.png" 
-                                alt="Small Pipe Furniture" 
+                                src="/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png" 
+                                alt="Small Elements" 
                                 className="w-12 h-12 object-cover rounded"
                               />
                               <div>
-                                <p className="text-sm font-medium text-holo-black">Small Pipe Furniture</p>
-                                <p className="text-xs text-gray-600">Compact modular furniture pieces</p>
+                                <p className="text-sm font-medium text-holo-black">Small Elements</p>
+                                <p className="text-xs text-gray-600">Modular furniture components</p>
                               </div>
                             </div>
                           </div>
-
-                          {/* Any Stock Option */}
-                          <button
-                            onClick={() => handleFurnitureTypeSelect('Any Stock')}
-                            className="w-full px-3 py-2 rounded-lg text-xs font-medium bg-white border border-holo-teal text-holo-black hover:bg-holo-teal hover:text-white transition-colors duration-200"
-                          >
-                            Any Stock
-                          </button>
                         </div>
                       </div>
                     )}
@@ -449,15 +441,27 @@ const DesignerCustomization = () => {
                     {/* Design Variants */}
                     {message.showVariants && (
                       <div className="mt-4">
-                        <div className="grid grid-cols-3 gap-2 mb-4">
+                        <div className="space-y-3">
                           {[1, 2, 3].map((variant) => (
-                            <button
+                            <div 
                               key={variant}
+                              className="cursor-pointer border-2 border-holo-teal rounded-lg p-3 hover:border-holo-coral transition-colors duration-200"
                               onClick={() => handleVariantSelect(variant)}
-                              className="aspect-square bg-gray-100 rounded-lg border-2 border-holo-teal cursor-pointer hover:border-holo-coral transition-colors duration-200 flex items-center justify-center"
                             >
-                              <span className="text-xs text-gray-600">Option {variant}</span>
-                            </button>
+                              <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-holo-teal to-holo-coral rounded flex items-center justify-center text-white font-bold">
+                                  {variant}
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-holo-black">Option {variant}</p>
+                                  <p className="text-xs text-gray-600">
+                                    {variant === 1 && 'Most sustainable - 285 PVC pipes + 20 steel pipes'}
+                                    {variant === 2 && 'Balanced design - 200 PVC pipes + 40 steel pipes'}
+                                    {variant === 3 && 'Premium materials - 150 PVC pipes + 60 steel pipes'}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
                           ))}
                         </div>
                       </div>
@@ -466,70 +470,59 @@ const DesignerCustomization = () => {
                 </div>
               ))}
 
-              {/* Thinking Animation */}
+              {/* Loading indicator */}
               {isGenerating && (
                 <div className="flex justify-start">
                   <div className="bg-white border border-holo-teal/20 p-4 rounded-2xl">
-                    <div className="flex space-x-2">
-                      <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse"></div>
-                      <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-3 h-3 bg-holo-coral rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 bg-holo-teal rounded-full animate-pulse"></div>
+                      <p className="text-sm font-inter text-gray-600">Generating designs...</p>
                     </div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Chat Input with proper positioning and smaller font */}
-            <div className="mt-4">
-              <div className="relative">
+            {/* Input Section */}
+            <div className="border-t border-holo-teal/20 pt-4 mt-4">
+              <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="Enter goals, or select options..."
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  className="w-full h-14 bg-white rounded-full px-4 pr-16 border-2 border-holo-teal focus:outline-none focus:ring-2 focus:ring-holo-coral placeholder:text-holo-teal text-[#333333] text-xs"
+                  placeholder="Add any specific requirements..."
+                  className="flex-1 px-4 py-2 border border-holo-teal/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-holo-coral text-sm"
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-holo-coral text-white rounded-full flex items-center justify-center hover:scale-105 transition-transform duration-150"
+                  className="px-4 py-2 bg-holo-coral text-white rounded-lg hover:bg-holo-coral/80 transition-colors duration-200"
                 >
-                  <Send size={20} className="text-white" />
+                  <Send size={16} />
                 </button>
               </div>
+              
+              {/* Proceed Button */}
+              {canProceed && (
+                <button
+                  onClick={handleProceed}
+                  className="w-full mt-4 py-3 bg-gradient-teal-coral text-white rounded-lg font-medium hover:bg-gradient-coral-teal transition-all duration-300"
+                >
+                  Proceed to Final Design
+                </button>
+              )}
             </div>
-          </div>
-
-          {/* Proceed Button - Right below the chat panel */}
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={handleProceed}
-              disabled={!canProceed}
-              className={`w-[240px] h-[48px] rounded-xl font-inter font-semibold text-[16px] transition-all duration-300 shadow-md ${
-                canProceed
-                  ? 'bg-gradient-teal-coral hover:bg-gradient-coral-teal text-holo-white hover:scale-105'
-                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              Proceed with Selection
-            </button>
           </div>
         </div>
       </div>
 
       {/* Materials Database Modal */}
-      <MaterialsDatabase 
-        isOpen={showMaterialsDatabase}
-        onClose={() => setShowMaterialsDatabase(false)}
-      />
-
-      {/* Footer Logo */}
-      <div className="fixed bottom-4 right-4">
-        <div className="w-12 h-12 flex items-center justify-center">
-          <HoloLogo size="small" variant="dots" />
-        </div>
-      </div>
+      {showMaterialsDatabase && (
+        <MaterialsDatabase 
+          isOpen={showMaterialsDatabase} 
+          onClose={() => setShowMaterialsDatabase(false)} 
+        />
+      )}
     </div>
   );
 };

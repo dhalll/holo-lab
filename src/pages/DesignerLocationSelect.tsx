@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -19,6 +18,9 @@ const DesignerLocationSelect = () => {
   const [activeTab, setActiveTab] = useState('wind');
   const [analysisClicked, setAnalysisClicked] = useState(false);
   const [advancedClicked, setAdvancedClicked] = useState(false);
+
+  // Define selectable mesh names
+  const selectableMeshes = ['mesh_448', 'mesh_447', 'mesh_449', 'mesh_446'];
 
   const handleProceed = () => {
     // Pass the selectedBuilding ID via navigation state
@@ -41,8 +43,17 @@ const DesignerLocationSelect = () => {
 
   const handleBuildingClick = (buildingName: string | null, mesh?: THREE.Mesh | null) => {
     console.log('3D Building selected:', buildingName);
-    setSelectedBuilding(buildingName);
-    setSelectedMesh(mesh || null);
+    
+    // Only allow selection of specific meshes
+    if (buildingName && selectableMeshes.includes(buildingName)) {
+      setSelectedBuilding(buildingName);
+      setSelectedMesh(mesh || null);
+    } else if (buildingName === null) {
+      // Allow deselection
+      setSelectedBuilding(null);
+      setSelectedMesh(null);
+    }
+    // If mesh is not in selectable list, ignore the selection
   };
 
   // Map analysis tabs to their corresponding images
@@ -86,7 +97,8 @@ const DesignerLocationSelect = () => {
                 <ThreeScene 
                   className="w-full h-full" 
                   onBuildingClick={handleBuildingClick} 
-                  modelPath="/lovable-uploads/scene(2).gltf" 
+                  modelPath="/lovable-uploads/scene(2).gltf"
+                  selectableMeshes={selectableMeshes}
                 />
               </WorkflowWindow>
             </div>
@@ -129,7 +141,7 @@ const DesignerLocationSelect = () => {
               selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'
             } flex items-center justify-center mb-4 overflow-hidden`}>
               {selectedMesh ? (
-                // This part displays the orange square for mesh_481 etc.
+                // This part displays the orange square for mesh_448 etc.
                 <div className="w-full h-full flex items-center justify-center bg-holo-coral/20">
                   <div className="w-12 h-12 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
                 </div>
