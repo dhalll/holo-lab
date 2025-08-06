@@ -11,14 +11,12 @@ interface BuildingMeshProps {
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
   modelPath?: string;
   isolatedMeshId?: string | null;
-  allowedMeshes?: string[];
 }
 
 const BuildingMesh: React.FC<BuildingMeshProps> = ({ 
   onBuildingClick, 
   modelPath = "/lovable-uploads/scene(2).gltf",
-  isolatedMeshId = null,
-  allowedMeshes = []
+  isolatedMeshId = null
 }) => {
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
   const [isolatedMesh, setIsolatedMesh] = useState<THREE.Mesh | null>(null);
@@ -169,7 +167,6 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
         meshRef={meshRef}
         onBuildingClick={onBuildingClick}
         onMeshSelected={handleMeshSelected}
-        allowedMeshes={allowedMeshes}
       >
         <group ref={meshRef} />
       </MeshInteractionHandler>

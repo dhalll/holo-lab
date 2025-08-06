@@ -11,15 +11,13 @@ interface ThreeSceneProps {
   onBuildingClick?: (buildingName: string, mesh?: THREE.Mesh) => void;
   modelPath?: string;
   isolatedMeshId?: string | null;
-  allowedMeshes?: string[];
 }
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({ 
   className = "", 
   onBuildingClick, 
   modelPath = "/lovable-uploads/scene(2).gltf",
-  isolatedMeshId = null,
-  allowedMeshes = []
+  isolatedMeshId = null
 }) => {
   console.log('ThreeScene rendering with props:', { 
     className, 
@@ -51,7 +49,6 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
           onBuildingClick={onBuildingClick} 
           modelPath={modelPath}
           isolatedMeshId={isolatedMeshId}
-          allowedMeshes={allowedMeshes}
         />
         <OrbitControls 
           enablePan={true}

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
@@ -40,15 +41,6 @@ const DesignerLocationSelect = () => {
 
   const handleBuildingClick = (buildingName: string | null, mesh?: THREE.Mesh | null) => {
     console.log('3D Building selected:', buildingName);
-    
-    // Only allow selection of specific meshes
-    const allowedMeshes = ['mesh_448', 'mesh_447', 'mesh_449', 'mesh_446'];
-    
-    if (buildingName && !allowedMeshes.includes(buildingName)) {
-      console.log('Mesh not allowed for selection:', buildingName);
-      return; // Don't allow selection of other meshes
-    }
-    
     setSelectedBuilding(buildingName);
     setSelectedMesh(mesh || null);
   };
@@ -94,8 +86,7 @@ const DesignerLocationSelect = () => {
                 <ThreeScene 
                   className="w-full h-full" 
                   onBuildingClick={handleBuildingClick} 
-                  modelPath="/lovable-uploads/scene(2).gltf"
-                  allowedMeshes={['mesh_448', 'mesh_447', 'mesh_449', 'mesh_446']}
+                  modelPath="/lovable-uploads/scene(2).gltf" 
                 />
               </WorkflowWindow>
             </div>
@@ -138,7 +129,7 @@ const DesignerLocationSelect = () => {
               selectedBuilding ? 'border-holo-coral bg-holo-coral/10' : 'border-gray-300 bg-gray-50'
             } flex items-center justify-center mb-4 overflow-hidden`}>
               {selectedMesh ? (
-                // This part displays the orange square for selected meshes
+                // This part displays the orange square for mesh_481 etc.
                 <div className="w-full h-full flex items-center justify-center bg-holo-coral/20">
                   <div className="w-12 h-12 bg-gradient-to-br from-holo-coral to-orange-600 rounded shadow-sm"></div>
                 </div>

@@ -7,7 +7,6 @@ interface MeshInteractionHandlerProps {
   meshRef: React.RefObject<THREE.Group>;
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
   onMeshSelected?: (mesh: THREE.Mesh | null) => void;
-  allowedMeshes?: string[];
   children: React.ReactNode;
 }
 
@@ -15,7 +14,6 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
   meshRef,
   onBuildingClick,
   onMeshSelected,
-  allowedMeshes = [],
   children
 }) => {
   const [hoveredMesh, setHoveredMesh] = useState<THREE.Mesh | null>(null);
@@ -48,16 +46,6 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
       const clickedMesh = intersected.object as THREE.Mesh;
       const buildingName = intersected.object.userData.buildingName;
       
-      // Check if this mesh is allowed to be selected
-      const isAllowedMesh = allowedMeshes.length === 0 || allowedMeshes.includes(buildingName);
-      
-      if (!isAllowedMesh) {
-        // Don't allow selection of non-allowed meshes - just call the callback without visual changes
-        console.log('Mesh not allowed for selection:', buildingName);
-        onBuildingClick?.(buildingName, clickedMesh);
-        return;
-      }
-      
       if (selectedMesh === clickedMesh) {
         // Clicking the same mesh - deselect it
         MaterialManager.resetMeshToDefault(clickedMesh);
@@ -89,7 +77,7 @@ const MeshInteractionHandler: React.FC<MeshInteractionHandlerProps> = ({
         onMeshSelected?.(null);
       }
     }
-  }, [selectedMesh, onBuildingClick, onMeshSelected, allowedMeshes]);
+  }, [selectedMesh, onBuildingClick, onMeshSelected]);
 
   const handlePointerOver = useCallback((event: any) => {
     event.stopPropagation();
