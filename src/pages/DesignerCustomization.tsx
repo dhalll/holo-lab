@@ -67,10 +67,10 @@ const DesignerCustomization = () => {
       if (newPrograms.length === 1) {
         setMessages(prev => [
           ...prev,
-          { type: 'user', content: Selected: ${program}, showOptions: false },
+          { type: 'user', content: `Selected: ${program}`, showOptions: false },
           { 
             type: 'bot', 
-            content: Great choice! You can select one more program to combine with ${program}, or proceed with just this one.,
+            content: `Great choice! You can select one more program to combine with ${program}, or proceed with just this one.`,
             showOptions: false,
             showProceedButton: true
           }
@@ -79,10 +79,10 @@ const DesignerCustomization = () => {
         setTimeout(() => {
           setMessages(prev => [
             ...prev,
-            { type: 'user', content: Selected: ${newPrograms.join(' + ')}, showOptions: false },
+            { type: 'user', content: `Selected: ${newPrograms.join(' + ')}`, showOptions: false },
             { 
               type: 'bot', 
-              content: Thanks! Excited to design your ${newPrograms.join(' and ').toLowerCase()}. Let's gather some more info:,
+              content: `Thanks! Excited to design your ${newPrograms.join(' and ').toLowerCase()}. Let's gather some more info:`,
               showConstraints: true
             }
           ]);
@@ -99,10 +99,10 @@ const DesignerCustomization = () => {
       
       setMessages(prev => [
         ...prev,
-        { type: 'user', content: Proceed with: ${selectedPrograms.join(' + ')}, showOptions: false },
+        { type: 'user', content: `Proceed with: ${selectedPrograms.join(' + ')}`, showOptions: false },
         { 
           type: 'bot', 
-          content: Perfect! Let's design your ${programText}. Let's gather some more info:,
+          content: `Perfect! Let's design your ${programText}. Let's gather some more info:`,
           showConstraints: true
         }
       ]);
@@ -113,7 +113,7 @@ const DesignerCustomization = () => {
     setSelectedVolumeHeight(option);
     setMessages(prev => [
       ...prev,
-      { type: 'user', content: Volume & Height: ${option}, showOptions: false }
+      { type: 'user', content: `Volume & Height: ${option}`, showOptions: false }
     ]);
   };
 
@@ -121,7 +121,7 @@ const DesignerCustomization = () => {
     setSelectedSpacePreference(option);
     setMessages(prev => [
       ...prev,
-      { type: 'user', content: Space Preference: ${option}, showOptions: false }
+      { type: 'user', content: `Space Preference: ${option}`, showOptions: false }
     ]);
   };
 
@@ -129,7 +129,7 @@ const DesignerCustomization = () => {
     setSelectedShading(option);
     setMessages(prev => [
       ...prev,
-      { type: 'user', content: Shading: ${option}, showOptions: false }
+      { type: 'user', content: `Shading: ${option}`, showOptions: false }
     ]);
   };
 
@@ -169,7 +169,7 @@ const DesignerCustomization = () => {
     setSelectedFurnitureType(furnitureType);
     setMessages(prev => [
       ...prev,
-      { type: 'user', content: Selected: ${furnitureType}, showOptions: false }
+      { type: 'user', content: `Selected: ${furnitureType}`, showOptions: false }
     ]);
     startGeneration();
   };
@@ -194,8 +194,8 @@ const DesignerCustomization = () => {
   const handleVariantSelect = (variant: number) => {
     setMessages(prev => [
       ...prev,
-      { type: 'user', content: Selected Option ${variant}, showOptions: false },
-      { type: 'bot', content: Perfect! Option ${variant} has been selected. You can now proceed with your customized design., showOptions: false }
+      { type: 'user', content: `Selected Option ${variant}`, showOptions: false },
+      { type: 'bot', content: `Perfect! Option ${variant} has been selected. You can now proceed with your customized design.`, showOptions: false }
     ]);
     setCanProceed(true);
   };
@@ -273,12 +273,12 @@ const DesignerCustomization = () => {
             {/* Chat Messages with proper spacing */}
             <div className="flex-1 overflow-y-auto space-y-4">
               {messages.map((message, index) => (
-                <div key={index} className={flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}}>
-                  <div className={max-w-[80%] p-4 rounded-2xl ${
+                <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] p-4 rounded-2xl ${
                     message.type === 'user' 
                       ? 'bg-holo-coral text-white' 
                       : 'bg-white border border-holo-teal/20'
-                  }}>
+                  }`}>
                     <p className="text-sm font-inter">{message.content}</p>
                     
                     {/* Program Selection Options */}
@@ -290,11 +290,11 @@ const DesignerCustomization = () => {
                             <button
                               key={program}
                               onClick={() => handleProgramSelect(program)}
-                              className={px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
+                              className={`px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
                                 selectedPrograms.includes(program)
                                   ? 'bg-holo-coral text-white'
                                   : 'bg-white border border-holo-coral text-holo-coral hover:bg-holo-coral hover:text-white'
-                              }}
+                              }`}
                             >
                               {program}
                             </button>
@@ -325,11 +325,11 @@ const DesignerCustomization = () => {
                               <button
                                 key={option}
                                 onClick={() => handleVolumeHeightSelect(option)}
-                                className={px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
+                                className={`px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
                                   selectedVolumeHeight === option
                                     ? 'bg-holo-teal text-white'
                                     : 'bg-white border border-holo-teal text-holo-black hover:bg-holo-teal hover:text-white'
-                                }}
+                                }`}
                               >
                                 {option}
                               </button>
@@ -344,11 +344,11 @@ const DesignerCustomization = () => {
                               <button
                                 key={option}
                                 onClick={() => handleSpacePreferenceSelect(option)}
-                                className={px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
+                                className={`px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
                                   selectedSpacePreference === option
                                     ? 'bg-holo-coral text-white'
                                     : 'bg-white border border-holo-coral text-holo-coral hover:bg-holo-coral hover:text-white'
-                                }}
+                                }`}
                               >
                                 {option}
                               </button>
@@ -363,11 +363,11 @@ const DesignerCustomization = () => {
                               <button
                                 key={option}
                                 onClick={() => handleShadingSelect(option)}
-                                className={px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
+                                className={`px-3 py-2 rounded-full text-xs font-medium transition-colors duration-200 ${
                                   selectedShading === option
                                     ? 'bg-holo-coral text-white'
                                     : 'bg-white border border-holo-coral text-holo-coral hover:bg-holo-coral hover:text-white'
-                                }}
+                                }`}
                               >
                                 {option}
                               </button>
@@ -497,7 +497,7 @@ const DesignerCustomization = () => {
                                   ? "/lovable-uploads/7b775965-3c91-4858-a229-22200248f865.png"
                                   : "/lovable-uploads/7cc5f26e-912a-4253-a548-dcac010939d0.png"
                                 } 
-                                alt={Design Option ${variant}} 
+                                alt={`Design Option ${variant}`} 
                                 className="w-12 h-12 object-cover rounded"
                               />
                               <div>
