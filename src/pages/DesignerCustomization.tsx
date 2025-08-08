@@ -30,6 +30,9 @@ const DesignerCustomization = () => {
   // State to track the current model path - switches to mesh448_1.gltf after design generation for mesh_448
   const [currentModelPath, setCurrentModelPath] = useState("/lovable-uploads/scene(2).gltf");
   
+  // State to track camera position to preserve angle when switching models
+  const [preserveCameraAngle, setPreserveCameraAngle] = useState(false);
+  
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       type: 'bot',
@@ -169,8 +172,9 @@ const DesignerCustomization = () => {
   const startGeneration = () => {
     setIsGenerating(true);
     
-    // If mesh_448 was selected, switch to mesh448_1.gltf after generation
+    // If mesh_448 was selected, switch to mesh448_1.gltf after generation while preserving camera angle
     if (selectedBuildingId === 'mesh_448') {
+      setPreserveCameraAngle(true); // Signal to preserve camera position
       setCurrentModelPath("/lovable-uploads/mesh448_1.gltf");
     }
     
@@ -243,6 +247,7 @@ const DesignerCustomization = () => {
                   className="w-full h-full" 
                   modelPath={currentModelPath}
                   isolatedMeshId={selectedBuildingId}
+                  key={`${currentModelPath}-${preserveCameraAngle}`} // Force re-render with preserved angle
                 />
               </WorkflowWindow>
             </div>
