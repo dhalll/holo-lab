@@ -46,7 +46,7 @@ const DesignerCustomization = () => {
       setMessages(prev => [
         ...prev,
         { type: 'user', content: userInput },
-        { type: 'bot', content: 'Thanks! We'll take that into account.' }
+        { type: 'bot', content: 'Thanks! We\'ll take that into account.' }
       ]);
       setUserInput('');
     }
@@ -78,8 +78,6 @@ const DesignerCustomization = () => {
                   className="w-full h-full"
                   modelPath={useVariantModel ? variantModelPath : "/lovable-uploads/scene(2).gltf"}
                   isolatedMeshId={useVariantModel ? null : selectedMeshName}
-                  initialCameraPosition={cameraPosition}
-                  initialCameraTarget={cameraTarget}
                 />
               </WorkflowWindow>
             </div>
