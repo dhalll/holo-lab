@@ -27,6 +27,9 @@ const DesignerCustomization = () => {
   // Get the selected building ID from navigation state
   const selectedBuildingId = location.state?.selectedBuildingId || null;
   
+  // State to track the current model path - switches to mesh448_1.gltf after design generation for mesh_448
+  const [currentModelPath, setCurrentModelPath] = useState("/lovable-uploads/scene(2).gltf");
+  
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       type: 'bot',
@@ -165,6 +168,12 @@ const DesignerCustomization = () => {
 
   const startGeneration = () => {
     setIsGenerating(true);
+    
+    // If mesh_448 was selected, switch to mesh448_1.gltf after generation
+    if (selectedBuildingId === 'mesh_448') {
+      setCurrentModelPath("/lovable-uploads/mesh448_1.gltf");
+    }
+    
     setTimeout(() => {
       setMessages(prev => [
         ...prev,
@@ -232,7 +241,7 @@ const DesignerCustomization = () => {
               <WorkflowWindow className="w-[600px] h-[600px]">
                 <ThreeScene 
                   className="w-full h-full" 
-                  modelPath="/lovable-uploads/scene(2).gltf"
+                  modelPath={currentModelPath}
                   isolatedMeshId={selectedBuildingId}
                 />
               </WorkflowWindow>
