@@ -6,6 +6,7 @@ import BuildingMesh from './BuildingMesh';
 
 interface SceneWithFallbackProps {
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
+  onModelLoaded?: (mainMesh: THREE.Mesh | null) => void;
   modelPath?: string;
   isolatedMeshId?: string | null;
   selectableMeshes?: string[];
@@ -24,7 +25,8 @@ const LoadingFallback = () => (
 );
 
 const SceneWithFallback: React.FC<SceneWithFallbackProps> = ({ 
-  onBuildingClick, 
+  onBuildingClick,
+  onModelLoaded, 
   modelPath = "/lovable-uploads/scene(2).gltf",
   isolatedMeshId = null,
   selectableMeshes = []
@@ -34,7 +36,8 @@ const SceneWithFallback: React.FC<SceneWithFallbackProps> = ({
   return (
     <Suspense fallback={<LoadingFallback />}>
       <BuildingMesh 
-        onBuildingClick={onBuildingClick} 
+        onBuildingClick={onBuildingClick}
+        onModelLoaded={onModelLoaded}
         modelPath={modelPath}
         isolatedMeshId={isolatedMeshId}
         selectableMeshes={selectableMeshes}

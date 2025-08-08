@@ -9,13 +9,15 @@ import CameraZoomController from './CameraZoomController';
 
 interface BuildingMeshProps {
   onBuildingClick?: (buildingName: string | null, mesh?: THREE.Mesh | null) => void;
+  onModelLoaded?: (mainMesh: THREE.Mesh | null) => void;
   modelPath?: string;
   isolatedMeshId?: string | null;
   selectableMeshes?: string[];
 }
 
 const BuildingMesh: React.FC<BuildingMeshProps> = ({ 
-  onBuildingClick, 
+  onBuildingClick,
+  onModelLoaded, 
   modelPath = "/lovable-uploads/scene(2).gltf",
   isolatedMeshId = null,
   selectableMeshes = []
@@ -131,11 +133,22 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
       } else {
         // Normal behavior - reset background and set up all meshes with default properties
         scene.background = null;
+        let mainMesh: THREE.Mesh | null = null;
+        
         clonedScene.traverse((child) => {
           if (child instanceof THREE.Mesh) {
             MaterialManager.initializeMesh(child);
+            // For mesh448 models, find the main mesh to center on
+            if ((modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2')) && !mainMesh) {
+              mainMesh = child;
+            }
           }
         });
+        
+        // Trigger onModelLoaded callback for auto-centering mesh448 models
+        if (mainMesh && onModelLoaded) {
+          setTimeout(() => onModelLoaded(mainMesh), 100); // Small delay to ensure model is fully loaded
+        }
       }
       
       meshRef.current.add(clonedScene);
