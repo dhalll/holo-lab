@@ -258,8 +258,6 @@ const DesignerCustomization = () => {
                   modelPath={currentModelPath}
                   // ✅ 关键：切到变体模型时，不再传 isolatedMeshId
                   isolatedMeshId={useVariantModel ? null : selectedBuildingId}
-                  // ✅ 强制刷新以重新加载 glTF
-                  key={currentModelPath}
                 />
               </WorkflowWindow>
             </div>
