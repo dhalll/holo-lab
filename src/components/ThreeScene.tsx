@@ -1,131 +1,129 @@
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import CameraController from './three/CameraController';
+import CameraZoomController from './three/CameraZoomController';
+import SceneWithFallback from './three/SceneWithFallback';
 
 interface ThreeSceneProps {
   className?: string;
-  modelPath: string;
+  onBuildingClick?: (buildingName: string, mesh?: THREE.Mesh) => void;
+  modelPath?: string;
   isolatedMeshId?: string | null;
-  useVariantModel?: boolean; // ✅ 新增，用来判断是否在切换变体
+  selectableMeshes?: string[];
 }
 
-const ThreeScene: React.FC<ThreeSceneProps> = ({
-  className,
-  modelPath,
-  isolatedMeshId,
-  useVariantModel = false
+const ThreeScene: React.FC<ThreeSceneProps> = ({ 
+  className = "", 
+  onBuildingClick, 
+  modelPath = "/lovable-uploads/scene(2).gltf",
+  isolatedMeshId = null,
+  selectableMeshes = []
 }) => {
-  const mountRef = useRef<HTMLDivElement>(null);
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const controlsRef = useRef<OrbitControls | null>(null);
-  const lastCameraStateRef = useRef<{ position: THREE.Vector3; rotation: THREE.Euler } | null>(null);
-  const [scene] = useState(() => new THREE.Scene());
+  const [selectedMeshForCamera, setSelectedMeshForCamera] = useState<THREE.Mesh | null>(null);
+  const [autoCenter, setAutoCenter] = useState(false);
 
-  // 保存当前相机状态
+  // ✅ 新增：保存当前相机视角（方向 + 距离）与 OrbitControls 引用
+  const controlsRef = useRef<any>(null);
+  const lastDirRef = useRef<THREE.Vector3 | null>(null);
+  const lastDistRef = useRef<number | null>(null);
+
+  const isMesh448Model = modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2');
+
   useEffect(() => {
-    if (controlsRef.current && cameraRef.current) {
-      const handleChange = () => {
-        lastCameraStateRef.current = {
-          position: cameraRef.current!.position.clone(),
-          rotation: cameraRef.current!.rotation.clone(),
-        };
-      };
-      controlsRef.current.addEventListener('change', handleChange);
-      return () => {
-        controlsRef.current?.removeEventListener('change', handleChange);
-      };
+    if (isMesh448Model) {
+      setAutoCenter(true);
+      const timer = setTimeout(() => setAutoCenter(false), 2000);
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [modelPath, isMesh448Model]);
 
-  // 初始化场景
+  const canvasConfig = useMemo(() => ({
+    camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
+    onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
+      gl.setClearColor(0x000000, 0);
+    }
+  }), []);
+
+  // ✅ 在 modelPath 切换时，记录旧视角（相机位置相对 target 的方向和距离）
   useEffect(() => {
-    if (!mountRef.current) return;
+    const controls = controlsRef.current;
+    if (!controls) return;
+    const cam = controls.object as THREE.PerspectiveCamera;
+    const target = controls.target as THREE.Vector3;
 
-    const width = mountRef.current.clientWidth;
-    const height = mountRef.current.clientHeight;
+    const dir = new THREE.Vector3().subVectors(cam.position, target).normalize();
+    const dist = cam.position.distanceTo(target);
 
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.set(0, 5, 10);
-    cameraRef.current = camera;
+    lastDirRef.current = dir;
+    lastDistRef.current = dist;
+  }, [modelPath]);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    mountRef.current.appendChild(renderer.domElement);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controlsRef.current = controls;
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-
-    const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
-    scene.add(light);
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    return () => {
-      mountRef.current?.removeChild(renderer.domElement);
-    };
-  }, [scene]);
-
-  // 加载模型
   useEffect(() => {
-    if (!modelPath) return;
+    console.log('ThreeScene mounted with modelPath:', modelPath);
+  }, [modelPath]);
 
-    const loader = new GLTFLoader();
-    loader.load(modelPath, (gltf) => {
-      // 清空旧模型
-      scene.children = scene.children.filter(obj => !(obj as THREE.Mesh).isMesh);
+  return (
+    <div className={className}>
+      <Canvas {...canvasConfig}>
+        <CameraController />
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
 
-      const model = gltf.scene;
+        <SceneWithFallback 
+          onBuildingClick={(buildingName, mesh) => {
+            if (isMesh448Model && mesh) setSelectedMeshForCamera(mesh);
+            onBuildingClick?.(buildingName, mesh);
+          }}
+          onModelLoaded={(mainMesh) => {
+            // ✅ 新模型加载后，用相同角度与距离对准“新模型中心”
+            const controls = controlsRef.current;
+            if (controls && mainMesh) {
+              const cam = controls.object as THREE.PerspectiveCamera;
+              const target = controls.target as THREE.Vector3;
 
-      if (isolatedMeshId) {
-        const targetMesh = model.getObjectByName(isolatedMeshId);
-        if (targetMesh) {
-          scene.add(targetMesh.clone());
-        } else {
-          scene.add(model);
-        }
-      } else {
-        scene.add(model);
-      }
+              // 新模型中心
+              const box = new THREE.Box3().setFromObject(mainMesh);
+              const center = new THREE.Vector3();
+              box.getCenter(center);
 
-      // 角度保持 + 切换变体时缩放
-      if (cameraRef.current && lastCameraStateRef.current && controlsRef.current) {
-        const scaleFactor = useVariantModel ? 1.2 : 1; // ✅ 切换变体时拉远 20%
-        const direction = new THREE.Vector3()
-          .subVectors(lastCameraStateRef.current.position, controlsRef.current.target)
-          .multiplyScalar(scaleFactor);
+              // 之前的方向/距离（不存在则用当前）
+              const dir = (lastDirRef.current ?? new THREE.Vector3().subVectors(cam.position, target).normalize()).clone();
+              const dist = lastDistRef.current ?? cam.position.distanceTo(target);
 
-        cameraRef.current.position.copy(
-          new THREE.Vector3().addVectors(controlsRef.current.target, direction)
-        );
-        cameraRef.current.rotation.copy(lastCameraStateRef.current.rotation);
-      } else {
-        // 第一次加载时自动适配模型
-        const box = new THREE.Box3().setFromObject(model);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
+              target.copy(center);
+              cam.position.copy(center.clone().add(dir.multiplyScalar(dist)));
 
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const fov = cameraRef.current!.fov * (Math.PI / 180);
-        let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-        cameraZ *= 1.2;
+              cam.updateProjectionMatrix();
+              controls.update();
+            }
 
-        cameraRef.current!.position.set(center.x, center.y + maxDim / 5, cameraZ);
-        cameraRef.current!.lookAt(center);
-        controlsRef.current!.target.copy(center);
-      }
-    });
-  }, [modelPath, isolatedMeshId, scene, useVariantModel]);
+            // 保留你原来的 mesh448 自动居中缩放逻辑
+            if (isMesh448Model && mainMesh && autoCenter) {
+              setSelectedMeshForCamera(mainMesh);
+            }
+          }}
+          modelPath={modelPath}
+          isolatedMeshId={isolatedMeshId}
+          selectableMeshes={selectableMeshes}
+        />
 
-  return <div ref={mountRef} className={className} />;
+        {isMesh448Model && <CameraZoomController selectedMesh={selectedMeshForCamera} />}
+
+        {/* ✅ 绑定 OrbitControls 引用 */}
+        <OrbitControls 
+          ref={controlsRef}
+          enablePan
+          enableZoom
+          enableRotate
+          maxPolarAngle={Math.PI / 2}
+        />
+      </Canvas>
+    </div>
+  );
 };
 
 export default ThreeScene;
+
