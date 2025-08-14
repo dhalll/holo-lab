@@ -24,46 +24,59 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
   const [selectedMeshForCamera, setSelectedMeshForCamera] = useState<THREE.Mesh | null>(null);
   const [autoCenter, setAutoCenter] = useState(false);
 
-  // OrbitControls 与视角记录
+  // 相机/控制器引用 & 视角缓存
   const controlsRef = useRef<any>(null);
   const lastDirRef = useRef<THREE.Vector3 | null>(null);
   const lastDistRef = useRef<number | null>(null);
 
-  const isMesh448Model =
-    modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2');
+  // ✅ 新增：记录“基准视口”的空间范围（来自 customization 页第一次看到的 mesh_448）
+  const baseCenterRef = useRef<THREE.Vector3 | null>(null);
+  const baseSizeRef = useRef<THREE.Vector3 | null>(null);
+
+  const isMesh448Variant = modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2');
 
   useEffect(() => {
-    if (isMesh448Model) {
+    if (isMesh448Variant) {
       setAutoCenter(true);
       const t = setTimeout(() => setAutoCenter(false), 2000);
       return () => clearTimeout(t);
     }
-  }, [modelPath, isMesh448Model]);
+  }, [modelPath, isMesh448Variant]);
 
   const canvasConfig = useMemo(
     () => ({
       camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
       onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
-        gl.setClearColor(0x000000, 0); // 透明背景
+        gl.setClearColor(0x000000, 0);
       },
     }),
     []
   );
 
-  // 切换模型前记录观察方向与距离
+  // 切模型前，记录当前观察方向与距离
   useEffect(() => {
     const controls = controlsRef.current;
     if (!controls) return;
-
     const cam = controls.object as THREE.PerspectiveCamera;
     const target = controls.target as THREE.Vector3;
-
     const dir = new THREE.Vector3().subVectors(cam.position, target).normalize();
     const dist = cam.position.distanceTo(target);
-
     lastDirRef.current = dir;
     lastDistRef.current = dist;
   }, [modelPath]);
+
+  // 用“盒子适配”计算所需距离（同时考虑横向与纵向 FOV，取较大值）
+  function calcFitDistanceByBox(
+    cam: THREE.PerspectiveCamera,
+    size: THREE.Vector3,
+    padding = 1.6
+  ) {
+    const vFOV = (cam.fov * Math.PI) / 180;
+    const hFOV = 2 * Math.atan(Math.tan(vFOV / 2) * cam.aspect);
+    const fitH = (size.y * 0.5) / Math.tan(vFOV / 2);
+    const fitW = (size.x * 0.5) / Math.tan(hFOV / 2);
+    return Math.max(fitH, fitW) * padding;
+  }
 
   return (
     <div className={className}>
@@ -74,54 +87,67 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
 
         <SceneWithFallback
           onBuildingClick={(buildingName, mesh) => {
-            if (isMesh448Model && mesh) setSelectedMeshForCamera(mesh);
+            if (isMesh448Variant && mesh) setSelectedMeshForCamera(mesh);
             onBuildingClick?.(buildingName, mesh);
           }}
           onModelLoaded={(mainMesh) => {
-            // —— 相机对准新模型 —— //
             const controls = controlsRef.current;
-            if (controls && mainMesh) {
-              const cam = controls.object as THREE.PerspectiveCamera;
-              const target = controls.target as THREE.Vector3;
+            if (!controls || !mainMesh) return;
 
-              // 包围盒中心与尺寸
-              const box = new THREE.Box3().setFromObject(mainMesh);
-              const center = new THREE.Vector3();
-              box.getCenter(center);
-              const size = new THREE.Vector3();
-              box.getSize(size);
+            const cam = controls.object as THREE.PerspectiveCamera;
+            const target = controls.target as THREE.Vector3;
 
-              // 计算需要的观察距离：同时考虑横向与纵向 FOV，取较大值
-              const vFOV = (cam.fov * Math.PI) / 180; // 垂直FOV
-              const hFOV = 2 * Math.atan(Math.tan(vFOV / 2) * cam.aspect); // 水平FOV
-
-              const fitHeightDistance = (size.y * 0.5) / Math.tan(vFOV / 2);
-              const fitWidthDistance = (size.x * 0.5) / Math.tan(hFOV / 2);
-
-              // padding > 1 拉远；< 1 拉近。你可微调 1.4 ~ 1.8
-              const padding = 5;
-              const fitDist = Math.max(fitHeightDistance, fitWidthDistance) * padding;
-
-              // 维持切换前的观察方向（找不到则用当前方向）
-              const currentDir = new THREE.Vector3()
-                .subVectors(cam.position, target)
-                .normalize();
-              const dir = (lastDirRef.current ?? currentDir).clone();
-
-              // 设置 target 与相机位置
-              target.copy(center);
-              cam.position.copy(center.clone().add(dir.multiplyScalar(fitDist)));
-
-              // 稳定 near/far，避免裁剪过近
-              cam.near = Math.max(0.1, fitDist / 1000);
-              cam.far = fitDist * 1000;
-
-              cam.updateProjectionMatrix();
-              controls.update();
+            // ① 在初次进入 customization（非变体，且隔离 mesh_448）时，记录“基准视口”的中心与尺寸
+            if (!isMesh448Variant && isolatedMeshId === 'mesh_448') {
+              const baseBox = new THREE.Box3().setFromObject(mainMesh);
+              const baseCenter = new THREE.Vector3();
+              const baseSize = new THREE.Vector3();
+              baseBox.getCenter(baseCenter);
+              baseBox.getSize(baseSize);
+              baseCenterRef.current = baseCenter;
+              baseSizeRef.current = baseSize;
             }
 
-            // 保留原自动居中缩放逻辑
-            if (isMesh448Model && mainMesh && autoCenter) {
+            // ② 计算要对齐的中心与尺寸：
+            //    若是变体 => 使用“基准视口”的中心/尺寸（保证与图1一致）；
+            //    否则（普通 scene）=> 用当前模型本身的盒子。
+            const useBox = new THREE.Box3().setFromObject(mainMesh);
+            const meshCenter = new THREE.Vector3();
+            const meshSize = new THREE.Vector3();
+            useBox.getCenter(meshCenter);
+            useBox.getSize(meshSize);
+
+            const center =
+              isMesh448Variant && baseCenterRef.current
+                ? baseCenterRef.current.clone()
+                : meshCenter;
+
+            const size =
+              isMesh448Variant && baseSizeRef.current
+                ? baseSizeRef.current.clone()
+                : meshSize;
+
+            // ③ 距离：同时考虑横/纵 FOV，取较大值；padding 可微调（1.5~1.8）
+            const padding = 1.7;
+            const fitDist = calcFitDistanceByBox(cam, size, padding);
+
+            // ④ 方向：维持切换前的观察方向（没有就用当前方向）
+            const currentDir = new THREE.Vector3().subVectors(cam.position, target).normalize();
+            const dir = (lastDirRef.current ?? currentDir).clone();
+
+            // ⑤ 设置 target 与相机位置
+            target.copy(center);
+            cam.position.copy(center.clone().add(dir.multiplyScalar(fitDist)));
+
+            // ⑥ 适当设置 near/far，避免裁剪
+            cam.near = Math.max(0.1, fitDist / 1000);
+            cam.far = fitDist * 1000;
+
+            cam.updateProjectionMatrix();
+            controls.update();
+
+            // 保留原自动居中缩放逻辑（可与上面并存）
+            if (isMesh448Variant && autoCenter) {
               setSelectedMeshForCamera(mainMesh);
             }
           }}
@@ -130,7 +156,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
           selectableMeshes={selectableMeshes}
         />
 
-        {isMesh448Model && (
+        {isMesh448Variant && (
           <CameraZoomController selectedMesh={selectedMeshForCamera} />
         )}
 
@@ -147,4 +173,3 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
 };
 
 export default ThreeScene;
-
