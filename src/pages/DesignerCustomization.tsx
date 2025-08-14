@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ProgressBar from '@/components/ProgressBar';
 import BackButton from '@/components/BackButton';
@@ -30,14 +30,18 @@ const DesignerCustomization = () => {
   // 当前模型路径（默认还是原 scene）
   const [currentModelPath, setCurrentModelPath] = useState("/lovable-uploads/scene(2).gltf");
 
-  // ✅ 新增：是否已经切换到变体模型（用于 JSX 判断 isolatedMeshId）
+  // 是否已经切换到变体模型（用于不再传 isolatedMeshId）
   const [useVariantModel, setUseVariantModel] = useState(false);
 
-  // ✅ 新增：传给 ThreeScene 的相机设置（位置+目标），用于在切换到变体时还原初始角度 & 合适缩放
-  const [cameraSettings, setCameraSettings] = useState<{ position: [number, number, number], target: [number, number, number] } | null>(null);
+  // 仅用于你原先的强制 rerender 逻辑（可留可去）
+  const [preserveCameraAngle, setPreserveCameraAngle] = useState(false);
 
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { type: 'bot', content: 'Hi there! How can we customize your space?', showOptions: true }
+    {
+      type: 'bot',
+      content: 'Hi there! How can we customize your space?',
+      showOptions: true
+    }
   ]);
   const [userInput, setUserInput] = useState('');
   const [selectedPrograms, setSelectedPrograms] = useState<string[]>([]);
@@ -50,6 +54,22 @@ const DesignerCustomization = () => {
   const [canProceed, setCanProceed] = useState(false);
 
   const programs = ['Gym', 'Meeting Space', 'Bar', 'Greenhouse', 'Terrace'];
+
+  // === 新增：统一维护四类建筑的 1/2 变体路径 ===
+  const variantMap: Record<string, [string, string]> = {
+    mesh_446: ['/lovable-uploads/mesh446_1.gltf', '/lovable-uploads/mesh446_2.gltf'],
+    mesh_447: ['/lovable-uploads/mesh447_1.gltf', '/lovable-uploads/mesh447_2.gltf'],
+    mesh_448: ['/lovable-uploads/mesh448_1.gltf', '/lovable-uploads/mesh448_2.gltf'],
+    mesh_449: ['/lovable-uploads/mesh449_1.gltf', '/lovable-uploads/mesh449_2.gltf'],
+  };
+
+  // 严格 50/50 的选择函数
+  const pickVariant = (id: string) => {
+    const pair = variantMap[id];
+    if (!pair) return null;
+    // 直接用 < 0.5，确保 50/50
+    return Math.random() < 0.5 ? pair[0] : pair[1];
+  };
 
   const handleProgramSelect = (program: string) => {
     if (selectedPrograms.includes(program)) {
@@ -105,38 +125,46 @@ const DesignerCustomization = () => {
 
   const handleVolumeHeightSelect = (option: string) => {
     setSelectedVolumeHeight(option);
-    setMessages(prev => [...prev, { type: 'user', content: `Volume & Height: ${option}`, showOptions: false }]);
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Volume & Height: ${option}`, showOptions: false }
+    ]);
   };
 
   const handleSpacePreferenceSelect = (option: string) => {
     setSelectedSpacePreference(option);
-    setMessages(prev => [...prev, { type: 'user', content: `Space Preference: ${option}`, showOptions: false }]);
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Space Preference: ${option}`, showOptions: false }
+    ]);
   };
 
   const handleShadingSelect = (option: string) => {
     setSelectedShading(option);
-    setMessages(prev => [...prev, { type: 'user', content: `Shading: ${option}`, showOptions: false }]);
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Shading: ${option}`, showOptions: false }
+    ]);
   };
 
-  // ✅ 仅最小改动：点击“Generate Design Options”时切到变体，并给 ThreeScene 一组固定初始相机
-  // 这组相机与 ThreeScene 的初始 camera 相同（position: [5,5,5]，target: [0,0,0]）
+  // === 关键修改：点击“Generate Design Options”时切换到对应建筑的 1/2 变体（50/50）===
   const handleConstraintsComplete = () => {
-    if (selectedBuildingId === 'mesh_448') {
-      const variants = ['/lovable-uploads/mesh448_1.gltf', '/lovable-uploads/mesh448_2.gltf'];
-      const randomVariant = variants[Math.floor(Math.random() * variants.length)];
-      setCurrentModelPath(randomVariant);
-      setUseVariantModel(true);
-
-      // 交给 ThreeScene 去根据新模型的包围盒“合适缩放”，同时保持这个初始方向
-      setCameraSettings({
-        position: [5, 5, 5],
-        target: [0, 0, 0]
-      });
+    if (selectedBuildingId && variantMap[selectedBuildingId]) {
+      const chosen = pickVariant(selectedBuildingId);
+      if (chosen) {
+        setCurrentModelPath(chosen);
+        setUseVariantModel(true);     // 切换后不再传 isolatedMeshId
+        setPreserveCameraAngle(true); // 保持你之前的刷新策略
+      }
     }
 
     setMessages(prev => [
       ...prev,
-      { type: 'bot', content: 'Would you like furniture included with your program?', showFurnitureQuestion: true }
+      {
+        type: 'bot',
+        content: 'Would you like furniture included with your program?',
+        showFurnitureQuestion: true
+      }
     ]);
   };
 
@@ -146,29 +174,41 @@ const DesignerCustomization = () => {
       setMessages(prev => [
         ...prev,
         { type: 'user', content: 'Yes, include furniture', showOptions: false },
-        { type: 'bot', content: 'Great! What type of furniture would you prefer?', showFurnitureOptions: true }
+        {
+          type: 'bot',
+          content: 'Great! What type of furniture would you prefer?',
+          showFurnitureOptions: true
+        }
       ]);
     } else {
-      setMessages(prev => [...prev, { type: 'user', content: 'No furniture needed', showOptions: false }]);
+      setMessages(prev => [
+        ...prev,
+        { type: 'user', content: 'No furniture needed', showOptions: false }
+      ]);
       startGeneration();
     }
   };
 
   const handleFurnitureTypeSelect = (furnitureType: string) => {
     setSelectedFurnitureType(furnitureType);
-    setMessages(prev => [...prev, { type: 'user', content: `Selected: ${furnitureType}`, showOptions: false }]);
+    setMessages(prev => [
+      ...prev,
+      { type: 'user', content: `Selected: ${furnitureType}`, showOptions: false }
+    ]);
     startGeneration();
   };
 
   const startGeneration = () => {
     setIsGenerating(true);
+
+    // 不在这里切换模型，切换已在 handleConstraintsComplete 完成
     setTimeout(() => {
       setMessages(prev => [
         ...prev,
         { type: 'bot', content: 'Analyzing your requirements and available materials...', showOptions: false },
         {
           type: 'bot',
-          content: "I've generated 3 design options for you. Option 1 uses 285 PVC pipes + 20 steel pipes, with 45 3D-printable joints. Estimated CO₂ savings: 1.2 tonnes.",
+          content: 'I\'ve generated 3 design options for you. Option 1 uses 285 PVC pipes + 20 steel pipes, with 45 3D-printable joints. Estimated CO₂ savings: 1.2 tonnes.',
           showVariants: true
         }
       ]);
@@ -191,20 +231,29 @@ const DesignerCustomization = () => {
       setMessages(prev => [
         ...prev,
         { type: 'user', content: userInput, showOptions: false },
-        { type: 'bot', content: "Thank you for the additional details. I'll incorporate this into your design requirements.", showOptions: false }
+        { type: 'bot', content: 'Thank you for the additional details. I\'ll incorporate this into your design requirements.', showOptions: false }
       ]);
       setUserInput('');
     }
   };
 
-  const handleProceed = () => navigate('/designer/output');
-  const handleMaterialsDatabaseClick = () => setShowMaterialsDatabase(true);
+  const handleProceed = () => {
+    navigate('/designer/output');
+  };
+
+  const handleMaterialsDatabaseClick = () => {
+    setShowMaterialsDatabase(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-holo-teal/50 to-holo-white font-inter relative overflow-hidden">
       <ProgressBar currentStep={3} />
+
       <BackButton onClick={() => navigate('/designer/location')} />
-      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black z-10">CUSTOMIZE</h1>
+
+      <h1 className="absolute top-6 left-20 text-[20px] font-semibold text-holo-black z-10">
+        CUSTOMIZE
+      </h1>
 
       {/* Top Right Logo */}
       <div className="absolute top-0 right-10 z-15 p-0 py-0 px-0">
@@ -212,26 +261,27 @@ const DesignerCustomization = () => {
       </div>
 
       <div className="px-8 pt-16 pb-8 flex items-center justify-center min-h-[calc(100vh-8rem)]">
-        {/* 3D 窗口 */}
+        {/* Centered Map */}
         <div className="flex items-center justify-center">
           <div className="flex flex-col items-center">
+            {/* 3D Map Window */}
             <div className="mb-6">
               <WorkflowWindow className="w-[600px] h-[600px]">
                 <ThreeScene
                   className="w-full h-full"
                   modelPath={currentModelPath}
+                  // 切到变体模型时，不再传 isolatedMeshId
                   isolatedMeshId={useVariantModel ? null : selectedBuildingId}
-                  cameraSettings={cameraSettings} // ✅ 新增：传入相机设置
                 />
               </WorkflowWindow>
             </div>
           </div>
         </div>
 
-        {/* 右侧聊天 */}
+        {/* Right Panel - AI Chat Panel aligned with map height */}
         <div className="ml-12 w-[300px] flex flex-col h-[600px]">
           <div className="h-full bg-gradient-to-b from-white to-holo-teal rounded-xl flex flex-col p-4">
-            {/* 顶部图标 */}
+            {/* Top-right icon buttons */}
             <div className="flex justify-end space-x-3 mb-4">
               <button
                 onClick={handleMaterialsDatabaseClick}
@@ -247,21 +297,28 @@ const DesignerCustomization = () => {
               </button>
             </div>
 
-            {/* 聊天消息 */}
+            {/* Chat Messages with proper spacing */}
             <div className="flex-1 overflow-y-auto space-y-4">
               {messages.map((message, index) => (
-                <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div
+                  key={index}
+                  className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
                   <div
                     className={`max-w-[80%] p-4 rounded-2xl ${
-                      message.type === 'user' ? 'bg-holo-coral text-white' : 'bg-white border border-holo-teal/20'
+                      message.type === 'user'
+                        ? 'bg-holo-coral text-white'
+                        : 'bg-white border border-holo-teal/20'
                     }`}
                   >
                     <p className="text-sm font-inter">{message.content}</p>
 
-                    {/* Program 选择 */}
+                    {/* Program Selection Options */}
                     {message.showOptions && (
                       <div className="mt-4">
-                        <p className="text-sm font-medium text-gray-600 mb-3">Select Desired Program:</p>
+                        <p className="text-sm font-medium text-gray-600 mb-3">
+                          Select Desired Program:
+                        </p>
                         <div className="flex flex-wrap gap-2">
                           {programs.map((program) => (
                             <button
@@ -280,7 +337,7 @@ const DesignerCustomization = () => {
                       </div>
                     )}
 
-                    {/* Proceed */}
+                    {/* Proceed with Programs Button */}
                     {message.showProceedButton && selectedPrograms.length >= 1 && (
                       <div className="mt-4">
                         <button
@@ -292,11 +349,13 @@ const DesignerCustomization = () => {
                       </div>
                     )}
 
-                    {/* 约束选项 */}
+                    {/* Constraints Options */}
                     {message.showConstraints && (
                       <div className="mt-4 space-y-4">
                         <div>
-                          <p className="text-sm font-medium text-gray-600 mb-2">Volume and Height:</p>
+                          <p className="text-sm font-medium text-gray-600 mb-2">
+                            Volume and Height:
+                          </p>
                           <div className="flex flex-wrap gap-2">
                             {['<2m & <3m areas', 'All <2m', 'All ≥2m'].map((option) => (
                               <button
@@ -315,7 +374,9 @@ const DesignerCustomization = () => {
                         </div>
 
                         <div>
-                          <p className="text-sm font-medium text-gray-600 mb-2">Space Preferences:</p>
+                          <p className="text-sm font-medium text-gray-600 mb-2">
+                            Space Preferences:
+                          </p>
                           <div className="flex gap-4">
                             {['Separate', 'Connected'].map((option) => (
                               <button
@@ -334,7 +395,9 @@ const DesignerCustomization = () => {
                         </div>
 
                         <div>
-                          <p className="text-sm font-medium text-gray-600 mb-2">Shading Preferences:</p>
+                          <p className="text-sm font-medium text-gray-600 mb-2">
+                            Shading Preferences:
+                          </p>
                           <div className="flex flex-wrap gap-2">
                             {['Full Coverage', 'No Coverage', '½ Coverage'].map((option) => (
                               <button
@@ -363,7 +426,7 @@ const DesignerCustomization = () => {
                       </div>
                     )}
 
-                    {/* 家具问题 */}
+                    {/* Furniture Question */}
                     {message.showFurnitureQuestion && (
                       <div className="mt-4">
                         <div className="flex gap-2">
@@ -383,10 +446,11 @@ const DesignerCustomization = () => {
                       </div>
                     )}
 
-                    {/* 家具类型 */}
+                    {/* Furniture Type Options with Images */}
                     {message.showFurnitureOptions && (
                       <div className="mt-4">
                         <div className="space-y-3">
+                          {/* Large Pipe Furniture Option */}
                           <div
                             className="cursor-pointer border-2 border-holo-teal rounded-lg p-3 hover:border-holo-coral transition-colors duration-200"
                             onClick={() => handleFurnitureTypeSelect('Large Pipe Furniture')}
@@ -404,6 +468,7 @@ const DesignerCustomization = () => {
                             </div>
                           </div>
 
+                          {/* Small Elements Option */}
                           <div
                             className="cursor-pointer border-2 border-holo-teal rounded-lg p-3 hover:border-holo-coral transition-colors duration-200"
                             onClick={() => handleFurnitureTypeSelect('Small Elements')}
@@ -424,7 +489,7 @@ const DesignerCustomization = () => {
                       </div>
                     )}
 
-                    {/* 设计选项 */}
+                    {/* Design Variants */}
                     {message.showVariants && (
                       <div className="mt-4">
                         <div className="space-y-3">
@@ -456,7 +521,7 @@ const DesignerCustomization = () => {
                 </div>
               ))}
 
-              {/* 生成中 */}
+              {/* Loading indicator */}
               {isGenerating && (
                 <div className="flex justify-start">
                   <div className="bg-white border border-holo-teal/20 p-4 rounded-2xl">
@@ -469,7 +534,7 @@ const DesignerCustomization = () => {
               )}
             </div>
 
-            {/* 输入框 */}
+            {/* Input Section */}
             <div className="border-t border-holo-teal/20 pt-4 mt-4">
               <div className="flex gap-2">
                 <input
@@ -488,6 +553,7 @@ const DesignerCustomization = () => {
                 </button>
               </div>
 
+              {/* Proceed Button */}
               {canProceed && (
                 <button
                   onClick={handleProceed}
@@ -513,4 +579,3 @@ const DesignerCustomization = () => {
 };
 
 export default DesignerCustomization;
-
