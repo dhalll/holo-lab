@@ -13,24 +13,25 @@ interface ThreeSceneProps {
   modelPath?: string;
   isolatedMeshId?: string | null;
   selectableMeshes?: string[];
+  /** ✅ 新增：用于在切到变体时保持初始角度，同时自适应新模型大小 */
+  cameraSettings?: { position: [number, number, number]; target: [number, number, number] } | null;
 }
 
-const ThreeScene: React.FC<ThreeSceneProps> = ({ 
-  className = "", 
-  onBuildingClick, 
+const ThreeScene: React.FC<ThreeSceneProps> = ({
+  className = "",
+  onBuildingClick,
   modelPath = "/lovable-uploads/scene(2).gltf",
   isolatedMeshId = null,
-  selectableMeshes = []
+  selectableMeshes = [],
+  cameraSettings = null
 }) => {
   const [selectedMeshForCamera, setSelectedMeshForCamera] = useState<THREE.Mesh | null>(null);
   const [autoCenter, setAutoCenter] = useState(false);
 
-  // ✅ 保存当前相机视角（方向 + 距离）与 OrbitControls 引用
+  // OrbitControls / Camera 引用
   const controlsRef = useRef<any>(null);
-  const lastDirRef = useRef<THREE.Vector3 | null>(null);
-  const lastDistRef = useRef<number | null>(null);
+  const loadedMainMeshRef = useRef<THREE.Object3D | null>(null);
 
-  // ✅ 仅识别变体模型
   const isMesh448Model = modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2');
 
   useEffect(() => {
@@ -44,69 +45,43 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
   const canvasConfig = useMemo(() => ({
     camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
     onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
-      gl.setClearColor(0x000000, 0);
+      gl.setClearColor(0x000000, 0); // 透明背景
     }
   }), []);
 
-  // ✅ 在 modelPath 切换时，记录旧视角（相机位置相对 target 的方向和距离）
+  // ✅ 当 cameraSettings 或 模型加载完成 时：用初始方向 + 适配距离 来对准新模型中心
   useEffect(() => {
     const controls = controlsRef.current;
-    if (!controls) return;
+    const main = loadedMainMeshRef.current;
+    if (!controls || !main || !cameraSettings) return;
+
     const cam = controls.object as THREE.PerspectiveCamera;
     const target = controls.target as THREE.Vector3;
 
-    const dir = new THREE.Vector3().subVectors(cam.position, target).normalize();
-    const dist = cam.position.distanceTo(target);
+    // 新模型包围盒中心与半径
+    const box = new THREE.Box3().setFromObject(main);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
 
-    lastDirRef.current = dir;
-    lastDistRef.current = dist;
-  }, [modelPath]);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const radius = size.length() / 2;
 
-  useEffect(() => {
-    console.log('ThreeScene mounted with modelPath:', modelPath);
-  }, [modelPath]);
+    // 根据相机 fov 计算合适距离（留一点边距）
+    const fov = (cam.fov * Math.PI) / 180;
+    const fitDist = radius / Math.sin(fov / 2) * 1.2; // 1.2 = padding
 
-  // ----------------------------
-  // 🔶 仅在变体模型时使用的“橙色高亮”最小改动
-  // 与 Location 页接近的橙色（不要红色）
-  const HIGHLIGHT_ORANGE = new THREE.Color('#FF6A3D'); // 你要更接近可微调为 '#FF7A45'
-  const lastHighlightedRef = useRef<THREE.Object3D | null>(null);
+    // 用 cameraSettings 提供的方向（position->target）
+    const csPos = new THREE.Vector3(...cameraSettings.position);
+    const csTar = new THREE.Vector3(...cameraSettings.target);
+    const dir = new THREE.Vector3().subVectors(csPos, csTar).normalize();
 
-  // 给对象（及子网格）着色，首次着色会把原色存到 material.userData._origColor
-  const tintObject = (obj: THREE.Object3D, color: THREE.Color) => {
-    obj.traverse((child: any) => {
-      if (child?.isMesh && child.material) {
-        const mats = Array.isArray(child.material) ? child.material : [child.material];
-        mats.forEach((mat: any) => {
-          if (mat?.color) {
-            if (!mat.userData?._origColor) {
-              mat.userData = mat.userData || {};
-              mat.userData._origColor = mat.color.clone();
-            }
-            mat.color.copy(color);
-            mat.needsUpdate = true;
-          }
-        });
-      }
-    });
-  };
+    target.copy(center);
+    cam.position.copy(center.clone().add(dir.multiplyScalar(fitDist)));
 
-  // 恢复对象（及子网格）原始颜色
-  const restoreObject = (obj: THREE.Object3D) => {
-    obj.traverse((child: any) => {
-      if (child?.isMesh && child.material) {
-        const mats = Array.isArray(child.material) ? child.material : [child.material];
-        mats.forEach((mat: any) => {
-          const orig: THREE.Color | undefined = mat?.userData?._origColor;
-          if (orig && mat.color) {
-            mat.color.copy(orig);
-            mat.needsUpdate = true;
-          }
-        });
-      }
-    });
-  };
-  // ----------------------------
+    cam.updateProjectionMatrix();
+    controls.update();
+  }, [cameraSettings]);
 
   return (
     <div className={className}>
@@ -115,63 +90,29 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
         <ambientLight intensity={0.6} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
 
-        <SceneWithFallback 
+        <SceneWithFallback
           onBuildingClick={(buildingName, mesh) => {
-            // 🔸保持你原来的相机处理
             if (isMesh448Model && mesh) setSelectedMeshForCamera(mesh);
-
-            // 🔸仅当是变体模型时，点击高亮为橙色（并恢复上一个）
-            if (isMesh448Model && mesh) {
-              if (lastHighlightedRef.current && lastHighlightedRef.current !== mesh) {
-                restoreObject(lastHighlightedRef.current);
-              }
-              tintObject(mesh, HIGHLIGHT_ORANGE);
-              lastHighlightedRef.current = mesh;
-            }
-
-            // 🔸透传原回调
             onBuildingClick?.(buildingName, mesh);
           }}
           onModelLoaded={(mainMesh) => {
-            // ✅ 新模型加载后，用相同角度与距离对准“新模型中心”
-            const controls = controlsRef.current;
-            if (controls && mainMesh) {
-              const cam = controls.object as THREE.PerspectiveCamera;
-              const target = controls.target as THREE.Vector3;
+            // 记录主模型，供上面 cameraSettings 的自适应逻辑使用
+            loadedMainMeshRef.current = mainMesh || null;
 
-              // 新模型中心
-              const box = new THREE.Box3().setFromObject(mainMesh);
-              const center = new THREE.Vector3();
-              box.getCenter(center);
-
-              // 之前的方向/距离（不存在则用当前）
-              const dir = (lastDirRef.current ?? new THREE.Vector3().subVectors(cam.position, target).normalize()).clone();
-              const dist = lastDistRef.current ?? cam.position.distanceTo(target);
-
-              target.copy(center);
-              cam.position.copy(center.clone().add(dir.multiplyScalar(dist)));
-
-              cam.updateProjectionMatrix();
-              controls.update();
-            }
-
-            // 保留你原来的 mesh448 自动居中缩放逻辑
+            // 保留原有 mesh448 自动居中缩放逻辑
             if (isMesh448Model && mainMesh && autoCenter) {
               setSelectedMeshForCamera(mainMesh);
             }
-
-            // 每次换新模型时清空上一次高亮记录，避免误染
-            lastHighlightedRef.current = null;
           }}
           modelPath={modelPath}
           isolatedMeshId={isolatedMeshId}
           selectableMeshes={selectableMeshes}
         />
 
+        {/* 保留你的 Zoom 控制器 */}
         {isMesh448Model && <CameraZoomController selectedMesh={selectedMeshForCamera} />}
 
-        {/* ✅ 绑定 OrbitControls 引用 */}
-        <OrbitControls 
+        <OrbitControls
           ref={controlsRef}
           enablePan
           enableZoom
@@ -184,6 +125,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
 };
 
 export default ThreeScene;
+
 
 
 
