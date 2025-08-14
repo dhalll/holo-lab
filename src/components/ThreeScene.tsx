@@ -99,7 +99,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
               const fitWidthDistance = (size.x * 0.5) / Math.tan(hFOV / 2);
 
               // padding > 1 拉远；< 1 拉近。你可微调 1.4 ~ 1.8
-              const padding = 1.6;
+              const padding = 1.8;
               const fitDist = Math.max(fitHeightDistance, fitWidthDistance) * padding;
 
               // 维持切换前的观察方向（找不到则用当前方向）
