@@ -101,7 +101,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
 
               // 以 FOV 计算合适的观察距离；padding 调小为 0.8 让模型更大
               const fov = (cam.fov * Math.PI) / 180;
-              const fitDist = (radius / Math.sin(fov / 2)) * 1;
+              const fitDist = (radius / Math.sin(fov / 2)) * 1.2;
 
               // 保持用户的观察方向（如果没有记录，则用当前方向）
               const currentDir = new THREE.Vector3()
