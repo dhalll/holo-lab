@@ -24,7 +24,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
   const [selectedMeshForCamera, setSelectedMeshForCamera] = useState<THREE.Mesh | null>(null);
   const [autoCenter, setAutoCenter] = useState(false);
 
-  // 记录 OrbitControls / 上一次的观察方向与距离（用于保持角度）
+  // OrbitControls 与视角记录
   const controlsRef = useRef<any>(null);
   const lastDirRef = useRef<THREE.Vector3 | null>(null);
   const lastDistRef = useRef<number | null>(null);
@@ -32,7 +32,6 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
   const isMesh448Model =
     modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2');
 
-  // mesh448 变体初次加载时做一次自动居中（保留你原先的逻辑）
   useEffect(() => {
     if (isMesh448Model) {
       setAutoCenter(true);
@@ -51,7 +50,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
     []
   );
 
-  // 在 modelPath 即将切换时，记录当前观察方向与距离（用于保持角度）
+  // 切换模型前记录观察方向与距离
   useEffect(() => {
     const controls = controlsRef.current;
     if (!controls) return;
@@ -64,11 +63,6 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
 
     lastDirRef.current = dir;
     lastDistRef.current = dist;
-  }, [modelPath]);
-
-  useEffect(() => {
-    // 仅用于调试
-    // console.log('ThreeScene mounted with modelPath:', modelPath);
   }, [modelPath]);
 
   return (
@@ -84,40 +78,49 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
             onBuildingClick?.(buildingName, mesh);
           }}
           onModelLoaded={(mainMesh) => {
-            // ★ 关键：新模型加载完成 → 用同角度 + 以包围盒中心为 target 放置相机，并缩小 padding 让模型更大
+            // —— 相机对准新模型 —— //
             const controls = controlsRef.current;
             if (controls && mainMesh) {
               const cam = controls.object as THREE.PerspectiveCamera;
               const target = controls.target as THREE.Vector3;
 
-              // 计算包围盒中心与半径
+              // 包围盒中心与尺寸
               const box = new THREE.Box3().setFromObject(mainMesh);
               const center = new THREE.Vector3();
               box.getCenter(center);
-
               const size = new THREE.Vector3();
               box.getSize(size);
-              const radius = size.length() / 2;
 
-              // 以 FOV 计算合适的观察距离；padding 调小为 0.8 让模型更大
-              const fov = (cam.fov * Math.PI) / 180;
-              const fitDist = (radius / Math.sin(fov / 2)) * 1.2;
+              // 计算需要的观察距离：同时考虑横向与纵向 FOV，取较大值
+              const vFOV = (cam.fov * Math.PI) / 180; // 垂直FOV
+              const hFOV = 2 * Math.atan(Math.tan(vFOV / 2) * cam.aspect); // 水平FOV
 
-              // 保持用户的观察方向（如果没有记录，则用当前方向）
+              const fitHeightDistance = (size.y * 0.5) / Math.tan(vFOV / 2);
+              const fitWidthDistance = (size.x * 0.5) / Math.tan(hFOV / 2);
+
+              // padding > 1 拉远；< 1 拉近。你可微调 1.4 ~ 1.8
+              const padding = 1.6;
+              const fitDist = Math.max(fitHeightDistance, fitWidthDistance) * padding;
+
+              // 维持切换前的观察方向（找不到则用当前方向）
               const currentDir = new THREE.Vector3()
                 .subVectors(cam.position, target)
                 .normalize();
               const dir = (lastDirRef.current ?? currentDir).clone();
 
-              // 以中心为 target，沿着相同方向、按计算距离放置相机
+              // 设置 target 与相机位置
               target.copy(center);
               cam.position.copy(center.clone().add(dir.multiplyScalar(fitDist)));
+
+              // 稳定 near/far，避免裁剪过近
+              cam.near = Math.max(0.1, fitDist / 1000);
+              cam.far = fitDist * 1000;
 
               cam.updateProjectionMatrix();
               controls.update();
             }
 
-            // 保留你原来的 mesh448 自动居中缩放逻辑
+            // 保留原自动居中缩放逻辑
             if (isMesh448Model && mainMesh && autoCenter) {
               setSelectedMeshForCamera(mainMesh);
             }
@@ -127,12 +130,10 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
           selectableMeshes={selectableMeshes}
         />
 
-        {/* 你的缩放/居中控制器（继续保留） */}
         {isMesh448Model && (
           <CameraZoomController selectedMesh={selectedMeshForCamera} />
         )}
 
-        {/* 绑定 OrbitControls ref 以便控制相机 */}
         <OrbitControls
           ref={controlsRef}
           enablePan
@@ -146,3 +147,4 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
 };
 
 export default ThreeScene;
+
