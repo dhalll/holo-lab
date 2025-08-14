@@ -128,7 +128,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
                 : meshSize;
 
             // ③ 距离：同时考虑横/纵 FOV，取较大值；padding 可微调（1.5~1.8）
-            const padding = 1.7;
+            const padding = 2.0;
             const fitDist = calcFitDistanceByBox(cam, size, padding);
 
             // ④ 方向：维持切换前的观察方向（没有就用当前方向）
