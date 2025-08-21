@@ -1,6 +1,5 @@
-// src/components/ThreeScene.tsx
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import CameraController from './three/CameraController';
@@ -15,8 +14,68 @@ interface ThreeSceneProps {
   selectableMeshes?: string[];
 }
 
-const SCENE_ZOOM   = 0.90; // 进入 Customize 时，框选主 scene 中的 isolated mesh 的放大系数（越小越近）
-const VARIANT_ZOOM = 1.05; // 切到 _1/_2 变体时，框选整棵变体模型的放大系数
+/** 用当前相机角度，把相机与 controls.target 调整到 box 的中心，并按 padding 计算合适距离 */
+function frameCameraToBox(
+  camera: THREE.PerspectiveCamera,
+  controls: any | null,
+  box: THREE.Box3,
+  padding = 1.0
+) {
+  const size = new THREE.Vector3();
+  const center = new THREE.Vector3();
+  box.getSize(size);
+  box.getCenter(center);
+
+  // 以当前相机的朝向来保持角度
+  const currentTarget = controls ? controls.target.clone() : new THREE.Vector3();
+  const dir = camera.position.clone().sub(currentTarget).normalize();
+
+  // 计算需要的距离（同时考虑宽高与纵横比）
+  const vFov = THREE.MathUtils.degToRad(camera.fov);
+  const fitHeightDistance = (size.y / 2) / Math.tan(vFov / 2);
+  const fitWidthDistance  = (size.x / 2) / Math.tan(vFov / 2) / camera.aspect;
+  const distance = padding * Math.max(fitHeightDistance, fitWidthDistance, size.z);
+
+  const newPos = center.clone().add(dir.multiplyScalar(distance));
+
+  if (controls) controls.target.copy(center);
+  camera.position.copy(newPos);
+  camera.updateProjectionMatrix();
+  if (controls) controls.update();
+}
+
+/** 在整城 scene + 传入 isolatedMeshId 的情况下，等子网格出现后自动居中 */
+const FitIsolated: React.FC<{
+  name: string | null | undefined;
+  modelPath: string;
+  controlsRef: React.RefObject<any>;
+  padding?: number;
+}> = ({ name, modelPath, controlsRef, padding = 1.05 }) => {
+  const { scene, camera } = useThree();
+
+  useEffect(() => {
+    if (!name) return;
+    let canceled = false;
+    let tries = 0;
+
+    const tryFit = () => {
+      if (canceled) return;
+      const obj = scene.getObjectByName(name);
+      if (obj) {
+        const box = new THREE.Box3().setFromObject(obj);
+        frameCameraToBox(camera as THREE.PerspectiveCamera, controlsRef.current, box, padding);
+        return;
+      }
+      // 模型还没挂到场景上就下一帧再查（最多约 60 次）
+      if (tries++ < 60) requestAnimationFrame(tryFit);
+    };
+
+    tryFit();
+    return () => { canceled = true; };
+  }, [name, modelPath, scene, camera, controlsRef, padding]);
+
+  return null;
+};
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({
   className = '',
@@ -26,17 +85,34 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
   selectableMeshes = [],
 }) => {
   const [selectedMeshForCamera, setSelectedMeshForCamera] = useState<THREE.Mesh | null>(null);
+  const [autoCenter, setAutoCenter] = useState(false);
 
-  // OrbitControls + 最近一次视角（用于变体切换时沿用方向）
   const controlsRef = useRef<any>(null);
-  const lastDirRef  = useRef<THREE.Vector3 | null>(null);   // camera->target 的单位方向
-  const lastDistRef = useRef<number | null>(null);          // camera 与 target 的距离
+  const lastDirRef = useRef<THREE.Vector3 | null>(null);
+  const lastDistRef = useRef<number | null>(null);
 
-  const isVariantModel =
-    /mesh4(46|47|48|49)_(1|2)\.gltf$/i.test(modelPath) || /mesh\d+_(1|2)\.gltf$/i.test(modelPath);
-  const isSceneModel = /scene/i.test(modelPath);
+  // 是否为“独立变体”模型（mesh446_1.gltf / mesh447_2.gltf 等）
+  const isVariantModel = /mesh\d+_[12]\.gltf$/i.test(modelPath);
 
-  // 进入/切换模型前记录当前视角
+  useEffect(() => {
+    if (isVariantModel) {
+      setAutoCenter(true);
+      const t = setTimeout(() => setAutoCenter(false), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [modelPath, isVariantModel]);
+
+  const canvasConfig = useMemo(
+    () => ({
+      camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
+      onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
+        gl.setClearColor(0x000000, 0);
+      },
+    }),
+    []
+  );
+
+  // 记录切换前相机的“方向与距离”，切换模型后沿同方向对准新中心
   useEffect(() => {
     const controls = controlsRef.current;
     if (!controls) return;
@@ -50,56 +126,6 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
     lastDistRef.current = dist;
   }, [modelPath]);
 
-  const canvasConfig = useMemo(
-    () => ({
-      camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
-      onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
-        gl.setClearColor(0x000000, 0); // 透明背景
-      },
-    }),
-    []
-  );
-
-  // 根据目标对象（mesh 或整棵 scene）框选并居中
-  const frameObject = (
-    controls: any,
-    obj: THREE.Object3D,
-    opts?: { zoom?: number; usePrevDir?: boolean }
-  ) => {
-    const cam = controls.object as THREE.PerspectiveCamera;
-    const target = controls.target as THREE.Vector3;
-    const zoom = opts?.zoom ?? 1.0;
-
-    // 用包围盒/球获取半径与中心
-    const box = new THREE.Box3().setFromObject(obj);
-    const center = new THREE.Vector3();
-    box.getCenter(center);
-
-    const sphere = new THREE.Sphere();
-    box.getBoundingSphere(sphere);
-    const radius = sphere.radius || box.getSize(new THREE.Vector3()).length() * 0.5 || 1;
-
-    // 计算相机距离（根据 FOV 与半径）
-    const fov = THREE.MathUtils.degToRad(cam.fov);
-    const distance = (radius / Math.sin(fov / 2)) * zoom;
-
-    // 使用之前的观察方向（更平滑），没有则用默认方向
-    const dir =
-      (opts?.usePrevDir && lastDirRef.current
-        ? lastDirRef.current.clone()
-        : new THREE.Vector3(1, 1, 1).normalize());
-
-    target.copy(center);
-    cam.position.copy(center.clone().add(dir.multiplyScalar(distance)));
-
-    cam.updateProjectionMatrix();
-    controls.update();
-
-    // 记录新的方向/距离，便于下次切换继续沿用
-    lastDirRef.current = new THREE.Vector3().subVectors(cam.position, target).normalize();
-    lastDistRef.current = cam.position.distanceTo(target);
-  };
-
   return (
     <div className={className}>
       <Canvas {...canvasConfig}>
@@ -107,28 +133,55 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
         <ambientLight intensity={0.6} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
 
+        {/* 当是整城 scene 且有 isolatedMeshId 时，加载完后对准该子网格 */}
+        {!isVariantModel && isolatedMeshId && (
+          <FitIsolated
+            name={isolatedMeshId}
+            modelPath={modelPath}
+            controlsRef={controlsRef}
+            padding={1.05}   // 可微调：>1 拉远，<1 拉近
+          />
+        )}
+
         <SceneWithFallback
           onBuildingClick={(buildingName, mesh) => {
-            if (mesh) setSelectedMeshForCamera(mesh);
+            if (isVariantModel && mesh) setSelectedMeshForCamera(mesh);
             onBuildingClick?.(buildingName, mesh);
           }}
-          onModelLoaded={(root: THREE.Object3D) => {
-            const controls = controlsRef.current;
-            if (!controls || !root) return;
+          onModelLoaded={(mainMesh) => {
+            // 仅对“独立变体”模型做一次整体居中（整城 scene 的居中由 FitIsolated 负责）
+            if (isVariantModel && mainMesh) {
+              const controls = controlsRef.current;
+              if (controls) {
+                const cam = controls.object as THREE.PerspectiveCamera;
+                const target = controls.target as THREE.Vector3;
 
-            if (isSceneModel) {
-              // ① 主 scene：找到 isolatedMeshId 对应的节点，否则退回整棵 scene
-              const focus =
-                (isolatedMeshId
-                  ? root.getObjectByName(isolatedMeshId as string)
-                  : null) || root;
-              frameObject(controls, focus, { zoom: SCENE_ZOOM, usePrevDir: true });
-            } else if (isVariantModel) {
-              // ② 变体 glTF：对整棵变体模型框选，并沿用上次的观察方向
-              frameObject(controls, root, { zoom: VARIANT_ZOOM, usePrevDir: true });
-            } else {
-              // 兜底：任何其他模型都对整棵 root 框选
-              frameObject(controls, root, { zoom: 1.0, usePrevDir: true });
+                // 上溯到 GLTF 的根（确保拿到完整包围盒）
+                let root: THREE.Object3D = mainMesh;
+                while (root.parent && root.parent.type !== 'Scene') root = root.parent;
+
+                const box = new THREE.Box3().setFromObject(root);
+                // 用上一次的相机方向保持角度
+                const dir =
+                  (lastDirRef.current ??
+                    new THREE.Vector3().subVectors(cam.position, target).normalize()).clone();
+
+                // 0.9 稍微比“完全包裹”更近一点（你说 0.9 “刚好”）
+                frameCameraToBox(cam, controls, box, 0.9);
+
+                // 再沿“记录的方向”修正一次位置（让角度与切换前一致）
+                const center = new THREE.Vector3();
+                box.getCenter(center);
+                const dist = lastDistRef.current ?? cam.position.distanceTo(target);
+                cam.position.copy(center.clone().add(dir.multiplyScalar(dist)));
+                if (controls) controls.target.copy(center);
+                cam.updateProjectionMatrix();
+                if (controls) controls.update();
+              }
+
+              if (autoCenter) {
+                setSelectedMeshForCamera(mainMesh);
+              }
             }
           }}
           modelPath={modelPath}
@@ -136,10 +189,9 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
           selectableMeshes={selectableMeshes}
         />
 
-        {/* 如果你还有点击放大之类逻辑，保留它 */}
+        {/* 只在独立变体时启用这个小的“呼吸缩放” */}
         {isVariantModel && <CameraZoomController selectedMesh={selectedMeshForCamera} />}
 
-        {/* 绑定 OrbitControls 引用 */}
         <OrbitControls
           ref={controlsRef}
           enablePan
