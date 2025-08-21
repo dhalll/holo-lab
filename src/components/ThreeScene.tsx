@@ -14,54 +14,60 @@ interface ThreeSceneProps {
   selectableMeshes?: string[];
 }
 
-const paddingScale = 0.9; // ✅ 与 448 保持一致
+const paddingScale = 0.9; // ✅ 统一缩放：模型更大更贴近（你确认0.9“刚好”）
 
-// ✅ 统一的取景函数（无需额外文件依赖）
+// 取整棵GLTF根节点，避免只用到某个子mesh导致测量偏差
+function getModelRoot(obj: THREE.Object3D): THREE.Object3D {
+  let root = obj;
+  while (root.parent && root.parent.type !== 'Scene') {
+    root = root.parent;
+  }
+  return root;
+}
+
+// 将对象“框选到视口”：方向保持、尺寸合适、居中显示
 function frameObjectToView(
   camera: THREE.PerspectiveCamera,
   controls: any,
   object: THREE.Object3D,
   direction: THREE.Vector3,
-  padding: number
+  pad: number
 ) {
   const box = new THREE.Box3().setFromObject(object);
-  const size = new THREE.Vector3();
-  const center = new THREE.Vector3();
-  box.getSize(size);
-  box.getCenter(center);
+  const sphere = box.getBoundingSphere(new THREE.Sphere());
+  const center = sphere.center.clone();
+  const radius = Math.max(sphere.radius, 0.001);
 
-  const maxDim = Math.max(size.x, size.y, size.z);
   const fov = (camera.fov * Math.PI) / 180;
-  let cameraZ = Math.abs((maxDim / 2) / Math.tan(fov / 2));
+  // 距离 = 半径 / sin(fov/2) * 系数；pad < 1 更近（更大），>1 更远（更小）
+  const distance = (radius / Math.sin(fov / 2)) * 1.15 * pad;
 
-  cameraZ *= padding;
+  const target = controls.target as THREE.Vector3;
+  target.copy(center);
 
   const dir = direction.clone().normalize();
-  const offset = dir.multiplyScalar(cameraZ);
+  camera.position.copy(center.clone().add(dir.multiplyScalar(distance)));
 
-  camera.position.copy(center.clone().add(offset));
-  camera.lookAt(center);
+  camera.near = Math.max(0.01, distance - radius * 2);
+  camera.far = Math.max(camera.far, distance + radius * 4);
   camera.updateProjectionMatrix();
 
-  controls.target.copy(center);
   controls.update();
 }
 
-const ThreeScene: React.FC<ThreeSceneProps> = ({ 
-  className = "", 
-  onBuildingClick, 
-  modelPath = "/lovable-uploads/scene(2).gltf",
+const ThreeScene: React.FC<ThreeSceneProps> = ({
+  className = '',
+  onBuildingClick,
+  modelPath = '/lovable-uploads/scene(2).gltf',
   isolatedMeshId = null,
-  selectableMeshes = []
+  selectableMeshes = [],
 }) => {
   const [selectedMeshForCamera, setSelectedMeshForCamera] = useState<THREE.Mesh | null>(null);
-  const [autoCenter, setAutoCenter] = useState(false);
 
-  // OrbitControls & 相机朝向记录
   const controlsRef = useRef<any>(null);
   const lastDirRef = useRef<THREE.Vector3 | null>(null);
 
-  // ✅ 识别 446/447/448/449 的变体模型
+  // ✅ 识别 446/447/448/449 的全部“变体”模型
   const isVariantModel = useMemo(() => {
     const p = modelPath.toLowerCase();
     return (
@@ -72,35 +78,24 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
     );
   }, [modelPath]);
 
-  // mesh448 系的“自动居中缩放”标志仍然保留
-  const isMesh448Model = modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2');
-
-  useEffect(() => {
-    if (isMesh448Model) {
-      setAutoCenter(true);
-      const timer = setTimeout(() => setAutoCenter(false), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [modelPath, isMesh448Model]);
-
-  // 记录切换前相机朝向（从控制器 target 指向相机位置）
+  // 记录切换前的观察方向（从target指向相机）
   useEffect(() => {
     const controls = controlsRef.current;
     if (!controls) return;
     const cam = controls.object as THREE.PerspectiveCamera;
     const target = controls.target as THREE.Vector3;
-
-    // 记录切换前的观察方向（尽量保持用户当前视角）
-    const dir = new THREE.Vector3().subVectors(cam.position, target).normalize();
-    lastDirRef.current = dir;
+    lastDirRef.current = new THREE.Vector3().subVectors(cam.position, target).normalize();
   }, [modelPath]);
 
-  const canvasConfig = useMemo(() => ({
-    camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
-    onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
-      gl.setClearColor(0x000000, 0); // 透明背景
-    }
-  }), []);
+  const canvasConfig = useMemo(
+    () => ({
+      camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
+      onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
+        gl.setClearColor(0x000000, 0); // 透明背景
+      },
+    }),
+    []
+  );
 
   return (
     <div className={className}>
@@ -109,28 +104,27 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
         <ambientLight intensity={0.6} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
 
-        <SceneWithFallback 
+        <SceneWithFallback
           onBuildingClick={(buildingName, mesh) => {
-            if (isMesh448Model && mesh) setSelectedMeshForCamera(mesh);
+            if (isVariantModel && mesh) setSelectedMeshForCamera(mesh);
             onBuildingClick?.(buildingName, mesh);
           }}
           onModelLoaded={(mainMesh) => {
-            // ✅ 变体模型：统一做“居中 + 取景缩放”，与 448 一致
             const controls = controlsRef.current;
-            if (controls && mainMesh && isVariantModel) {
+            if (!controls || !mainMesh) return;
+
+            // 👉 对 446/447/448/449 的 _1/_2 统一执行“居中 + 尺寸适配”
+            if (isVariantModel) {
               const cam = controls.object as THREE.PerspectiveCamera;
+              const rootObject = getModelRoot(mainMesh);
 
-              // 如果 glTF 把几何包在上一层 Group 中，用父级包围盒更稳妥
-              const objectToFrame = mainMesh.parent ?? mainMesh;
+              const direction =
+                (lastDirRef.current && lastDirRef.current.clone()) ||
+                new THREE.Vector3(-1, 0.65, 1); // 兜底方向，接近你之前的视角
 
-              // 优先使用切换前的观察方向；没有则使用默认 [1,1,1]
-              const direction = lastDirRef.current ?? new THREE.Vector3(1, 1, 1);
+              frameObjectToView(cam, controls, rootObject, direction, paddingScale);
 
-              frameObjectToView(cam, controls, objectToFrame, direction, paddingScale);
-            }
-
-            // 保留你原来的 mesh448 自动居中缩放逻辑
-            if (isMesh448Model && mainMesh && autoCenter) {
+              // 供 CameraZoomController 使用（如不需要可去掉）
               setSelectedMeshForCamera(mainMesh);
             }
           }}
@@ -139,10 +133,10 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
           selectableMeshes={selectableMeshes}
         />
 
-        {/* 保留你原先的缩放控制（只对 448 开启） */}
-        {isMesh448Model && <CameraZoomController selectedMesh={selectedMeshForCamera} />}
+        {/* ✅ 对所有变体启用（如果你不需要这个行为，可删除这一行） */}
+        {isVariantModel && <CameraZoomController selectedMesh={selectedMeshForCamera} />}
 
-        <OrbitControls 
+        <OrbitControls
           ref={controlsRef}
           enablePan
           enableZoom
