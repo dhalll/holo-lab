@@ -24,23 +24,17 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
   const [selectedMeshForCamera, setSelectedMeshForCamera] = useState<THREE.Mesh | null>(null);
   const [autoCenter, setAutoCenter] = useState(false);
 
-  // === 保持视角用 ===
   const controlsRef = useRef<any>(null);
   const lastDirRef = useRef<THREE.Vector3 | null>(null);
   const lastDistRef = useRef<number | null>(null);
 
-  // ✅ 新增：记录“初始 mesh_448（灰城）”时的基准视角（中心/方向/距离）
   const baseTargetRef = useRef<THREE.Vector3 | null>(null);
   const baseDirRef = useRef<THREE.Vector3 | null>(null);
   const baseDistRef = useRef<number | null>(null);
 
-  // 当前是否加载的是 448 的“变体”模型
   const isMesh448Variant = modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2');
 
-  // 变体刚加载时稍微拉远一点（让画面更完整）
-  const VARIANT_ZOOM_SCALE = 1.18;
-
-  // 只有在切换到 448 变体时，临时触发一次自动居中（两秒后关闭）
+  // 进入 448 变体时，短暂允许自动居中（我们会手动放置相机，随后关闭）
   useEffect(() => {
     if (isMesh448Variant) {
       setAutoCenter(true);
@@ -49,15 +43,14 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
     }
   }, [modelPath, isMesh448Variant]);
 
-  // Canvas 配置
   const canvasConfig = useMemo(() => ({
     camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
     onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
-      gl.setClearColor(0x000000, 0); // 透明背景
+      gl.setClearColor(0x000000, 0);
     }
   }), []);
 
-  // 记录切换前的相机方向/距离（用于普通切换的回退逻辑）
+  // 记录切换前的方向/距离（无基准时兜底）
   useEffect(() => {
     const controls = controlsRef.current;
     if (!controls) return;
@@ -75,6 +68,36 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
     console.log('ThreeScene mounted with modelPath:', modelPath);
   }, [modelPath]);
 
+  // === 帮助函数：把对象“框选”到视窗，给定朝向方向 dir，自动计算合适距离 ===
+  const frameObjectToView = (
+    cam: THREE.PerspectiveCamera,
+    controls: any,
+    object: THREE.Object3D,
+    dir: THREE.Vector3,
+    fit = 1.15,        // 越大看得越远
+  ) => {
+    const box = new THREE.Box3().setFromObject(object);
+    const center = new THREE.Vector3();
+    const size = new THREE.Vector3();
+    box.getCenter(center);
+    box.getSize(size);
+
+    // 用包围球半径拟合到相机竖向 FOV
+    const radius = size.length() / 2;
+    const vFov = THREE.MathUtils.degToRad(cam.fov);
+    // 距离：让整个球刚好落入视口，再乘以 fit
+    const dist = (radius / Math.sin(vFov / 2)) * fit;
+
+    // 适当的 near/far，避免裁剪
+    cam.near = Math.max(0.1, dist / 100);
+    cam.far = Math.max(cam.far, dist * 50);
+    cam.updateProjectionMatrix();
+
+    controls.target.copy(center);
+    cam.position.copy(center.clone().add(dir.normalize().multiplyScalar(dist)));
+    controls.update();
+  };
+
   return (
     <div className={className}>
       <Canvas {...canvasConfig}>
@@ -90,62 +113,42 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
           onModelLoaded={(mainMesh) => {
             const controls = controlsRef.current;
 
-            // === A) 在“初始灰城模式 + 选中 mesh_448”时，记录基准视角 ===
+            // 记录基础视角：初始场景中，用户选择 mesh_448 时
             if (!isMesh448Variant && isolatedMeshId === 'mesh_448' && controls && mainMesh) {
               const cam = controls.object as THREE.PerspectiveCamera;
               const target = controls.target as THREE.Vector3;
 
-              // 用 mesh_448 的包围盒中心作为基准 target
               const box = new THREE.Box3().setFromObject(mainMesh);
               const center = new THREE.Vector3();
               box.getCenter(center);
 
-              // 记录当前视角（方向/距离 + 目标）
               baseTargetRef.current = center.clone();
               baseDirRef.current = new THREE.Vector3().subVectors(cam.position, target).normalize();
               baseDistRef.current = cam.position.distanceTo(target);
 
-              // 可顺带把 target 对齐到 mesh_448 中心（避免之前 target 偏移）
+              // 保证 target 就在中心
               target.copy(center);
               controls.update();
             }
 
-            // === B) 切到 448 变体时，强行用“基准视角”来摆放相机 ===
+            // === 关键：加载 448 变体时，基于包围球自动“框选到视口” ===
             if (isMesh448Variant && controls && mainMesh) {
               const cam = controls.object as THREE.PerspectiveCamera;
-              const target = controls.target as THREE.Vector3;
 
-              if (baseTargetRef.current && baseDirRef.current && baseDistRef.current != null) {
-                const dist = baseDistRef.current * VARIANT_ZOOM_SCALE;
-                target.copy(baseTargetRef.current);
-                cam.position.copy(
-                  baseTargetRef.current.clone().add(
-                    baseDirRef.current.clone().multiplyScalar(dist)
-                  )
-                );
-                cam.updateProjectionMatrix();
-                controls.update();
-              } else {
-                // 兜底：如果没有基准（用户直接进来就是 448 变体），
-                // 则用“上一视角”+ 新模型中心来放置，尽量稳妥。
-                const box = new THREE.Box3().setFromObject(mainMesh);
-                const center = new THREE.Vector3();
-                box.getCenter(center);
-                const dir = (lastDirRef.current ?? new THREE.Vector3(1,1,1).normalize()).clone();
-                const dist = (lastDistRef.current ?? 8) * VARIANT_ZOOM_SCALE;
-                target.copy(center);
-                cam.position.copy(center.clone().add(dir.multiplyScalar(dist)));
-                cam.updateProjectionMatrix();
-                controls.update();
-              }
+              // 优先用“初始 mesh_448 的方向”，否则用上一视角方向，再否则用一个稳定兜底方向
+              const dir =
+                (baseDirRef.current && baseDirRef.current.clone()) ||
+                (lastDirRef.current && lastDirRef.current.clone()) ||
+                new THREE.Vector3(-1, 0.65, 1).normalize(); // 兜底：与初始橙色视角相近
 
-              // 不触发变体的自动缩放/贴近（避免“钻进管子里”）
-              if (autoCenter) {
-                setSelectedMeshForCamera(null);
-              }
+              // 使用通用“框选”算法；fit 取 1.15 ~ 1.2 之间即可
+              frameObjectToView(cam, controls, mainMesh, dir, 1.18);
+
+              // 变体时不再用缩放控制器，避免再次推进
+              if (autoCenter) setSelectedMeshForCamera(null);
             }
 
-            // === C) 维持你之前的 mesh448 自动居中逻辑（非变体时可用）===
+            // 保留你原本的自动居中逻辑（只针对非变体）
             if (!isMesh448Variant && mainMesh && autoCenter) {
               setSelectedMeshForCamera(mainMesh);
             }
@@ -155,7 +158,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
           selectableMeshes={selectableMeshes}
         />
 
-        {/* 变体时关闭 ZoomController，避免它覆盖我们设好的基准视角 */}
+        {/* 变体时关闭缩放控制器，避免“贴脸” */}
         {!isMesh448Variant && <CameraZoomController selectedMesh={selectedMeshForCamera} />}
 
         <OrbitControls 
