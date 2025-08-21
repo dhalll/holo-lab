@@ -160,7 +160,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
                 new THREE.Vector3(-1, 0.65, 1).normalize();
 
               // 留白比例可微调（1.10~1.25），确保大小与初始一致且完全可见
-              frameObjectToView(cam, controls, rootObject, dir, 1.18);
+              frameObjectToView(cam, controls, rootObject, dir, 1.10);
 
               // 维持你原先的自动居中缩放行为（如需）
               if (autoCenter) setSelectedMeshForCamera(null);
