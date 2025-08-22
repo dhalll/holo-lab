@@ -14,6 +14,9 @@ interface ThreeSceneProps {
   selectableMeshes?: string[];
 }
 
+const DEFAULT_VIEW_DIR = new THREE.Vector3(-1.2, 0.9, 1.4).normalize(); // 第一次没有历史角时用的默认斜俯视方向
+const FIT_PADDING = 1.12; // 画面内留白(越大越小) —— 只针对进入 Customize 的基础场景
+
 const ThreeScene: React.FC<ThreeSceneProps> = ({
   className = "",
   onBuildingClick,
@@ -22,39 +25,25 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
   selectableMeshes = []
 }) => {
   const [selectedMeshForCamera, setSelectedMeshForCamera] = useState<THREE.Mesh | null>(null);
-  const [autoCenter, setAutoCenter] = useState(false);
 
-  // ---- 保存当前相机视角（方向 + 距离）与 OrbitControls 引用 ----
+  // OrbitControls & 历史视角
   const controlsRef = useRef<any>(null);
-  const lastDirRef = useRef<THREE.Vector3 | null>(null);
-  const lastDistRef = useRef<number | null>(null);
+  const lastDirRef   = useRef<THREE.Vector3 | null>(null);
+  const lastDistRef  = useRef<number | null>(null);
 
-  // ✅ 统一判断 446/447/448/449 的 _1/_2 变体
-  const isVariantModel = /mesh44(6|7|8|9)_(1|2)\.gltf$/i.test(modelPath || "");
+  // 是否是你上传的“变体”模型（本需求暂时不处理变体的自动居中）
+  const isVariantModel =
+    /mesh44(6|7|8|9)_(1|2)\.gltf$/i.test(modelPath) ||
+    modelPath.includes('mesh446_') ||
+    modelPath.includes('mesh447_') ||
+    modelPath.includes('mesh448_') ||
+    modelPath.includes('mesh449_');
 
-  // 旧逻辑中用到的 448 判断，这里保留但不再用于缩放控制
-  const isMesh448Model = modelPath.includes('mesh448_1') || modelPath.includes('mesh448_2');
-
-  // 对变体在加载窗口时短暂打开 autoCenter（不触发二次拉近）
-  useEffect(() => {
-    if (isVariantModel) {
-      setAutoCenter(true);
-      const t = setTimeout(() => setAutoCenter(false), 1200);
-      return () => clearTimeout(t);
-    }
-  }, [modelPath, isVariantModel]);
-
-  const canvasConfig = useMemo(() => ({
-    camera: { position: [5, 5, 5] as [number, number, number], fov: 75 },
-    onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
-      gl.setClearColor(0x000000, 0); // 透明背景
-    }
-  }), []);
-
-  // 记录切换前的视角（相机位置相对 target 的方向和距离）
+  // 进入/切换模型前先记录当前相机方向 & 距离，便于过渡
   useEffect(() => {
     const controls = controlsRef.current;
     if (!controls) return;
+
     const cam = controls.object as THREE.PerspectiveCamera;
     const target = controls.target as THREE.Vector3;
 
@@ -65,47 +54,62 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
     lastDistRef.current = dist;
   }, [modelPath]);
 
-  // 取整棵GLTF根节点，避免只用到某个子mesh导致测量偏差
-  const getModelRoot = (obj: THREE.Object3D): THREE.Object3D => {
-    let root: THREE.Object3D = obj;
-    while (root.parent && root.parent.type !== 'Scene') {
-      root = root.parent;
-    }
-    return root;
-  };
+  const canvasConfig = useMemo(
+    () => ({
+      camera: { position: [5, 5, 5] as [number, number, number], fov: 60 }, // 稍小的 FOV 更建筑
+      onCreated: ({ gl }: { gl: THREE.WebGLRenderer }) => {
+        gl.setClearColor(0x000000, 0);
+      }
+    }),
+    []
+  );
 
-  // 自适应把对象“框选到视口”
-  const frameObjectToView = (
-    cam: THREE.PerspectiveCamera,
+  /**
+   * 把 object “框选到视口”
+   * - 计算包围盒中心与尺寸
+   * - 用相机 FOV 严格算一个合适的观察距离
+   * - 维持既有观察方向（没有则用默认方向）
+   */
+  function frameObjectToView(
+    obj: THREE.Object3D,
     controls: any,
-    object3D: THREE.Object3D,
-    keepDirection?: THREE.Vector3 | null,
-    paddingScale: number = 0.9
-  ) => {
-    const box = new THREE.Box3().setFromObject(object3D);
-    if (!box.isEmpty()) {
-      const size = new THREE.Vector3();
-      const center = new THREE.Vector3();
-      box.getSize(size);
-      box.getCenter(center);
+    padding = FIT_PADDING
+  ) {
+    if (!obj || !controls) return;
 
-      const maxSize = Math.max(size.x, size.y, size.z);
-      const fov = (cam.fov * Math.PI) / 180;
-      // 距离 = 物体半径 / tan(FOV/2) / padding
-      const distance = (maxSize / 2) / Math.tan(fov / 2) / paddingScale;
+    const cam = controls.object as THREE.PerspectiveCamera;
+    const target = controls.target as THREE.Vector3;
 
-      // 方向：优先使用切换前的视角方向
-      const dir = (keepDirection && keepDirection.length() > 0
-        ? keepDirection.clone()
-        : new THREE.Vector3(1, 1, 1).normalize());
+    // 1) 包围盒
+    const box = new THREE.Box3().setFromObject(obj);
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
 
-      const newPos = center.clone().add(dir.multiplyScalar(distance));
-      cam.position.copy(newPos);
-      controls.target.copy(center);
-      cam.updateProjectionMatrix();
-      controls.update();
-    }
-  };
+    // 2) 基于 FOV 的距离（保证无论画布比例如何，都能完整显示）
+    const maxSize = Math.max(size.x, size.y, size.z);
+    const fov = (cam.fov * Math.PI) / 180;
+    const halfFovV = fov / 2;
+    const halfFovH = Math.atan(Math.tan(halfFovV) * cam.aspect);
+
+    // 取最紧方向的距离
+    const distV = (maxSize * padding) / Math.sin(halfFovV); // 近似：让对角/最大边都能放下
+    const distH = (maxSize * padding) / Math.sin(halfFovH);
+    const dist = Math.max(distV, distH);
+
+    // 3) 方向：优先沿用上一次的观察方向；没有则用默认
+    const dir = (lastDirRef.current ?? DEFAULT_VIEW_DIR).clone();
+
+    // 4) 写入相机与 target
+    target.copy(center);
+    cam.position.copy(center.clone().add(dir.multiplyScalar(dist)));
+
+    cam.near = Math.max(0.01, dist * 0.01);
+    cam.far = dist * 100;
+    cam.updateProjectionMatrix();
+    controls.update();
+  }
 
   return (
     <div className={className}>
@@ -116,44 +120,35 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
 
         <SceneWithFallback
           onBuildingClick={(buildingName, mesh) => {
-            // 变体不再触发 CameraZoomController 的二次拉近
-            if (!isVariantModel && isMesh448Model && mesh) {
-              setSelectedMeshForCamera(mesh);
-            }
             onBuildingClick?.(buildingName, mesh);
           }}
-          onModelLoaded={(mainMesh) => {
+          onModelLoaded={(rootScene) => {
             const controls = controlsRef.current;
-            if (controls && mainMesh) {
-              const cam = controls.object as THREE.PerspectiveCamera;
-              const target = controls.target as THREE.Vector3;
+            if (!controls || !rootScene) return;
 
-              // 用整棵 GLTF 的根来计算包围盒
-              const rootObject = getModelRoot(mainMesh);
+            // ========= 只在“基础场景 + 指定了 isolatedMeshId”时，居中选中建筑 =========
+            const isBaseScene =
+              !isVariantModel && (modelPath.includes('scene(') || modelPath.includes('scene'));
 
-              // 之前记录的方向、距离
-              const keepDir =
-                lastDirRef.current ??
-                new THREE.Vector3().subVectors(cam.position, target).normalize();
+            if (isBaseScene && isolatedMeshId) {
+              // 在整棵树里找该建筑
+              const picked =
+                rootScene.getObjectByName(isolatedMeshId) ?? rootScene;
 
-              // ✅ 统一使用 0.9 的 padding，让模型大小合适且居中
-              frameObjectToView(cam, controls, rootObject, keepDir, 0.9);
+              frameObjectToView(picked, controls, FIT_PADDING);
+              return;
             }
 
-            // 旧的 448 自动居中逻辑保留，但对“变体”禁用 CameraZoom（二次拉近）
-            if (!isVariantModel && isMesh448Model && mainMesh && autoCenter) {
-              setSelectedMeshForCamera(mainMesh);
-            }
+            // ========= 其他情况（比如没传 isolatedMeshId / 变体）保守策略：对整棵 root 居中一次 =========
+            frameObjectToView(rootScene, controls, 1.15);
           }}
           modelPath={modelPath}
           isolatedMeshId={isolatedMeshId}
           selectableMeshes={selectableMeshes}
         />
 
-        {/* ❗ 关键：对 446/447/448/449 的 _1/_2 变体禁用二次拉近 */}
-        {!isVariantModel && isMesh448Model && (
-          <CameraZoomController selectedMesh={selectedMeshForCamera} />
-        )}
+        {/* 这里原本只给 448 用的缩放/过渡可继续保留；不影响“进入页面的居中” */}
+        <CameraZoomController selectedMesh={selectedMeshForCamera} />
 
         <OrbitControls
           ref={controlsRef}
