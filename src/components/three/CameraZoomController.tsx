@@ -8,7 +8,16 @@ interface CameraZoomControllerProps {
 }
 
 const CameraZoomController: React.FC<CameraZoomControllerProps> = ({ selectedMesh }) => {
-  const { camera, controls } = useThree();
+  // Safely access useThree with error handling
+  let camera: THREE.Camera, controls: any;
+  try {
+    const threeState = useThree();
+    camera = threeState.camera;
+    controls = threeState.controls;
+  } catch (error) {
+    console.error('CameraZoomController: useThree hook failed:', error);
+    return null;
+  }
 
   useEffect(() => {
     if (selectedMesh && controls) {

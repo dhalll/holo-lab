@@ -25,7 +25,18 @@ const BuildingMesh: React.FC<BuildingMeshProps> = ({
   const [selectedMesh, setSelectedMesh] = useState<THREE.Mesh | null>(null);
   const [isolatedMesh, setIsolatedMesh] = useState<THREE.Mesh | null>(null);
   const meshRef = useRef<THREE.Group>(null);
-  const { camera, controls, scene } = useThree();
+  
+  // Safely access useThree with error handling
+  let camera: THREE.Camera, controls: any, scene: THREE.Scene;
+  try {
+    const threeState = useThree();
+    camera = threeState.camera;
+    controls = threeState.controls;
+    scene = threeState.scene;
+  } catch (error) {
+    console.error('BuildingMesh: useThree hook failed:', error);
+    return null;
+  }
   
   console.log('BuildingMesh loading model:', modelPath);
   
